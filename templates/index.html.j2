@@ -1,0 +1,17 @@
+{% extends "base.html.j2" %}
+
+{% block title %}{{ app_title | default('ggp3d') }} — 3D Geometry Processor{% endblock %}
+
+{% block description %}Zero-dependency 3D geometry processor powered by Rust WebAssembly and native Web Components.{% endblock %}
+
+{% block body %}
+  <!--
+    app-root is the top-level Web Component.
+    It manages the WASM lifecycle, layout, and child component orchestration.
+    All UI logic is encapsulated within Shadow DOM sub-trees.
+  -->
+  <app-root
+    role="application"
+    aria-label="{{ app_title | default('ggp3d') }} 3D viewer application">
+  </app-root>
+{% endblock %}

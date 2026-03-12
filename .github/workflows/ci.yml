@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: ["dev", "main"]
+  pull_request:
+    branches: ["dev", "main"]
+
+env:
+  RUST_BACKTRACE: 1
+
+jobs:
+  # ─────────────────────────────────────────────
+  # 1. Rust unit tests (native, no WASM target needed)
+  # ─────────────────────────────────────────────
+  rust-test:
+    name: Rust Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            wasm/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('wasm/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+
+      - name: cargo fmt --check
+        run: cargo fmt --check
+        working-directory: wasm
+
+      - name: cargo clippy
+        run: cargo clippy -- -D warnings
+        working-directory: wasm
+
+      - name: cargo test
+        run: cargo test
+        working-directory: wasm
+
+  # ─────────────────────────────────────────────
+  # 2. Python lint + WCAG validation
+  # ─────────────────────────────────────────────
+  python-lint:
+    name: Python Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: ruff check
+        run: ruff check scripts/ run.py
+
+      - name: ruff format --check
+        run: ruff format --check scripts/ run.py
+
+  # ─────────────────────────────────────────────
+  # 3. JavaScript component tests
+  # ─────────────────────────────────────────────
+  js-test:
+    name: JS Component Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Run component tests
+        run: npm test
