@@ -1,8 +1,11 @@
 """
 build.py — compiles the Rust WASM module, renders Jinja2 templates, and
 copies all frontend assets into the dist/ directory.
+
+Copyright 2026 by GuidoGerb Publishing, LLC
 """
 
+import json
 import shutil
 import subprocess
 import sys
@@ -15,6 +18,13 @@ WASM_DIR = ROOT / "wasm"
 DIST_DIR = ROOT / "dist"
 TEMPLATES_DIR = ROOT / "templates"
 FRONTEND_DIR = ROOT / "frontend"
+SITE_JSON = ROOT / "resources" / "site.json"
+
+
+def _load_site_config() -> dict:
+    """Load project metadata from resources/site.json."""
+    with open(SITE_JSON, encoding="utf-8") as f:
+        return json.load(f)
 
 
 def _run(cmd: list[str], cwd: Path | None = None) -> None:
@@ -40,21 +50,26 @@ def build_wasm() -> None:
 
 
 def render_templates(
-    app_title: str = "ggp3d",
-    app_description: str = "Zero-dependency 3D geometry processor powered by Rust WebAssembly.",
-    lang: str = "en",
+    app_title: str | None = None,
+    app_description: str | None = None,
+    lang: str | None = None,
 ) -> None:
     """Render all Jinja2 templates and write them to dist/."""
     print("  [build] Rendering Jinja2 templates…")
+    site = _load_site_config()
+    title = app_title or site.get("project_name", "${PROJECT_NAME}")
+    description = app_description or site.get("project_description", "")
+    lang_val = lang or site.get("lang", "en")
     env = jinja2.Environment(
         loader=jinja2.FileSystemLoader(str(TEMPLATES_DIR)),
         autoescape=jinja2.select_autoescape(["html"]),
         undefined=jinja2.StrictUndefined,
     )
     context = {
-        "app_title": app_title,
-        "app_description": app_description,
-        "lang": lang,
+        "app_title": title,
+        "app_description": description,
+        "lang": lang_val,
+        "repo_url": site.get("repository", {}).get("url", ""),
     }
     DIST_DIR.mkdir(parents=True, exist_ok=True)
     for tmpl_path in TEMPLATES_DIR.glob("*.j2"):
@@ -67,9 +82,22 @@ def render_templates(
         print(f"    {tmpl_path.name} → {output_path.relative_to(ROOT)}")
 
 
+def _resolve_env_vars(text: str, replacements: dict[str, str]) -> str:
+    """Replace ${KEY} markers in text with values from the replacements dict."""
+    for key, value in replacements.items():
+        text = text.replace(f"${{{key}}}", value)
+    return text
+
+
 def copy_assets() -> None:
-    """Copy frontend JS, CSS, and static assets to dist/."""
+    """Copy frontend JS, CSS, and static assets to dist/, resolving ${VAR} markers."""
     print("  [build] Copying frontend assets…")
+    site = _load_site_config()
+    replacements = {
+        "PROJECT_NAME": site.get("project_name", ""),
+        "REPO_URL": site.get("repository", {}).get("url", ""),
+        "WASM_MODULE": site.get("wasm_module", ""),
+    }
     mappings = [
         (FRONTEND_DIR / "js", DIST_DIR / "js"),
         (FRONTEND_DIR / "styles", DIST_DIR / "styles"),
@@ -79,6 +107,13 @@ def copy_assets() -> None:
         if dst.exists():
             shutil.rmtree(dst)
         shutil.copytree(src, dst, ignore=shutil.ignore_patterns("*.test.js"))
+        # Resolve ${VAR} markers in copied JS/CSS files
+        for filepath in dst.rglob("*"):
+            if filepath.is_file() and filepath.suffix in (".js", ".css"):
+                content = filepath.read_text(encoding="utf-8")
+                resolved = _resolve_env_vars(content, replacements)
+                if resolved != content:
+                    filepath.write_text(resolved, encoding="utf-8")
         print(f"    {src.relative_to(ROOT)} → {dst.relative_to(ROOT)}")
 
     # Copy a minimal favicon if one does not exist

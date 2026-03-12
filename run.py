@@ -1,5 +1,7 @@
 """
-run.py — single CLI entry point for the ggp3d toolchain.
+run.py — single CLI entry point for the project toolchain.
+
+Copyright 2026 by GuidoGerb Publishing, LLC
 
 Usage:
     python run.py <command> [options]
@@ -23,7 +25,7 @@ import sys
 def main() -> int:
     parser = argparse.ArgumentParser(
         prog="run.py",
-        description="ggp3d toolchain CLI",
+        description="Project toolchain CLI",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -36,6 +38,8 @@ def main() -> int:
     subparsers.add_parser("format", help="Auto-format all source files")
     subparsers.add_parser("lint", help="Run static analysis")
     subparsers.add_parser("validate", help="Run WCAG 2.1 accessibility checks")
+    subparsers.add_parser("validate-copyright", help="Check copyright notices in source files")
+    subparsers.add_parser("validate-mime", help="Validate binary file mime-type content")
     subparsers.add_parser("test", help="Run Web Component test suites")
 
     pipeline_p = subparsers.add_parser("pipeline", help="Run the full automation pipeline")
@@ -70,6 +74,14 @@ def main() -> int:
         return fn()
     elif args.command == "validate":
         from scripts.validate_wcag import main as fn
+
+        return fn()
+    elif args.command == "validate-copyright":
+        from scripts.validate_copyright import main as fn
+
+        return fn()
+    elif args.command == "validate-mime":
+        from scripts.validate_mime_type_content import main as fn
 
         return fn()
     elif args.command == "test":

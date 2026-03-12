@@ -1,3 +1,5 @@
+// Copyright 2026 by GuidoGerb Publishing, LLC
+
 use wasm_bindgen::prelude::*;
 
 /// A 3-component vector for 3D geometry operations.

@@ -1,8 +1,9 @@
 """
-format_code.py — auto-formats all JS, Rust, Python, and HTML source files.
+format_code.py — auto-formats Rust and Python source files.
+
+Copyright 2026 by GuidoGerb Publishing, LLC
 
 Runs:
-  • prettier   — JS / HTML (via npx)
   • rustfmt    — Rust
   • ruff format — Python
 """
@@ -27,23 +28,6 @@ def _run(cmd: list[str], cwd: Path | None = None, label: str = "") -> bool:
     return True
 
 
-def format_js() -> bool:
-    """Format JS and HTML with Prettier."""
-    return _run(
-        [
-            "npx",
-            "--yes",
-            "prettier",
-            "--write",
-            "frontend/**/*.js",
-            "frontend/**/*.css",
-            "templates/**/*.j2",
-        ],
-        cwd=ROOT,
-        label="prettier",
-    )
-
-
 def format_rust() -> bool:
     """Format Rust source with rustfmt via cargo fmt."""
     return _run(["cargo", "fmt"], cwd=ROOT / "wasm", label="rustfmt")
@@ -63,7 +47,6 @@ def format_all() -> bool:
     results = [
         format_python(),
         format_rust(),
-        format_js(),
     ]
     return all(results)
 

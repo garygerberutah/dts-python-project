@@ -1,0 +1,32 @@
+---
+applyTo: "wasm/src/**/*.rs"
+description: "Use when writing Rust WASM code. Covers wasm-bindgen exports, immutability, math types, and size optimization."
+---
+# Rust WASM Standards
+
+## Copyright
+- Every `.rs` file must contain `Copyright 2026 by GuidoGerb Publishing, LLC` in a `//` comment at the top
+
+## Exports
+- Expose via `#[wasm_bindgen]` on structs and impl blocks
+- Return new instances from methods — no in-place mutation
+- Use `pub` only for wasm-bindgen-exported items
+
+## Types
+- `Vec3`: `new(x, y, z)`, arithmetic returns new `Vec3`, derives `Clone + Copy + Debug + PartialEq`
+- `Mat4`: column-major, `identity()`, `perspective()`, `rotation_y()`, `translation()`, `multiply()` returns new `Mat4`
+- `to_js_array()` → `Vec<f64>` for passing matrices to WebGL
+
+## Build
+- `opt-level = "z"` + `lto = true` in release profile
+- `crate-type = ["cdylib", "rlib"]`
+- Build via `wasm-pack build --target web --release`
+
+## Testing
+- `cargo test` for native Rust unit tests
+- Keep math logic testable without wasm-bindgen where possible
+
+## Binary Content Rule
+- No base64 data URIs or inline binary encodings in Rust source files — reference assets by path
+- Binary files (`.png`, `.jpg`, `.svg`, `.pdf`, etc.) may be versioned if their content matches the extension's mime-type
+- `application/octet-stream` and opaque binary blobs are forbidden in git

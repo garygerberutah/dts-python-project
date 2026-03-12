@@ -1,8 +1,9 @@
-"""
-test_components.py — runs the Web Component test suites via Node.js.
+"""test_components.py — runs the Web Component test suites via pytest.
 
-Each component has a co-located *.test.js file that uses the Node.js
-built-in test runner (node:test) and jsdom for a headless DOM environment.
+Copyright 2026 by GuidoGerb Publishing, LLC
+
+Test files live under tests/ and verify component source structure,
+Shadow DOM patterns, and accessibility attributes using Python only.
 """
 
 import subprocess
@@ -10,35 +11,27 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-FRONTEND_DIR = ROOT / "frontend" / "components"
-NODE_MODULES = ROOT / "node_modules"
-
-
-def _run_test(test_file: Path) -> bool:
-    """Run a single *.test.js file with Node. Returns True if it passed."""
-    print(f"  [test] Running {test_file.relative_to(ROOT)}…")
-    result = subprocess.run(
-        ["node", "--experimental-vm-modules", str(test_file)],
-        cwd=ROOT,
-        text=True,
-        capture_output=False,
-    )
-    passed = result.returncode == 0
-    status = "✓ PASS" if passed else "✗ FAIL"
-    print(f"  [test] {status}: {test_file.name}")
-    return passed
+TESTS_DIR = ROOT / "tests"
 
 
 def run_all_tests() -> bool:
-    """Discover and run all *.test.js files. Returns True if all pass."""
-    test_files = sorted(FRONTEND_DIR.glob("**/*.test.js"))
+    """Run all pytest test files. Returns True if all pass."""
+    if not TESTS_DIR.exists():
+        print("[test] tests/ directory not found.")
+        return True
+
+    test_files = sorted(TESTS_DIR.glob("test_*.py"))
     if not test_files:
         print("[test] No test files found.")
         return True
 
     print(f"[test] Found {len(test_files)} test file(s).")
-    results = [_run_test(f) for f in test_files]
-    return all(results)
+    result = subprocess.run(
+        [sys.executable, "-m", "pytest", str(TESTS_DIR), "-v"],
+        cwd=ROOT,
+        text=True,
+    )
+    return result.returncode == 0
 
 
 def main() -> int:

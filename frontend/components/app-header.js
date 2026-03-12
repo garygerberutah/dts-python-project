@@ -1,4 +1,6 @@
 /**
+ * Copyright 2026 by GuidoGerb Publishing, LLC
+ *
  * app-header — navigation header Web Component.
  * Provides accessible site navigation with Shadow DOM encapsulation.
  */
@@ -15,7 +17,7 @@ class AppHeader extends HTMLElement {
   }
 
   #render() {
-    const title = this.getAttribute("app-title") || "ggp3d";
+    const title = this.getAttribute("app-title") || "${PROJECT_NAME}";
     this.#shadow.innerHTML = `
       <style>
         :host {
@@ -74,7 +76,7 @@ class AppHeader extends HTMLElement {
             <li><a href="/about">About</a></li>
             <li>
               <a
-                href="https://github.com/guidogerb/ggp3d"
+                href="${REPO_URL}"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="View source on GitHub (opens in new tab)">

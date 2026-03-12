@@ -1,0 +1,96 @@
+@import "../../../1-settings/class-vars";
+@import "../../../1-settings/color-swatches";
+
+#{$base-class} {
+  &.main-menu__outer {
+    position: relative;
+    z-index: 2500;
+  }
+  .main-menu {
+    &__wrapper {
+      background-color: var(--gray-light-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 var(--spacing-l) 0 var(--spacing-xs);
+
+      .utds-icon-before-search::before {
+       font-size: 1.1rem;
+      }
+    }
+
+    .menu-item__search {
+      margin-left: auto;
+    }
+
+    &__search-placeholder {
+      height: var(--form-ele-medium);
+      width: var(--form-ele-medium);
+    }
+  }
+
+  .horizontal-menu {
+    &>ul {
+      list-style-type: none;
+      display: flex;
+      padding: 0;
+      flex-wrap: wrap;
+      li {
+
+        .menu-item__title {
+          position: relative;
+        }
+
+        a[href], button {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          color: var(--gray-color);
+          padding: var(--spacing-3xs) var(--spacing);
+          margin: var(--spacing-xs) 0;
+          border-radius: 999px;
+          transition: all var(--timing-quick) ease-in-out;
+          position: relative;
+          box-sizing: border-box;
+          font-size: var(--font-size);
+          font-weight: var(--font-weight-semi-bold);
+          min-height: auto;
+          line-height: 1.7;
+
+          .menu-item__menu-arrow {
+            font-size: .65rem;
+            margin-left: var(--spacing-2xs);
+            &[class*=utds-icon-before-]::before {
+              margin-right: 0;
+            }
+          }
+
+          &:hover {
+            color: black;
+            box-shadow: inset 0 0 0 1000px var(--hover-gray-color);
+          }
+          &.menu-item--selected_parent + span.menu-chiclet {
+            font-weight: bold;
+          }
+
+          &.menu-item--selected + span.menu-chiclet {
+            &::after {
+              content: "";
+              width: 100%;
+              height: var(--spacing-2xs);
+              background: var(--primary-color);
+              display: block;
+              position: absolute;
+              top: 0;
+              left: 0;
+              border-bottom-left-radius: var(--spacing-2xs);
+              border-bottom-right-radius: var(--spacing-2xs);
+              outline: none;
+              outline-offset: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}

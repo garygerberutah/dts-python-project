@@ -1,6 +1,8 @@
 """
 validate_wcag.py — WCAG 2.1 compliance validator for compiled HTML output.
 
+Copyright 2026 by GuidoGerb Publishing, LLC
+
 Checks the rendered HTML in dist/ for a subset of WCAG 2.1 Level AA rules:
   • 1.1.1  Non-text content — <img> elements must have non-empty alt text.
   • 1.3.1  Info & Relationships — <form> inputs need associated <label>.

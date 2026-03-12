@@ -1,10 +1,12 @@
 """
-lint.py — static analysis for JS (ESLint), Rust (Clippy), and Python (Ruff).
+lint.py — static analysis for JS, Rust, and Python.
+
+Copyright 2026 by GuidoGerb Publishing, LLC
 
 Runs:
   • ruff check  — Python
   • cargo clippy — Rust (strict)
-  • eslint       — JavaScript (via npx)
+  • lint_js      — JavaScript (Python-based)
 """
 
 import subprocess
@@ -49,21 +51,11 @@ def lint_rust() -> bool:
 
 
 def lint_js() -> bool:
-    """Run ESLint over frontend JavaScript sources."""
-    return _run(
-        [
-            "npx",
-            "--yes",
-            "eslint",
-            "frontend/",
-            "--ext",
-            ".js",
-            "--max-warnings",
-            "0",
-        ],
-        cwd=ROOT,
-        label="eslint",
-    )
+    """Run the Python-based JS linter over frontend sources."""
+    from scripts.lint_js import lint_js_files
+
+    print("  [lint:js] Running Python JS linter…")
+    return lint_js_files(ROOT)
 
 
 def lint_all() -> bool:

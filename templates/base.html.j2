@@ -1,3 +1,4 @@
+<!-- Copyright 2026 by GuidoGerb Publishing, LLC -->
 <!DOCTYPE html>
 <html lang="{{ lang | default('en') }}">
   <head>
@@ -6,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- Primary Meta Tags -->
-    <title>{% block title %}{{ app_title | default('ggp3d') }}{% endblock %}</title>
+    <title>{% block title %}{{ app_title }}{% endblock %}</title>
     <meta
       name="description"
       content="{% block description %}{{ app_description | default('Zero-dependency 3D geometry processor powered by Rust WebAssembly and native Web Components.') }}{% endblock %}"
@@ -15,7 +16,7 @@
 
     <!-- Open Graph / Social -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="{{ app_title | default('ggp3d') }}" />
+    <meta property="og:title" content="{{ app_title }}" />
     <meta
       property="og:description"
       content="{{ app_description | default('Zero-dependency 3D geometry processor.') }}"

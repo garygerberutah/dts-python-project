@@ -1,0 +1,124 @@
+@import "../../1-settings/media-size-vars";
+
+.ggpds-design-system {
+  .utds {
+    &-logo-wrapper {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      letter-spacing: 0;
+    }
+    &-logo-vert-line {
+      height: 85%;
+      width: 1px;
+      background-color: #707070;
+      margin: 0 var(--spacing-xs) 0 var(--spacing);
+      display: block;
+    }
+    &-title-wrapper {
+      font-size: var(--font-size-3xl);
+      font-weight: 600;
+      color: var(--gray-medium-color);
+      display: flex;
+      align-items: center;
+      flex: 1;
+      height: 100%;
+      gap: var(--spacing-xs);
+      text-decoration: none;
+      border-radius: var(--radius-small);
+      padding: 0 var(--spacing-xs);
+      &__logo {
+        height: 100%;
+        width: auto;
+        max-width: 100%;
+        max-height: 100%;
+        display: flex;
+        align-items: center;
+
+        svg, img {
+          height: 100%;
+          width: auto;
+          max-width: 100%;
+          max-height: 100%;
+        }
+        img {
+          height: auto;
+          &[src*=".svg"] {
+            height: 100%;
+            max-width: 100%;
+          }
+        }
+      }
+      &__title {
+        line-height: .8;
+        color: var(--gray-medium-color);
+      }
+    }
+  }
+
+  .ggpds-logo-wrapper {
+    height: 100%;
+    margin-bottom: -4px;
+    .popup {
+      &__content {
+        border-radius: var(--radius-small);
+        background: var(--gray-color);
+        color: white;
+        box-sizing: border-box;
+        padding: var(--spacing-3xs) var(--spacing-s);
+        border-color: var(--gray-color)
+      }
+      &__arrow {
+        &::before {
+
+          border-color: var(--gray-color) !important;
+        }
+      }
+    }
+  }
+  button.ggpds-logo-svg {
+    height: 100%;
+    position: relative;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    &:hover {
+      background: none;
+    }
+    &:active {
+      box-shadow: none;
+    }
+    svg {
+      height: 100%;
+      width: auto;
+      fill: var(--primary-color);
+      font-family: 'Source Sans 3', 'Source Sans Pro', Helvetica, Arial, sans-serif;
+      font-weight: normal;
+      font-size: 14px;
+      display: block;
+    }
+  }
+  .utds-official-website-hover {
+    &__wrapper {
+      font-size: 1rem;
+      font-weight: var(--font-weight-normal);
+      font-family: var(--normal-font-family);
+      text-align: center;
+    }
+  }
+  a[href].utds-title-wrapper {
+    text-decoration: none;
+  }
+}
+
+@media screen and (max-width: #{$media-size-tablet-portrait}) {
+  .ggpds-design-system {
+    .utds {
+      &-title-wrapper {
+        font-size: var(--font-size-xl);
+      }
+    }
+  }
+}
+

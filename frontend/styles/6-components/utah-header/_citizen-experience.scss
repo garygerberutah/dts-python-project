@@ -1,0 +1,13 @@
+.utds-citizen-experience-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+
+  &--mobile {
+    display: none;
+  }
+
+  .main-menu__search {
+    margin-right: var(--spacing);
+  }
+}

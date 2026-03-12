@@ -1,4 +1,6 @@
 /**
+ * Copyright 2026 by GuidoGerb Publishing, LLC
+ *
  * main.js — application entry point.
  * Registers all Web Components and bootstraps the application.
  */
@@ -9,4 +11,4 @@ import "./components/app-header.js";
 import "./components/app-3d-viewer.js";
 
 // Log readiness for debugging during development.
-console.info("[ggp3d] Web Components registered.");
+console.info("[app] Web Components registered.");

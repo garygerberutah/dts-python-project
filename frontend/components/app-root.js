@@ -1,5 +1,7 @@
 /**
- * app-root — root shell Web Component for ggp3d.
+ * Copyright 2026 by GuidoGerb Publishing, LLC
+ *
+ * app-root — root shell Web Component.
  * Manages application-level layout and WASM lifecycle.
  */
 class AppRoot extends HTMLElement {
@@ -60,7 +62,7 @@ class AppRoot extends HTMLElement {
   async #loadWasm() {
     const statusEl = this.#shadow.getElementById("wasm-status");
     try {
-      const wasm = await import("/wasm/ggp3d_wasm.js");
+      const wasm = await import("/wasm/${WASM_MODULE}.js");
       await wasm.default();
       this.#wasmReady = true;
       this.dispatchEvent(

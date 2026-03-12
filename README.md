@@ -1,6 +1,7 @@
 # ggp3d
 
 **Zero-dependency 3D geometry processor** — native HTML5 Web Components + Rust WebAssembly.
+**Python-only toolchain** — no Node.js, npm, or any JS build tools.
 
 [![CI](https://github.com/guidogerb/ggp3d/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/guidogerb/ggp3d/actions/workflows/ci.yml)
 [![Deploy (dev)](https://github.com/guidogerb/ggp3d/actions/workflows/deploy-dev.yml/badge.svg?branch=dev)](https://github.com/guidogerb/ggp3d/actions/workflows/deploy-dev.yml)
@@ -13,8 +14,9 @@
 |---|---|
 | UI | HTML5 Web Components (Shadow DOM), vanilla JS — **zero runtime dependencies** |
 | Core | Rust compiled to WebAssembly (wasm-bindgen) |
-| Templates | Python + Jinja2 (build-time rendering only) |
-| Toolchain | Python scripts (`run.py`) |
+| Templates | Python + Jinja2 (build-time rendering only — never served at runtime) |
+| Toolchain | Python scripts (`run.py`) — no Node.js |
+| Tests | pytest (source-analysis, no browser) |
 | CI/CD | GitHub Actions → AWS S3 + CloudFront |
 
 ---
@@ -28,14 +30,10 @@
 | Python | ≥ 3.12 |
 | Rust (stable) | ≥ 1.75 |
 | wasm-pack | latest |
-| Node.js | ≥ 22 |
 
 ```bash
-# Install Python dependencies
+# Install Python dependencies (only dependency: Python)
 pip install -r requirements.txt
-
-# Install Node dev-tools (prettier, eslint, jsdom)
-npm install
 
 # Install wasm-pack
 curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
@@ -56,11 +54,11 @@ python run.py <command> [options]
 | `clean` | Remove `dist/` and `wasm/pkg/` |
 | `build` | Compile WASM → render Jinja2 templates → copy assets to `dist/` |
 | `serve [port]` | Serve `dist/` locally (default port 8080) |
-| `format` | Auto-format JS (Prettier), Rust (rustfmt), Python (ruff) |
-| `lint` | Static analysis — ESLint, cargo clippy, ruff check |
+| `format` | Auto-format Rust (rustfmt), Python (ruff) |
+| `lint` | Static analysis — Python JS linter, cargo clippy, ruff check |
 | `validate` | WCAG 2.1 compliance check on compiled HTML |
-| `test` | Run all Web Component test suites |
-| `pipeline` | Full automation: format → lint → validate → clean → build → test → deploy |
+| `test` | Run all component test suites (pytest) |
+| `pipeline` | Full automation: format → lint → clean → build → validate → test → deploy |
 | `pipeline --skip-deploy` | As above but skip the git commit/push stage |
 
 ---
@@ -73,12 +71,12 @@ python run.py pipeline --skip-deploy
 
 Stages (fail-fast):
 
-1. **Format** — auto-formats JS, Rust, Python, HTML
-2. **Lint** — ESLint, cargo clippy (`-D warnings`), ruff
+1. **Format** — auto-formats Rust, Python
+2. **Lint** — Python JS linter, cargo clippy (`-D warnings`), ruff
 3. **Clean** — purge prior artefacts
 4. **Build** — compile WASM, render templates, copy assets
 5. **Validate** — WCAG 2.1 Level AA checks on rendered HTML
-6. **Test** — Node.js component tests (Shadow DOM isolation, WASM events)
+6. **Test** — pytest component tests (source analysis, Shadow DOM patterns, accessibility)
 7. **Deploy** — `git commit` + `git push` *(gated behind 100% success)*
 
 ---
@@ -91,13 +89,18 @@ ggp3d/
 │   ├── Cargo.toml
 │   └── src/lib.rs
 ├── frontend/
-│   ├── components/         # Web Components + co-located *.test.js
-│   │   ├── app-root.js / app-root.test.js
-│   │   ├── app-header.js / app-header.test.js
-│   │   └── app-3d-viewer.js / app-3d-viewer.test.js
+│   ├── components/         # Web Components (source only, no test files)
+│   │   ├── app-root.js
+│   │   ├── app-header.js
+│   │   └── app-3d-viewer.js
 │   ├── js/main.js          # ES module entry point
 │   └── styles/main.css     # Global CSS reset
-├── templates/              # Jinja2 HTML templates
+├── tests/                  # pytest component test suites
+│   ├── conftest.py         # Source-analysis fixtures
+│   ├── test_app_root.py
+│   ├── test_app_header.py
+│   └── test_app_3d_viewer.py
+├── templates/              # Jinja2 HTML templates (build-time only)
 │   ├── base.html.j2
 │   └── index.html.j2
 ├── scripts/                # Python toolchain scripts
@@ -106,17 +109,18 @@ ggp3d/
 │   ├── serve.py
 │   ├── format_code.py
 │   ├── lint.py
+│   ├── lint_js.py
 │   ├── validate_wcag.py
 │   ├── test_components.py
 │   └── pipeline.py
-├── .github/workflows/
-│   ├── ci.yml              # Runs on every PR / push to dev|main
-│   └── deploy-dev.yml      # Deploys to AWS S3 + CloudFront on push to dev
+├── .github/
+│   ├── copilot-instructions.md
+│   └── workflows/
+│       ├── ci.yml
+│       └── deploy-dev.yml
 ├── run.py                  # Single CLI entry point
-├── package.json
-├── requirements.txt
-├── ruff.toml
-└── eslint.config.js
+├── requirements.txt        # Python deps only (jinja2, pytest, ruff)
+└── ruff.toml
 ```
 
 ---
@@ -144,11 +148,11 @@ The `deploy-dev.yml` workflow triggers on every push to the `dev` branch.
 cd wasm && cargo test
 ```
 
-### Web Components (Node.js)
+### Web Components (pytest)
 ```bash
-npm test
-# or individually:
-node --test frontend/components/app-root.test.js
+python run.py test
+# or directly:
+pytest tests/ -v
 ```
 
 ### WCAG Validation (after build)

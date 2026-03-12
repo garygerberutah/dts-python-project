@@ -1,17 +1,21 @@
 """
-pipeline.py — master automation pipeline for ggp3d.
+pipeline.py — master automation pipeline.
+
+Copyright 2026 by GuidoGerb Publishing, LLC
 
 Pipeline stages (in order):
-  1. format   — auto-format all source files
-  2. lint      — static analysis (ruff, clippy, eslint)
-  3. validate  — WCAG 2.1 accessibility check
-  4. clean     — remove prior build artefacts
-  5. build     — compile WASM + render templates + copy assets
-  6. test      — run Web Component test suites
-  7. deploy    — git commit + git push  (optional, skipped with --skip-deploy)
+  1. format    — auto-format all source files
+  2. lint      — static analysis (ruff, clippy, JS linter)
+  3. validate  — copyright notice in all source files
+  4. validate  — binary files match their mime-type encoding
+  5. clean     — remove prior build artefacts
+  6. build     — compile WASM + render templates + copy assets
+  7. validate  — WCAG 2.1 accessibility check
+  8. test      — run Web Component test suites
+  9. deploy    — git commit + git push  (optional, skipped with --skip-deploy)
 
 Fail-fast: any stage failure immediately aborts the pipeline.
-Git operations are only executed after 100% success of all prior stages.
+All stages (1-8) must pass before any git commit is allowed.
 """
 
 import argparse
@@ -24,6 +28,8 @@ from scripts.clean import clean
 from scripts.format_code import format_all
 from scripts.lint import lint_all
 from scripts.test_components import run_all_tests
+from scripts.validate_copyright import validate as validate_copyright
+from scripts.validate_mime_type_content import validate as validate_mime
 from scripts.validate_wcag import DIST_DIR, validate
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -52,25 +58,47 @@ def _stage_validate() -> bool:
     return True
 
 
+def _stage_validate_copyright() -> bool:
+    """Validate that all source files contain the copyright notice."""
+    errors = validate_copyright()
+    if errors:
+        for err in errors:
+            print(err, file=sys.stderr)
+        return False
+    return True
+
+
+def _stage_validate_mime() -> bool:
+    """Validate that binary files match their extension's mime-type."""
+    errors = validate_mime()
+    if errors:
+        for err in errors:
+            print(err, file=sys.stderr)
+        return False
+    return True
+
+
 def run(skip_deploy: bool = False) -> int:
     """Execute the full pipeline. Returns 0 on success, 1 on any failure."""
-    print("\n[pipeline] ggp3d Master Automation Pipeline")
+    print("\n[pipeline] Master Automation Pipeline")
     print("[pipeline] Fail-fast mode enabled.\n")
 
     _stage("1. format", format_all)
     _stage("2. lint", lint_all)
+    _stage("3. validate (copyright)", _stage_validate_copyright)
+    _stage("4. validate (mime-type)", _stage_validate_mime)
 
-    # Build must happen before validate so HTML artefacts exist
-    _stage("3. clean", clean)
-    _stage("4. build", build)
+    # Build must happen before WCAG validate so HTML artefacts exist
+    _stage("5. clean", clean)
+    _stage("6. build", build)
 
-    _stage("5. validate (WCAG 2.1)", _stage_validate)
-    _stage("6. test (Web Components)", run_all_tests)
+    _stage("7. validate (WCAG 2.1)", _stage_validate)
+    _stage("8. test (Web Components)", run_all_tests)
 
     if not skip_deploy:
-        _stage("7. deploy", _deploy)
+        _stage("9. deploy", _deploy)
     else:
-        print("\n[pipeline] Stage 7 (deploy) skipped (--skip-deploy).")
+        print("\n[pipeline] Stage 9 (deploy) skipped (--skip-deploy).")
 
     print("\n[pipeline] ✓ All stages completed successfully.")
     return 0
@@ -95,7 +123,7 @@ def _deploy() -> bool:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="ggp3d master automation pipeline")
+    parser = argparse.ArgumentParser(description="Master automation pipeline")
     parser.add_argument(
         "--skip-deploy",
         action="store_true",
