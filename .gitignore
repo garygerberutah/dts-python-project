@@ -1,4 +1,14 @@
-# Byte-compiled / optimized / DLL files
+# ─── Build artefacts ───────────────────────────────────────────────────────
+dist/
+wasm/pkg/
+wasm/target/
+
+# ─── Node.js ────────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+.npm
+
+# ─── Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
 *$py.class
