@@ -26,9 +26,20 @@ ROOT = Path(__file__).resolve().parent.parent
 
 # Extensions considered static resources (images, vectors, fonts)
 ASSET_EXTENSIONS = {
-    ".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".bmp", ".ico",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".webp",
+    ".avif",
+    ".bmp",
+    ".ico",
     ".svg",
-    ".woff", ".woff2", ".ttf", ".otf", ".eot",
+    ".woff",
+    ".woff2",
+    ".ttf",
+    ".otf",
+    ".eot",
 }
 
 # Pattern: camelCase prefix, dash, 64 hex chars, dot extension
@@ -57,8 +68,7 @@ def validate_file(filepath: Path, root: Path) -> list[str]:
     match = NAMING_PATTERN.match(name)
     if not match:
         errors.append(
-            f"  {rel}: filename does not match pattern "
-            f"'camelCase-<sha256>.ext' (got '{name}')"
+            f"  {rel}: filename does not match pattern 'camelCase-<sha256>.ext' (got '{name}')"
         )
         return errors
 

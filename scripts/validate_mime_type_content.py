@@ -173,8 +173,7 @@ def validate_file(filepath: Path) -> str | None:
     try:
         if not validator_fn(filepath):
             return (
-                f"  {rel}: content does not match {ext} encoding standard "
-                f"(invalid mime-type data)"
+                f"  {rel}: content does not match {ext} encoding standard (invalid mime-type data)"
             )
     except OSError as exc:
         return f"  {rel}: cannot read — {exc}"

@@ -7,6 +7,7 @@ Usage:
     python run.py <command> [options]
 
 Commands:
+    setup      Configure git hooks (run once after clone)
     clean      Remove build artefacts
     build      Compile WASM, render templates, copy assets
     serve      Start local dev server (default port 8080)
@@ -29,6 +30,10 @@ def main() -> int:
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
+    subparsers.add_parser(
+        "setup",
+        help="Configure git hooks (run once after clone)",
+    )
     subparsers.add_parser("clean", help="Remove build artefacts")
     subparsers.add_parser("build", help="Compile WASM + render templates + copy assets")
 
@@ -38,7 +43,15 @@ def main() -> int:
     subparsers.add_parser("format", help="Auto-format all source files")
     subparsers.add_parser("lint", help="Run static analysis")
     subparsers.add_parser("validate", help="Run WCAG 2.1 accessibility checks")
-    subparsers.add_parser("validate-copyright", help="Check copyright notices in source files")
+    copyright_p = subparsers.add_parser(
+        "validate-copyright",
+        help="Check copyright notices in source files",
+    )
+    copyright_p.add_argument(
+        "--fix",
+        action="store_true",
+        help="Auto-fix missing or incorrect copyright comments",
+    )
     subparsers.add_parser("validate-mime", help="Validate binary file mime-type content")
     subparsers.add_parser("test", help="Run Web Component test suites")
 
@@ -51,7 +64,19 @@ def main() -> int:
 
     args = parser.parse_args()
 
-    if args.command == "clean":
+    if args.command == "setup":
+        import subprocess
+
+        print("[setup] Configuring git hooks via pre-commit…")
+        # Unset core.hooksPath if set — pre-commit manages .git/hooks/ directly
+        subprocess.run(
+            ["git", "config", "--unset-all", "core.hooksPath"],
+            check=False,
+        )
+        subprocess.run(["pre-commit", "install"], check=True)
+        print("[setup] Done — pre-commit hooks installed.")
+        return 0
+    elif args.command == "clean":
         from scripts.clean import main as fn
 
         return fn()
@@ -77,9 +102,10 @@ def main() -> int:
 
         return fn()
     elif args.command == "validate-copyright":
-        from scripts.validate_copyright import main as fn
+        from scripts.validate_copyright import validate
 
-        return fn()
+        errors = validate(fix=getattr(args, "fix", False))
+        return 1 if errors else 0
     elif args.command == "validate-mime":
         from scripts.validate_mime_type_content import main as fn
 

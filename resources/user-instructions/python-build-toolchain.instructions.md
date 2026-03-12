@@ -24,6 +24,7 @@ Python 3.12 is the sole build/scripting language. No Node.js, no npm, no Make (u
 1. Format source → 2. Lint → 3. Clean → 4. Compile (WASM, SCSS, etc.) → 5. Validate → 6. Test → 7. Deploy
 
 ## Forbidden
+- **Never** use `--no-verify` or `-n` on any git command — never bypass pre-commit hooks; fix the code instead
 - Never call `npx`, `node`, `npm`, or any JS-ecosystem CLI
 - Never create `package.json` or `node_modules`
 - Never use JS build tools (Webpack, Vite, esbuild, Rollup, Prettier, ESLint)

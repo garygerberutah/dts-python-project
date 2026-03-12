@@ -64,19 +64,19 @@ HEAD_BYTES = 1024
 # Comment wrappers per file extension
 COMMENT_STYLES: dict[str, tuple[str, str]] = {
     # (prefix, suffix) — suffix is empty for line-comment styles
-    ".py": ('# ', ''),
-    ".js": ('/** ', ' */'),
-    ".rs": ('// ', ''),
-    ".css": ('/* ', ' */'),
-    ".scss": ('/* ', ' */'),
-    ".html": ('<!-- ', ' -->'),
-    ".j2": ('<!-- ', ' -->'),
-    ".toml": ('# ', ''),
-    ".cfg": ('# ', ''),
-    ".yml": ('# ', ''),
-    ".yaml": ('# ', ''),
-    ".tf": ('# ', ''),
-    ".sh": ('# ', ''),
+    ".py": ("# ", ""),
+    ".js": ("/** ", " */"),
+    ".rs": ("// ", ""),
+    ".css": ("/* ", " */"),
+    ".scss": ("/* ", " */"),
+    ".html": ("<!-- ", " -->"),
+    ".j2": ("<!-- ", " -->"),
+    ".toml": ("# ", ""),
+    ".cfg": ("# ", ""),
+    ".yml": ("# ", ""),
+    ".yaml": ("# ", ""),
+    ".tf": ("# ", ""),
+    ".sh": ("# ", ""),
 }
 
 # Regex to match any existing copyright line (case-insensitive "Copyright" + year + any holder)
@@ -94,7 +94,7 @@ def _load_copyright_text() -> str:
 
 def _make_comment(text: str, ext: str) -> str:
     """Wrap text in the comment style appropriate for the file extension."""
-    prefix, suffix = COMMENT_STYLES.get(ext, ('# ', ''))
+    prefix, suffix = COMMENT_STYLES.get(ext, ("# ", ""))
     return f"{prefix}{text}{suffix}"
 
 
@@ -234,12 +234,6 @@ def main() -> int:
         print(f"[copyright] {len(errors)} file(s) with copyright issues:", file=sys.stderr)
         for err in errors:
             print(err, file=sys.stderr)
-        return 1
-    return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
         return 1
     return 0
 

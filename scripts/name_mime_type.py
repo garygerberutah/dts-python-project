@@ -24,14 +24,23 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 ASSET_EXTENSIONS = {
-    ".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".bmp", ".ico",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".webp",
+    ".avif",
+    ".bmp",
+    ".ico",
     ".svg",
-    ".woff", ".woff2", ".ttf", ".otf", ".eot",
+    ".woff",
+    ".woff2",
+    ".ttf",
+    ".otf",
+    ".eot",
 }
 
-NAMING_PATTERN = re.compile(
-    r"^[a-zA-Z][a-zA-Z0-9]*-[0-9a-f]{64}\.[a-zA-Z0-9]+$"
-)
+NAMING_PATTERN = re.compile(r"^[a-zA-Z][a-zA-Z0-9]*-[0-9a-f]{64}\.[a-zA-Z0-9]+$")
 
 STATIC_DIRS = [
     ROOT / "frontend",

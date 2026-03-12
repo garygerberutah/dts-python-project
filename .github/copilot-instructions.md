@@ -73,7 +73,20 @@ All of the following must run and pass before committing to the git repository:
 7. **Test** — `python run.py test`
 
 Or run `python run.py pipeline --skip-deploy` which executes all stages in order.
-A pre-commit git hook enforces this — commits are rejected if any stage fails.
+
+Hooks are managed by the [pre-commit](https://pre-commit.com/) framework.
+After cloning, run once:
+
+```bash
+pip install -r requirements.txt
+python run.py setup              # pre-commit install
+```
+
+The `.pre-commit-config.yaml` calls `python run.py pipeline --skip-deploy` as a local hook.
+The `.githooks/pre-commit` script is the versioned fallback — commits are rejected if any stage fails.
+
+**Never bypass the pre-commit hook.** The flags `--no-verify` and `-n` are strictly
+forbidden on `git commit` and `git push`. If the hook fails, fix the code — never skip the check.
 
 ## Copyright Notice
 

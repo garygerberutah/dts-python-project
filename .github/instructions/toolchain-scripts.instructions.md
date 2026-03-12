@@ -27,6 +27,7 @@ Python is **build tooling only** — it never ships, never runs at request time,
 - Commits are rejected by the pre-commit hook if any stage fails
 
 ## Forbidden
+- **Never** use `--no-verify` or `-n` on any git command — never bypass pre-commit hooks; fix the code instead
 - Never call `npx`, `node`, `npm`, or any JS-ecosystem tool
 - Never import jinja2 outside build scripts
 - Never add Node.js dependencies — Python is the only scripting language

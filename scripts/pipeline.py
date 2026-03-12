@@ -7,15 +7,16 @@ Pipeline stages (in order):
   1. format    — auto-format all source files
   2. lint      — static analysis (ruff, clippy, JS linter)
   3. validate  — copyright notice in all source files
-  4. validate  — binary files match their mime-type encoding
-  5. clean     — remove prior build artefacts
-  6. build     — compile WASM + render templates + copy assets
-  7. validate  — WCAG 2.1 accessibility check
-  8. test      — run Web Component test suites
-  9. deploy    — git commit + git push  (optional, skipped with --skip-deploy)
+  4. validate  — asset naming convention + SHA-256 hashes
+  5. validate  — binary files match their mime-type encoding
+  6. clean     — remove prior build artefacts
+  7. build     — compile WASM + render templates + copy assets
+  8. validate  — WCAG 2.1 accessibility check
+  9. test      — run Web Component test suites
+ 10. deploy    — git commit + git push  (optional, skipped with --skip-deploy)
 
 Fail-fast: any stage failure immediately aborts the pipeline.
-All stages (1-8) must pass before any git commit is allowed.
+All stages (1-9) must pass before any git commit is allowed.
 """
 
 import argparse
@@ -28,6 +29,7 @@ from scripts.clean import clean
 from scripts.format_code import format_all
 from scripts.lint import lint_all
 from scripts.test_components import run_all_tests
+from scripts.validate_assets import validate as validate_assets
 from scripts.validate_copyright import validate as validate_copyright
 from scripts.validate_mime_type_content import validate as validate_mime
 from scripts.validate_wcag import DIST_DIR, validate
@@ -68,6 +70,16 @@ def _stage_validate_copyright() -> bool:
     return True
 
 
+def _stage_validate_assets() -> bool:
+    """Validate asset naming convention and SHA-256 hashes."""
+    errors = validate_assets()
+    if errors:
+        for err in errors:
+            print(err, file=sys.stderr)
+        return False
+    return True
+
+
 def _stage_validate_mime() -> bool:
     """Validate that binary files match their extension's mime-type."""
     errors = validate_mime()
@@ -86,17 +98,18 @@ def run(skip_deploy: bool = False) -> int:
     _stage("1. format", format_all)
     _stage("2. lint", lint_all)
     _stage("3. validate (copyright)", _stage_validate_copyright)
-    _stage("4. validate (mime-type)", _stage_validate_mime)
+    _stage("4. validate (assets)", _stage_validate_assets)
+    _stage("5. validate (mime-type)", _stage_validate_mime)
 
     # Build must happen before WCAG validate so HTML artefacts exist
-    _stage("5. clean", clean)
-    _stage("6. build", build)
+    _stage("6. clean", clean)
+    _stage("7. build", build)
 
-    _stage("7. validate (WCAG 2.1)", _stage_validate)
-    _stage("8. test (Web Components)", run_all_tests)
+    _stage("8. validate (WCAG 2.1)", _stage_validate)
+    _stage("9. test (Web Components)", run_all_tests)
 
     if not skip_deploy:
-        _stage("9. deploy", _deploy)
+        _stage("10. deploy", _deploy)
     else:
         print("\n[pipeline] Stage 9 (deploy) skipped (--skip-deploy).")
 
