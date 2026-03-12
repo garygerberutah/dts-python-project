@@ -19,7 +19,14 @@ ROOT = Path(__file__).resolve().parent.parent
 def _run(cmd: list[str], cwd: Path | None = None, label: str = "") -> bool:
     """Run a linting command. Returns True on success."""
     print(f"  [lint:{label}] {' '.join(cmd)}")
-    result = subprocess.run(cmd, cwd=cwd, text=True)
+    try:
+        result = subprocess.run(cmd, cwd=cwd, text=True)
+    except FileNotFoundError:
+        print(
+            f"  [lint:{label}] FAILED — '{cmd[0]}' not found. Install it and retry.",
+            file=sys.stderr,
+        )
+        return False
     if result.returncode != 0:
         print(f"  [lint:{label}] FAILED (exit {result.returncode})", file=sys.stderr)
         return False

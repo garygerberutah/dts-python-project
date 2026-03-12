@@ -1,5 +1,9 @@
 # Project Guidelines
 
+## Rules Over Convention
+
+- **Changing any rule in this file or any instruction file requires explicit user permission every time** — never add, remove, or modify a rule without asking first
+
 ## Architecture
 
 Two completely separate concerns. Never mix them.
@@ -183,6 +187,17 @@ Use the appropriate comment syntax for each file type:
 - No browser, no DOM engine, no JS runtime needed
 - Test component behavior through source analysis, not internal state (`#private` fields are inaccessible)
 
+## Script Filename Protection
+
+- **Never rename or move** any file in `scripts/` without explicit user permission
+- If a rename is truly necessary, explain the reason before making the change and wait for approval
+
+## No Graceful Skipping
+
+- Pipeline stages **must never skip gracefully** — if a required tool is missing, a directory is empty, or a resource is unavailable, the stage must **fail loudly** (`return False`, raise an exception, or `sys.exit(1)`)
+- Never return `True` or silently pass when expected work cannot be performed
+- A missing executable (e.g. `cargo`, `ruff`) is a hard failure, not a skip
+
 ## Pitfalls
 
 - `StrictUndefined` means typos in template context variables crash the build
@@ -190,3 +205,4 @@ Use the appropriate comment syntax for each file type:
 - No `package.json` exists — **never** create one or suggest `npm install`
 - `:root` CSS variables don't inherit into shadow trees unless explicitly opted in
 - `dist/` is the only thing that runs — everything else is build tooling
+- If a Python script fails with `ModuleNotFoundError` or `ImportError`, **ask the user for permission** before adding the missing package to `requirements.txt`, then run `pip install -r requirements.txt` and retry the failing command

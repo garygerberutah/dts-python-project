@@ -21,7 +21,14 @@ def _run(cmd: list[str], cwd: Path | None = None, label: str = "") -> bool:
     Returns True on success, False on failure (does NOT raise).
     """
     print(f"  [format:{label}] {' '.join(cmd)}")
-    result = subprocess.run(cmd, cwd=cwd, text=True)
+    try:
+        result = subprocess.run(cmd, cwd=cwd, text=True)
+    except FileNotFoundError:
+        print(
+            f"  [format:{label}] FAILED — '{cmd[0]}' not found. Install it and retry.",
+            file=sys.stderr,
+        )
+        return False
     if result.returncode != 0:
         print(f"  [format:{label}] FAILED (exit {result.returncode})", file=sys.stderr)
         return False

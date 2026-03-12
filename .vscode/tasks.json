@@ -1,0 +1,81 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "pipeline",
+            "type": "shell",
+            "command": "python run.py pipeline --skip-deploy",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "python run.py build",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "python run.py test",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "format",
+            "type": "shell",
+            "command": "python run.py format",
+            "problemMatcher": []
+        },
+        {
+            "label": "lint",
+            "type": "shell",
+            "command": "python run.py lint",
+            "problemMatcher": []
+        },
+        {
+            "label": "validate",
+            "type": "shell",
+            "command": "python run.py validate",
+            "problemMatcher": []
+        },
+        {
+            "label": "validate-copyright",
+            "type": "shell",
+            "command": "python run.py validate-copyright",
+            "problemMatcher": []
+        },
+        {
+            "label": "validate-mime",
+            "type": "shell",
+            "command": "python run.py validate-mime",
+            "problemMatcher": []
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "python run.py clean",
+            "problemMatcher": []
+        },
+        {
+            "label": "serve",
+            "type": "shell",
+            "command": "python run.py serve",
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "push",
+            "type": "shell",
+            "command": "python run.py pipeline",
+            "problemMatcher": []
+        }
+    ]
+}

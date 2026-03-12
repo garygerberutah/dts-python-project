@@ -4,19 +4,20 @@ pipeline.py — master automation pipeline.
 Copyright 2026 by GuidoGerb Publishing, LLC
 
 Pipeline stages (in order):
-  1. format    — auto-format all source files
-  2. lint      — static analysis (ruff, clippy, JS linter)
-  3. validate  — copyright notice in all source files
-  4. validate  — asset naming convention + SHA-256 hashes
-  5. validate  — binary files match their mime-type encoding
-  6. clean     — remove prior build artefacts
-  7. build     — compile WASM + render templates + copy assets
-  8. validate  — WCAG 2.1 accessibility check
-  9. test      — run Web Component test suites
- 10. deploy    — git commit + git push  (optional, skipped with --skip-deploy)
+  1. test      — run global toolchain tests (tests/)
+  2. format    — auto-format all source files
+  3. lint      — static analysis (ruff, clippy, JS linter)
+  4. validate  — copyright notice in all source files
+  5. validate  — asset naming convention + SHA-256 hashes
+  6. validate  — binary files match their mime-type encoding
+  7. clean     — remove prior build artefacts
+  8. build     — compile WASM + render templates + copy assets
+  9. validate  — WCAG 2.1 accessibility check
+ 10. test      — run Web Component test suites
+ 11. deploy    — git commit + git push  (optional, skipped with --skip-deploy)
 
 Fail-fast: any stage failure immediately aborts the pipeline.
-All stages (1-9) must pass before any git commit is allowed.
+All stages (1-10) must pass before any git commit is allowed.
 """
 
 import argparse
@@ -28,7 +29,7 @@ from scripts.build import build
 from scripts.clean import clean
 from scripts.format_code import format_all
 from scripts.lint import lint_all
-from scripts.test_components import run_all_tests
+from scripts.test_components import TOOLCHAIN_TESTS_DIR, run_all_tests
 from scripts.validate_assets import validate as validate_assets
 from scripts.validate_copyright import validate as validate_copyright
 from scripts.validate_mime_type_content import validate as validate_mime
@@ -90,28 +91,42 @@ def _stage_validate_mime() -> bool:
     return True
 
 
+def _stage_global_tests() -> bool:
+    """Run global toolchain tests from tests/ directory."""
+    if not TOOLCHAIN_TESTS_DIR.exists() or not sorted(TOOLCHAIN_TESTS_DIR.glob("test_*.py")):
+        print("[test] No global tests found — FAILING.", file=sys.stderr)
+        return False
+    result = subprocess.run(
+        [sys.executable, "-m", "pytest", str(TOOLCHAIN_TESTS_DIR), "-v"],
+        cwd=ROOT,
+        text=True,
+    )
+    return result.returncode == 0
+
+
 def run(skip_deploy: bool = False) -> int:
     """Execute the full pipeline. Returns 0 on success, 1 on any failure."""
     print("\n[pipeline] Master Automation Pipeline")
     print("[pipeline] Fail-fast mode enabled.\n")
 
-    _stage("1. format", format_all)
-    _stage("2. lint", lint_all)
-    _stage("3. validate (copyright)", _stage_validate_copyright)
-    _stage("4. validate (assets)", _stage_validate_assets)
-    _stage("5. validate (mime-type)", _stage_validate_mime)
+    _stage("1. test (global)", _stage_global_tests)
+    _stage("2. format", format_all)
+    _stage("3. lint", lint_all)
+    _stage("4. validate (copyright)", _stage_validate_copyright)
+    _stage("5. validate (assets)", _stage_validate_assets)
+    _stage("6. validate (mime-type)", _stage_validate_mime)
 
     # Build must happen before WCAG validate so HTML artefacts exist
-    _stage("6. clean", clean)
-    _stage("7. build", build)
+    _stage("7. clean", clean)
+    _stage("8. build", build)
 
-    _stage("8. validate (WCAG 2.1)", _stage_validate)
-    _stage("9. test (Web Components)", run_all_tests)
+    _stage("9. validate (WCAG 2.1)", _stage_validate)
+    _stage("10. test (Web Components)", run_all_tests)
 
     if not skip_deploy:
-        _stage("10. deploy", _deploy)
+        _stage("11. deploy", _deploy)
     else:
-        print("\n[pipeline] Stage 9 (deploy) skipped (--skip-deploy).")
+        print("\n[pipeline] Stage 11 (deploy) skipped (--skip-deploy).")
 
     print("\n[pipeline] ✓ All stages completed successfully.")
     return 0

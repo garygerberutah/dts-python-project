@@ -5,6 +5,7 @@ copies all frontend assets into the dist/ directory.
 Copyright 2026 by GuidoGerb Publishing, LLC
 """
 
+import hashlib
 import json
 import shutil
 import subprocess
@@ -29,7 +30,12 @@ def _load_site_config() -> dict:
 
 def _run(cmd: list[str], cwd: Path | None = None) -> None:
     """Run a subprocess command, raising on failure."""
-    result = subprocess.run(cmd, cwd=cwd, capture_output=False, text=True)
+    try:
+        result = subprocess.run(cmd, cwd=cwd, capture_output=False, text=True)
+    except FileNotFoundError:
+        raise RuntimeError(
+            f"Command failed — '{cmd[0]}' not found. Install it and retry."
+        ) from None
     if result.returncode != 0:
         raise RuntimeError(f"Command failed ({result.returncode}): {' '.join(cmd)}")
 
@@ -53,6 +59,7 @@ def render_templates(
     app_title: str | None = None,
     app_description: str | None = None,
     lang: str | None = None,
+    favicon_filename: str = "favicon.svg",
 ) -> None:
     """Render all Jinja2 templates and write them to dist/."""
     print("  [build] Rendering Jinja2 templates…")
@@ -70,6 +77,7 @@ def render_templates(
         "app_description": description,
         "lang": lang_val,
         "repo_url": site.get("repository", {}).get("url", ""),
+        "favicon_filename": favicon_filename,
     }
     DIST_DIR.mkdir(parents=True, exist_ok=True)
     for tmpl_path in TEMPLATES_DIR.glob("*.j2"):
@@ -89,8 +97,11 @@ def _resolve_env_vars(text: str, replacements: dict[str, str]) -> str:
     return text
 
 
-def copy_assets() -> None:
-    """Copy frontend JS, CSS, and static assets to dist/, resolving ${VAR} markers."""
+def copy_assets() -> str:
+    """Copy frontend JS, CSS, and static assets to dist/, resolving ${VAR} markers.
+
+    Returns the hashed favicon filename (e.g. 'favicon-<sha256>.svg').
+    """
     print("  [build] Copying frontend assets…")
     site = _load_site_config()
     replacements = {
@@ -116,27 +127,33 @@ def copy_assets() -> None:
                     filepath.write_text(resolved, encoding="utf-8")
         print(f"    {src.relative_to(ROOT)} → {dst.relative_to(ROOT)}")
 
-    # Copy a minimal favicon if one does not exist
+    # Copy or generate a favicon, then rename with SHA-256 hash
     favicon_src = ROOT / "assets" / "favicon.svg"
-    favicon_dst = DIST_DIR / "favicon.svg"
+    tmp_favicon = DIST_DIR / "_favicon_tmp.svg"
     if favicon_src.exists():
-        shutil.copy2(favicon_src, favicon_dst)
+        shutil.copy2(favicon_src, tmp_favicon)
     else:
-        favicon_dst.write_text(
+        tmp_favicon.write_text(
             '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
             '<rect width="32" height="32" fill="#0d1117"/>'
             '<text x="16" y="22" font-size="16" text-anchor="middle" fill="#58a6ff">3D</text>'
             "</svg>",
             encoding="utf-8",
         )
+    sha = hashlib.sha256(tmp_favicon.read_bytes()).hexdigest()
+    favicon_final = DIST_DIR / f"favicon-{sha}.svg"
+    tmp_favicon.rename(favicon_final)
+    # Store the hashed filename so templates can reference it
+    _favicon_filename = favicon_final.name
+    return _favicon_filename
 
 
 def build() -> None:
     """Run the full build pipeline."""
     DIST_DIR.mkdir(parents=True, exist_ok=True)
     build_wasm()
-    render_templates()
-    copy_assets()
+    favicon_filename = copy_assets()
+    render_templates(favicon_filename=favicon_filename)
 
 
 def main() -> int:

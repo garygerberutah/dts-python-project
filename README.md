@@ -35,7 +35,12 @@
 # Install Python dependencies (only dependency: Python)
 pip install -r requirements.txt
 
-# Install wasm-pack
+# Install Rust toolchain (Linux / WSL2)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source "$HOME/.cargo/env"
+
+# Add WASM compile target and install wasm-pack
+rustup target add wasm32-unknown-unknown
 curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 ```
 

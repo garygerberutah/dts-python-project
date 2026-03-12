@@ -11,27 +11,34 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-TESTS_DIR = ROOT / "tests"
+FRONTEND_TESTS_DIR = ROOT / "frontend" / "tests"
+TOOLCHAIN_TESTS_DIR = ROOT / "tests"
 
 
 def run_all_tests() -> bool:
     """Run all pytest test files. Returns True if all pass."""
-    if not TESTS_DIR.exists():
-        print("[test] tests/ directory not found.")
-        return True
+    test_dirs = []
+    for d in (FRONTEND_TESTS_DIR, TOOLCHAIN_TESTS_DIR):
+        if d.exists() and sorted(d.glob("test_*.py")):
+            test_dirs.append(str(d))
 
-    test_files = sorted(TESTS_DIR.glob("test_*.py"))
-    if not test_files:
-        print("[test] No test files found.")
-        return True
+    if not test_dirs:
+        print("[test] No test directories found.", file=sys.stderr)
+        return False
 
-    print(f"[test] Found {len(test_files)} test file(s).")
-    result = subprocess.run(
-        [sys.executable, "-m", "pytest", str(TESTS_DIR), "-v"],
-        cwd=ROOT,
-        text=True,
-    )
-    return result.returncode == 0
+    # Run each directory in a separate pytest invocation to avoid
+    # conftest.py collisions between identically-named 'tests/' packages.
+    all_ok = True
+    for d in test_dirs:
+        print(f"[test] Running tests from {d}")
+        result = subprocess.run(
+            [sys.executable, "-m", "pytest", d, "-v"],
+            cwd=ROOT,
+            text=True,
+        )
+        if result.returncode != 0:
+            all_ok = False
+    return all_ok
 
 
 def main() -> int:
