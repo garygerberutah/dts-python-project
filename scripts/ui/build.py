@@ -14,12 +14,12 @@ from pathlib import Path
 
 import jinja2
 
-ROOT = Path(__file__).resolve().parent.parent
-WASM_DIR = ROOT / "wasm"
+ROOT = Path(__file__).resolve().parent.parent.parent
+WASM_DIR = ROOT / "ui" / "src" / "wasm"
 DIST_DIR = ROOT / "dist"
-TEMPLATES_DIR = ROOT / "templates"
-FRONTEND_DIR = ROOT / "frontend"
-SITE_JSON = ROOT / "resources" / "site.json"
+TEMPLATES_DIR = ROOT / "ui" / "src" / "templates"
+UI_DIR = ROOT / "ui"
+SITE_JSON = ROOT / "resources" / "config" / "site.json"
 
 
 def _load_site_config() -> dict:
@@ -109,23 +109,32 @@ def copy_assets() -> str:
         "REPO_URL": site.get("repository", {}).get("url", ""),
         "WASM_MODULE": site.get("wasm_module", ""),
     }
-    mappings = [
-        (FRONTEND_DIR / "js", DIST_DIR / "js"),
-        (FRONTEND_DIR / "styles", DIST_DIR / "styles"),
-        (FRONTEND_DIR / "components", DIST_DIR / "components"),
+    # Copy main.js entry point
+    js_dst = DIST_DIR / "js"
+    js_dst.mkdir(parents=True, exist_ok=True)
+    main_js_src = UI_DIR / "src" / "main.js"
+    if main_js_src.exists():
+        shutil.copy2(main_js_src, js_dst / "main.js")
+        print(f"    {main_js_src.relative_to(ROOT)} → {(js_dst / 'main.js').relative_to(ROOT)}")
+
+    # Copy directory-based assets
+    dir_mappings = [
+        (UI_DIR / "scss", DIST_DIR / "styles"),
+        (UI_DIR / "src" / "components", DIST_DIR / "components"),
     ]
-    for src, dst in mappings:
+    for src, dst in dir_mappings:
         if dst.exists():
             shutil.rmtree(dst)
         shutil.copytree(src, dst, ignore=shutil.ignore_patterns("*.test.js"))
-        # Resolve ${VAR} markers in copied JS/CSS files
-        for filepath in dst.rglob("*"):
-            if filepath.is_file() and filepath.suffix in (".js", ".css"):
-                content = filepath.read_text(encoding="utf-8")
-                resolved = _resolve_env_vars(content, replacements)
-                if resolved != content:
-                    filepath.write_text(resolved, encoding="utf-8")
         print(f"    {src.relative_to(ROOT)} → {dst.relative_to(ROOT)}")
+
+    # Resolve ${VAR} markers in copied JS/CSS/SCSS files
+    for filepath in DIST_DIR.rglob("*"):
+        if filepath.is_file() and filepath.suffix in (".js", ".css", ".scss"):
+            content = filepath.read_text(encoding="utf-8")
+            resolved = _resolve_env_vars(content, replacements)
+            if resolved != content:
+                filepath.write_text(resolved, encoding="utf-8")
 
     # Copy or generate a favicon, then rename with SHA-256 hash
     favicon_src = ROOT / "assets" / "favicon.svg"

@@ -12,7 +12,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 def _run(cmd: list[str], cwd: Path | None = None, label: str = "") -> bool:
@@ -37,13 +37,13 @@ def _run(cmd: list[str], cwd: Path | None = None, label: str = "") -> bool:
 
 def format_rust() -> bool:
     """Format Rust source with rustfmt via cargo fmt."""
-    return _run(["cargo", "fmt"], cwd=ROOT / "wasm", label="rustfmt")
+    return _run(["cargo", "fmt"], cwd=ROOT / "ui" / "src" / "wasm", label="rustfmt")
 
 
 def format_python() -> bool:
     """Format Python source with ruff."""
     return _run(
-        ["ruff", "format", "scripts/", "run.py"],
+        ["ruff", "format", "--config", "resources/config/ruff.toml", "scripts/", "run.py"],
         cwd=ROOT,
         label="ruff",
     )

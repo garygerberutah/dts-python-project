@@ -5,8 +5,8 @@ Copyright 2026 by GuidoGerb Publishing, LLC
 
 from pathlib import Path
 
-import scripts.validate_copyright as vc_mod
-from scripts.validate_copyright import (
+import scripts.ui.validate_copyright as vc_mod
+from scripts.ui.validate_copyright import (
     COMMENT_STYLES,
     SOURCE_EXTENSIONS,
     find_source_files,

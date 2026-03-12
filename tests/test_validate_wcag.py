@@ -3,7 +3,7 @@
 Copyright 2026 by GuidoGerb Publishing, LLC
 """
 
-from scripts.validate_wcag import (
+from scripts.ui.validate_wcag import (
     Violation,
     WCAGParser,
     _check_file,

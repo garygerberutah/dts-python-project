@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 from html.parser import HTMLParser
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 DIST_DIR = ROOT / "dist"
 
 
@@ -174,7 +174,7 @@ def validate(dist_dir: Path = DIST_DIR) -> list[Violation]:
     """Validate all HTML files in dist_dir. Returns all violations found."""
     if not dist_dir.exists():
         print(
-            "[wcag] dist/ directory not found. Run 'python run.py build' first.",
+            "[wcag] dist/ directory not found. Run 'python build.py build' first.",
             file=sys.stderr,
         )
         return [

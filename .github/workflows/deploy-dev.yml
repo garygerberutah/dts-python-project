@@ -49,22 +49,12 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            wasm/target
-          key: ${{ runner.os }}-cargo-wasm-${{ hashFiles('wasm/Cargo.lock') }}
+            ui/src/wasm/target
+          key: ${{ runner.os }}-cargo-wasm-${{ hashFiles('ui/src/wasm/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-wasm-
 
       - name: Install wasm-pack
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-
-      # ── Node.js (component tests) ─────────────
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
-
-      - name: Install Node dependencies
-        run: npm ci
 
       # ── Pipeline (format → lint → validate → clean → build → test) ──
       - name: Run pipeline (no deploy stage)

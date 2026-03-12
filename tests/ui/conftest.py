@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-COMPONENTS_DIR = Path(__file__).resolve().parent.parent / "components"
+COMPONENTS_DIR = Path(__file__).resolve().parent.parent.parent / "ui" / "src" / "components"
 
 
 def _read_component(name: str) -> str:

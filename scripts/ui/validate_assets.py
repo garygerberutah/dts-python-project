@@ -22,7 +22,7 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 
 # Extensions considered static resources (images, vectors, fonts)
 ASSET_EXTENSIONS = {
@@ -101,7 +101,7 @@ def validate(directories: list[Path] | None = None) -> list[str]:
     """Validate all asset files. Returns list of all errors."""
     if directories is None:
         directories = [
-            ROOT / "frontend",
+            ROOT / "ui",
             ROOT / "assets",
             ROOT / "dist",
         ]

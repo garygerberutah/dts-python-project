@@ -8,8 +8,8 @@ import shutil
 import sys
 from pathlib import Path
 
-DIST_DIR = Path(__file__).resolve().parent.parent / "dist"
-WASM_PKG_DIR = Path(__file__).resolve().parent.parent / "wasm" / "pkg"
+DIST_DIR = Path(__file__).resolve().parent.parent.parent / "dist"
+WASM_PKG_DIR = Path(__file__).resolve().parent.parent.parent / "ui" / "src" / "wasm" / "pkg"
 
 
 def clean() -> None:

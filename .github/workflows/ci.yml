@@ -32,21 +32,21 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            wasm/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('wasm/Cargo.lock') }}
+            ui/src/wasm/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('ui/src/wasm/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-
 
       - name: cargo fmt --check
         run: cargo fmt --check
-        working-directory: wasm
+        working-directory: ui/src/wasm
 
       - name: cargo clippy
         run: cargo clippy -- -D warnings
-        working-directory: wasm
+        working-directory: ui/src/wasm
 
       - name: cargo test
         run: cargo test
-        working-directory: wasm
+        working-directory: ui/src/wasm
 
   # ─────────────────────────────────────────────
   # 2. Python lint + WCAG validation
@@ -67,28 +67,28 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: ruff check
-        run: ruff check scripts/ run.py
+        run: ruff check --config resources/config/ruff.toml scripts/ run.py
 
       - name: ruff format --check
-        run: ruff format --check scripts/ run.py
+        run: ruff format --check --config resources/config/ruff.toml scripts/ run.py
 
   # ─────────────────────────────────────────────
-  # 3. JavaScript component tests
-  # ─────────────────────────────────────────────
-  js-test:
-    name: JS Component Tests
+  # 3. Component tests (pytest source-analysis)
+  # ─────────────────────────────────────────────────
+  component-test:
+    name: Component Tests (pytest)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          node-version: "22"
-          cache: npm
+          python-version: "3.12"
+          cache: pip
 
-      - name: Install Node dependencies
-        run: npm ci
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
 
       - name: Run component tests
-        run: npm test
+        run: python run.py test

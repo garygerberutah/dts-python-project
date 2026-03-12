@@ -5,7 +5,7 @@ Copyright 2026 by GuidoGerb Publishing, LLC
 
 import hashlib
 
-from scripts.validate_assets import (
+from scripts.ui.validate_assets import (
     ASSET_EXTENSIONS,
     NAMING_PATTERN,
     find_asset_files,

@@ -3,7 +3,7 @@
 Copyright 2026 by GuidoGerb Publishing, LLC
 """
 
-from scripts.validate_mime_type_content import (
+from scripts.ui.validate_mime_type_content import (
     VALIDATORS,
     find_binary_files,
     validate,

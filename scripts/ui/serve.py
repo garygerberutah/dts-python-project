@@ -10,7 +10,7 @@ import socketserver
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 DIST_DIR = ROOT / "dist"
 DEFAULT_PORT = 8080
 

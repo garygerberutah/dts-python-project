@@ -13,7 +13,7 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 def _strip_strings(line: str) -> str:
@@ -71,14 +71,14 @@ def _check_file(filepath: Path) -> list[tuple[int, str, str]]:
 
 
 def lint_js_files(root: Path = ROOT) -> bool:
-    """Lint all JS files under frontend/ (excluding *.test.js). Returns True if clean."""
-    frontend_dir = root / "frontend"
-    if not frontend_dir.exists():
-        print("  [lint:js] frontend/ directory not found.")
+    """Lint all JS files under ui/ (excluding *.test.js). Returns True if clean."""
+    ui_dir = root / "ui"
+    if not ui_dir.exists():
+        print("  [lint:js] ui/ directory not found.")
         return True
 
-    js_files = sorted(frontend_dir.glob("**/*.js"))
-    js_files = [f for f in js_files if ".test." not in f.name]
+    js_files = sorted(ui_dir.glob("**/*.js"))
+    js_files = [f for f in js_files if ".test." not in f.name and "/wasm/" not in f.as_posix()]
 
     if not js_files:
         print("  [lint:js] No JS files found.")

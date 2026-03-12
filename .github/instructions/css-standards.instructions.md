@@ -1,5 +1,5 @@
 ---
-applyTo: "frontend/styles/**/*.css"
+applyTo: "ui/scss/**/*.css"
 description: "Use when editing global CSS. Covers CSS variable scoping, Shadow DOM inheritance, system fonts, and self-contained resource rules."
 ---
 # CSS Standards

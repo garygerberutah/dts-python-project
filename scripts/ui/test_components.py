@@ -10,15 +10,15 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-FRONTEND_TESTS_DIR = ROOT / "frontend" / "tests"
+ROOT = Path(__file__).resolve().parent.parent.parent
+UI_TESTS_DIR = ROOT / "tests" / "ui"
 TOOLCHAIN_TESTS_DIR = ROOT / "tests"
 
 
 def run_all_tests() -> bool:
     """Run all pytest test files. Returns True if all pass."""
     test_dirs = []
-    for d in (FRONTEND_TESTS_DIR, TOOLCHAIN_TESTS_DIR):
+    for d in (UI_TESTS_DIR, TOOLCHAIN_TESTS_DIR):
         if d.exists() and sorted(d.glob("test_*.py")):
             test_dirs.append(str(d))
 

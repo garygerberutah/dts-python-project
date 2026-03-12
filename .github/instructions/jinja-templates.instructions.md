@@ -1,5 +1,5 @@
 ---
-applyTo: "templates/**/*.j2"
+applyTo: "ui/src/templates/**/*.j2"
 description: "Use when editing Jinja2 templates. Covers build-time rendering, block inheritance, context variables, and security rules."
 ---
 # Jinja2 Template Standards
@@ -18,7 +18,7 @@ description: "Use when editing Jinja2 templates. Covers build-time rendering, bl
 
 ## Context Variables
 - `app_title` (str), `app_description` (str), `lang` (str)
-- Defined in `scripts/build.py` — never from user input
+- Defined in `scripts/ui/build.py` — never from user input
 
 ## Security
 - Never pass user-supplied data into template context

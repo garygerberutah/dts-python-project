@@ -16,7 +16,7 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 COPYRIGHT_FILE = ROOT / "COPYRIGHT"
 
 # Extensions to validate and how many bytes from the top to search

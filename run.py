@@ -77,45 +77,45 @@ def main() -> int:
         print("[setup] Done — pre-commit hooks installed.")
         return 0
     elif args.command == "clean":
-        from scripts.clean import main as fn
+        from scripts.ui.clean import main as fn
 
         return fn()
     elif args.command == "build":
-        from scripts.build import main as fn
+        from scripts.ui.build import main as fn
 
         return fn()
     elif args.command == "serve":
-        from scripts.serve import serve
+        from scripts.ui.serve import serve
 
         serve(args.port)
         return 0
     elif args.command == "format":
-        from scripts.format_code import main as fn
+        from scripts.ui.format_code import main as fn
 
         return fn()
     elif args.command == "lint":
-        from scripts.lint import main as fn
+        from scripts.ui.lint import main as fn
 
         return fn()
     elif args.command == "validate":
-        from scripts.validate_wcag import main as fn
+        from scripts.ui.validate_wcag import main as fn
 
         return fn()
     elif args.command == "validate-copyright":
-        from scripts.validate_copyright import validate
+        from scripts.ui.validate_copyright import validate
 
         errors = validate(fix=getattr(args, "fix", False))
         return 1 if errors else 0
     elif args.command == "validate-mime":
-        from scripts.validate_mime_type_content import main as fn
+        from scripts.ui.validate_mime_type_content import main as fn
 
         return fn()
     elif args.command == "test":
-        from scripts.test_components import main as fn
+        from scripts.ui.test_components import main as fn
 
         return fn()
     elif args.command == "pipeline":
-        from scripts.pipeline import run
+        from scripts.build_all import run
 
         return run(skip_deploy=args.skip_deploy)
     else:

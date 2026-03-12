@@ -1,5 +1,5 @@
 """
-pipeline.py — master automation pipeline.
+build_all.py — master automation pipeline.
 
 Copyright 2026 by GuidoGerb Publishing, LLC
 
@@ -25,15 +25,15 @@ import subprocess
 import sys
 from pathlib import Path
 
-from scripts.build import build
-from scripts.clean import clean
-from scripts.format_code import format_all
-from scripts.lint import lint_all
-from scripts.test_components import TOOLCHAIN_TESTS_DIR, run_all_tests
-from scripts.validate_assets import validate as validate_assets
-from scripts.validate_copyright import validate as validate_copyright
-from scripts.validate_mime_type_content import validate as validate_mime
-from scripts.validate_wcag import DIST_DIR, validate
+from scripts.ui.build import build
+from scripts.ui.clean import clean
+from scripts.ui.format_code import format_all
+from scripts.ui.lint import lint_all
+from scripts.ui.test_components import TOOLCHAIN_TESTS_DIR, run_all_tests
+from scripts.ui.validate_assets import validate as validate_assets
+from scripts.ui.validate_copyright import validate as validate_copyright
+from scripts.ui.validate_mime_type_content import validate as validate_mime
+from scripts.ui.validate_wcag import DIST_DIR, validate
 
 ROOT = Path(__file__).resolve().parent.parent
 

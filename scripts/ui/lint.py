@@ -13,7 +13,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 def _run(cmd: list[str], cwd: Path | None = None, label: str = "") -> bool:
@@ -36,7 +36,7 @@ def _run(cmd: list[str], cwd: Path | None = None, label: str = "") -> bool:
 def lint_python() -> bool:
     """Run ruff check over Python sources."""
     return _run(
-        ["ruff", "check", "scripts/", "run.py"],
+        ["ruff", "check", "--config", "resources/config/ruff.toml", "scripts/", "run.py"],
         cwd=ROOT,
         label="ruff",
     )
@@ -52,14 +52,14 @@ def lint_rust() -> bool:
             "-D",
             "warnings",
         ],
-        cwd=ROOT / "wasm",
+        cwd=ROOT / "ui" / "src" / "wasm",
         label="clippy",
     )
 
 
 def lint_js() -> bool:
     """Run the Python-based JS linter over frontend sources."""
-    from scripts.lint_js import lint_js_files
+    from scripts.ui.lint_js import lint_js_files
 
     print("  [lint:js] Running Python JS linter…")
     return lint_js_files(ROOT)

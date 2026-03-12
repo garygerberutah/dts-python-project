@@ -21,7 +21,7 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 
 ASSET_EXTENSIONS = {
     ".png",
@@ -43,7 +43,7 @@ ASSET_EXTENSIONS = {
 NAMING_PATTERN = re.compile(r"^[a-zA-Z][a-zA-Z0-9]*-[0-9a-f]{64}\.[a-zA-Z0-9]+$")
 
 STATIC_DIRS = [
-    ROOT / "frontend",
+    ROOT / "ui",
     ROOT / "assets",
 ]
 

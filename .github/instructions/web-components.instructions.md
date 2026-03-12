@@ -1,5 +1,5 @@
 ---
-applyTo: "frontend/components/**/*.js"
+applyTo: "ui/src/components/**/*.js"
 description: "Use when creating or editing Web Components. Covers Shadow DOM, private fields, event dispatch, WASM integration, and accessibility patterns."
 ---
 # Web Component Standards

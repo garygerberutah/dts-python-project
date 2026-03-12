@@ -3,7 +3,7 @@
 Copyright 2026 by GuidoGerb Publishing, LLC
 """
 
-from scripts.format_code import format_python
+from scripts.ui.format_code import format_python
 
 
 def test_format_python_succeeds():
