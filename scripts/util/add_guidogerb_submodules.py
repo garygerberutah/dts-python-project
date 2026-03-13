@@ -17,6 +17,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import ssl
 import subprocess
 import sys
@@ -28,6 +29,7 @@ GITHUB_USER = "guidogerb"
 SELF_REPO = "guidogerb"  # the repo this script manages — never add as its own submodule
 API_BASE = "https://api.github.com"
 PER_PAGE = 100
+SUBMODULES_DIR = "submodules"  # all submodules live under this folder
 
 START_MARKER = "<!-- SUBMODULE-LIST-START -->"
 END_MARKER = "<!-- SUBMODULE-LIST-END -->"
@@ -121,9 +123,19 @@ def _get_existing_submodules(repo_dir: Path) -> dict[str, str]:
     return {paths[k]: urls.get(k, "") for k in paths}
 
 
-def _disable_lfs_for_submodule(repo_dir: Path, name: str) -> None:
+def _submodule_path(name: str) -> str:
+    """Return the canonical submodule path: submodules/<name>."""
+    return f"{SUBMODULES_DIR}/{name}"
+
+
+def _name_from_path(path: str) -> str:
+    """Extract the repo name from a submodule path."""
+    return path.rsplit("/", 1)[-1]
+
+
+def _disable_lfs_for_submodule(repo_dir: Path, sub_path: str) -> None:
     """Disable Git LFS inside a submodule so large files are skipped."""
-    sub_dir = repo_dir / name
+    sub_dir = repo_dir / sub_path
     if not sub_dir.is_dir():
         return
     # Uninstall LFS hooks; ignore errors if LFS isn't present
@@ -140,15 +152,19 @@ def _disable_lfs_for_submodule(repo_dir: Path, name: str) -> None:
 
 
 def _add_submodule(repo_dir: Path, name: str, clone_url: str, *, skip_lfs: bool = False) -> bool:
-    """Add a new submodule. Returns True on success."""
-    print(f"  Adding submodule: {name}")
+    """Add a new submodule under submodules/<name>. Returns True on success."""
+    sub_path = _submodule_path(name)
+    print(f"  Adding submodule: {sub_path}")
+
+    # Ensure the submodules directory exists
+    (repo_dir / SUBMODULES_DIR).mkdir(exist_ok=True)
 
     env = os.environ.copy()
     if skip_lfs:
         env["GIT_LFS_SKIP_SMUDGE"] = "1"
 
     result = subprocess.run(
-        ["git", "submodule", "add", "--", clone_url, name],
+        ["git", "submodule", "add", "--", clone_url, sub_path],
         cwd=repo_dir,
         capture_output=True,
         text=True,
@@ -160,7 +176,7 @@ def _add_submodule(repo_dir: Path, name: str, clone_url: str, *, skip_lfs: bool 
 
     # Init and update the newly added submodule
     subprocess.run(
-        ["git", "submodule", "update", "--init", "--", name],
+        ["git", "submodule", "update", "--init", "--", sub_path],
         cwd=repo_dir,
         capture_output=True,
         text=True,
@@ -168,17 +184,17 @@ def _add_submodule(repo_dir: Path, name: str, clone_url: str, *, skip_lfs: bool 
     )
 
     if skip_lfs:
-        _disable_lfs_for_submodule(repo_dir, name)
+        _disable_lfs_for_submodule(repo_dir, sub_path)
 
     return True
 
 
-def _checkout_latest_version_tag(repo_dir: Path, name: str) -> str | None:
+def _checkout_latest_version_tag(repo_dir: Path, sub_path: str) -> str | None:
     """If the submodule has tags starting with 'v', checkout the latest one.
 
     Returns the tag name checked out, or None if no version tags exist.
     """
-    sub_dir = repo_dir / name
+    sub_dir = repo_dir / sub_path
     if not sub_dir.is_dir():
         return None
 
@@ -210,7 +226,8 @@ def _checkout_latest_version_tag(repo_dir: Path, name: str) -> str | None:
     )
     if checkout.returncode != 0:
         print(
-            f"    Warning: failed to checkout {latest_tag} in {name}: {checkout.stderr.strip()}",
+            f"    Warning: failed to checkout {latest_tag} "
+            f"in {sub_path}: {checkout.stderr.strip()}",
             file=sys.stderr,
         )
         return None
@@ -219,60 +236,63 @@ def _checkout_latest_version_tag(repo_dir: Path, name: str) -> str | None:
     return latest_tag
 
 
-def _sync_submodule(repo_dir: Path, name: str, *, skip_lfs: bool = False) -> bool:
+def _sync_submodule(repo_dir: Path, sub_path: str, *, skip_lfs: bool = False) -> bool:
     """Sync and pull latest changes for an existing submodule."""
-    print(f"  Syncing submodule: {name}")
+    print(f"  Syncing submodule: {sub_path}")
 
     env = os.environ.copy()
     if skip_lfs:
         env["GIT_LFS_SKIP_SMUDGE"] = "1"
 
     subprocess.run(
-        ["git", "submodule", "sync", "--", name],
+        ["git", "submodule", "sync", "--", sub_path],
         cwd=repo_dir,
         capture_output=True,
         text=True,
     )
     result = subprocess.run(
-        ["git", "submodule", "update", "--init", "--remote", "--", name],
+        ["git", "submodule", "update", "--init", "--remote", "--", sub_path],
         cwd=repo_dir,
         capture_output=True,
         text=True,
         env=env,
     )
     if result.returncode != 0:
-        print(f"    Warning: failed to sync {name}: {result.stderr.strip()}", file=sys.stderr)
+        print(f"    Warning: failed to sync {sub_path}: {result.stderr.strip()}", file=sys.stderr)
         return False
 
     if skip_lfs:
-        _disable_lfs_for_submodule(repo_dir, name)
+        _disable_lfs_for_submodule(repo_dir, sub_path)
 
     return True
 
 
-def _remove_submodule(repo_dir: Path, name: str) -> bool:
-    """Remove a stale submodule that no longer has an upstream repo."""
-    print(f"  Removing stale submodule: {name}")
+def _remove_submodule(repo_dir: Path, sub_path: str) -> bool:
+    """Remove a submodule by its path (e.g. 'submodules/foo' or 'foo')."""
+    print(f"  Removing submodule: {sub_path}")
     # Deinit
     subprocess.run(
-        ["git", "submodule", "deinit", "-f", "--", name],
+        ["git", "submodule", "deinit", "-f", "--", sub_path],
         cwd=repo_dir,
         capture_output=True,
         text=True,
     )
     # Remove from index and working tree
     subprocess.run(
-        ["git", "rm", "-f", "--", name],
+        ["git", "rm", "-f", "--", sub_path],
         cwd=repo_dir,
         capture_output=True,
         text=True,
     )
-    # Clean up .git/modules entry
-    modules_dir = repo_dir / ".git" / "modules" / name
-    if modules_dir.is_dir():
-        import shutil
-
-        shutil.rmtree(modules_dir)
+    # Clean up .git/modules entry (check both path variants)
+    for modules_path in (sub_path, _name_from_path(sub_path)):
+        modules_dir = repo_dir / ".git" / "modules" / modules_path
+        if modules_dir.is_dir():
+            shutil.rmtree(modules_dir)
+    # Remove leftover working directory if git rm didn't clean it
+    leftover = repo_dir / sub_path
+    if leftover.is_dir():
+        shutil.rmtree(leftover)
     return True
 
 
@@ -283,7 +303,7 @@ def _remove_submodule(repo_dir: Path, name: str) -> bool:
 
 def _extract_readme_description(repo_dir: Path, name: str) -> str:
     """Extract the first meaningful paragraph from a submodule's README."""
-    sub_dir = repo_dir / name
+    sub_dir = repo_dir / SUBMODULES_DIR / name
     readme = None
     for candidate in ("README.md", "readme.md", "README.rst", "README.txt", "README"):
         path = sub_dir / candidate
@@ -369,12 +389,11 @@ def _update_readme(repo_dir: Path, table_md: str) -> None:
     block = f"{START_MARKER}\n\n## Submodules\n\n{table_md}\n\n{END_MARKER}"
 
     if START_MARKER in content and END_MARKER in content:
-        # Replace existing block
-        pattern = re.compile(
-            re.escape(START_MARKER) + r".*?" + re.escape(END_MARKER),
-            re.DOTALL,
-        )
-        content = pattern.sub(block, content, count=1)
+        # Replace existing block using plain string operations (not regex)
+        # to avoid backslash escape issues in README content
+        start_idx = content.index(START_MARKER)
+        end_idx = content.index(END_MARKER) + len(END_MARKER)
+        content = content[:start_idx] + block + content[end_idx:]
     else:
         # Append at the end
         if not content.endswith("\n"):
@@ -428,10 +447,23 @@ def run(repo_dir_str: str, *, ignore_repos: set[str] | None = None, skip_lfs: bo
     remote_names = set(repo_by_name.keys())
     print(f"  Found {len(remote_names)} remote repos (excluding self)")
 
-    # 2. Discover existing submodules
+    # 2. Discover existing submodules (path → url)
     existing = _get_existing_submodules(repo_dir)
-    existing_names = set(existing.keys())
-    print(f"  Found {len(existing_names)} existing submodules")
+    print(f"  Found {len(existing)} existing submodules")
+
+    # Build name → path lookup; detect root-level submodules needing migration
+    existing_by_name: dict[str, str] = {}  # name → current path
+    root_level: dict[str, str] = {}  # name → path (at repo root, needs move)
+    for path in existing:
+        name = _name_from_path(path)
+        existing_by_name[name] = path
+        if not path.startswith(f"{SUBMODULES_DIR}/"):
+            root_level[name] = path
+
+    if root_level:
+        print(f"  Found {len(root_level)} root-level submodules to migrate into {SUBMODULES_DIR}/")
+
+    existing_names = set(existing_by_name.keys())
 
     to_add = remote_names - existing_names
     to_sync = remote_names & existing_names
@@ -447,38 +479,80 @@ def run(repo_dir_str: str, *, ignore_repos: set[str] | None = None, skip_lfs: bo
             f"{', '.join(sorted(ignored_existing))}"
         )
 
-    # 3. Remove stale submodules
-    if to_remove:
-        print(f"\nRemoving {len(to_remove)} stale submodules...")
-        for name in sorted(to_remove):
-            _remove_submodule(repo_dir, name)
+    # 3. Migrate root-level submodules → submodules/<name>
+    #    (remove at old path, then re-add at new path)
+    to_migrate = set(root_level.keys()) - to_remove
+    if to_migrate:
+        print(f"\nMigrating {len(to_migrate)} submodules into {SUBMODULES_DIR}/...")
+        for name in sorted(to_migrate):
+            old_path = root_level[name]
+            _remove_submodule(repo_dir, old_path)
+        # Migrated repos need to be added fresh, not synced
+        to_add |= to_migrate
+        to_sync -= to_migrate
 
-    # 4. Add new submodules
+    # 4. Remove stale / ignored submodules
+    stale_to_remove = to_remove - to_migrate  # already removed during migration
+    if stale_to_remove:
+        print(f"\nRemoving {len(stale_to_remove)} stale submodules...")
+        for name in sorted(stale_to_remove):
+            path = existing_by_name.get(name, _submodule_path(name))
+            _remove_submodule(repo_dir, path)
+
+    # 5. Add new submodules (including migrated ones)
     if to_add:
         print(f"\nAdding {len(to_add)} new submodules...")
         for name in sorted(to_add):
             _add_submodule(repo_dir, name, repo_by_name[name]["clone_url"], skip_lfs=skip_lfs)
 
-    # 5. Sync existing submodules
+    # 6. Sync existing submodules
     if to_sync:
         print(f"\nSyncing {len(to_sync)} existing submodules...")
         for name in sorted(to_sync):
-            _sync_submodule(repo_dir, name, skip_lfs=skip_lfs)
+            sub_path = existing_by_name.get(name, _submodule_path(name))
+            _sync_submodule(repo_dir, sub_path, skip_lfs=skip_lfs)
 
-    # 6. Checkout latest version tag for each active submodule
+    # 7. Checkout latest version tag for each active submodule
     active_names = to_add | to_sync
     if active_names:
         print(f"\nChecking version tags for {len(active_names)} submodules...")
         for name in sorted(active_names):
-            tag = _checkout_latest_version_tag(repo_dir, name)
+            sub_path = _submodule_path(name)
+            tag = _checkout_latest_version_tag(repo_dir, sub_path)
             if not tag:
                 print(f"    {name}: no v* tags found, staying on default branch")
 
-    # 7. Build the table from repos that are now submodules
+    # 8. Build the table from repos that are now submodules
     present_repos = [repo_by_name[n] for n in sorted(repo_by_name) if n in (to_add | to_sync)]
     print(f"\nUpdating README.md with {len(present_repos)} submodule entries...")
     table = _build_markdown_table(present_repos, repo_dir)
     _update_readme(repo_dir, table)
+
+    # 9. Stage, commit, and push all changes
+    print("\nCommitting and pushing changes...")
+
+    # Stage only known paths to avoid choking on orphaned submodule dirs
+    for item in (".gitmodules", "README.md", SUBMODULES_DIR):
+        if (repo_dir / item).exists():
+            subprocess.run(["git", "add", "--", item], cwd=repo_dir, capture_output=True)
+    # Also stage any removals (deleted root-level submodule entries)
+    subprocess.run(["git", "add", "-u"], cwd=repo_dir, capture_output=True)
+
+    # Only commit if there are staged changes
+    status = subprocess.run(
+        ["git", "diff", "--cached", "--quiet"],
+        cwd=repo_dir,
+    )
+    if status.returncode != 0:
+        subprocess.run(
+            ["git", "commit", "-m", "Update submodules and README table"],
+            cwd=repo_dir,
+            check=True,
+        )
+        subprocess.run(["git", "push", "origin"], cwd=repo_dir, check=True)
+        print("  Pushed to origin.")
+    else:
+        print("  Nothing to commit — working tree clean.")
 
     print("\nDone.")
     return True
