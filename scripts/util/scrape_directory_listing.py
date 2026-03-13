@@ -9,7 +9,7 @@ Copyright 2026 by GuidoGerb Publishing, LLC
 import argparse
 import csv
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -34,7 +34,7 @@ def run(target_dir: str) -> bool:
 
     FS_INFO_DIR.mkdir(parents=True, exist_ok=True)
 
-    timestamp = datetime.now(tz=timezone.utc).strftime("%Y%m%d-%H%M%S")
+    timestamp = datetime.now(tz=UTC).strftime("%Y%m%d-%H%M%S")
     out_path = FS_INFO_DIR / f"fs-{timestamp}.csv"
 
     with open(out_path, "w", newline="", encoding="utf-8") as f:

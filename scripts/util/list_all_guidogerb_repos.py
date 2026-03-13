@@ -79,8 +79,7 @@ def run() -> bool:
 
     if not token:
         print(
-            "Warning: GITHUB_TOKEN / GH_TOKEN not set — "
-            "only public repos will be listed",
+            "Warning: GITHUB_TOKEN / GH_TOKEN not set — only public repos will be listed",
             file=sys.stderr,
         )
 

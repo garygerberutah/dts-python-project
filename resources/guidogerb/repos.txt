@@ -98,6 +98,7 @@ guidogerb/blockchainvoting
 guidogerb/bridge-gapp
 guidogerb/camel
 guidogerb/communique
+guidogerb/configurator
 guidogerb/crewAI
 guidogerb/cycles
 guidogerb/diloco_simple
@@ -106,6 +107,7 @@ guidogerb/fsutil
 guidogerb/garygerber-website
 guidogerb/ggml
 guidogerb/ggp-design-system
+guidogerb/ggp-mcp-agent
 guidogerb/ggp-midi-to-musicxml
 guidogerb/ggp-python-project
 guidogerb/ggp-react-project
@@ -172,9 +174,11 @@ guidogerb/sgl-learning-materials
 guidogerb/sgl-project.github.io
 guidogerb/sglang
 guidogerb/sglang-omni
+guidogerb/spksrc
 guidogerb/spring-cli
 guidogerb/spring-data-relational
 guidogerb/stable-diffusion-webui
+guidogerb/storefront
 guidogerb/streamlit
 guidogerb/surge
 guidogerb/tasks-tracker
