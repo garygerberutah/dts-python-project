@@ -14,10 +14,11 @@ Pipeline stages (in order):
   8. build     — compile WASM + render templates + copy assets
   9. validate  — WCAG 2.1 accessibility check
  10. test      — run Web Component test suites
- 11. deploy    — git commit + git push  (optional, skipped with --skip-deploy)
+ 11. sbom      — generate SBOM manifest + append to blockchain + store in DB
+ 12. deploy    — git commit + git push  (optional, skipped with --skip-deploy)
 
 Fail-fast: any stage failure immediately aborts the pipeline.
-All stages (1-10) must pass before any git commit is allowed.
+All stages (1-11) must pass before any git commit is allowed.
 """
 
 import argparse
@@ -36,6 +37,9 @@ from scripts.ui.validate_mime_type_content import validate as validate_mime
 from scripts.ui.validate_wcag import DIST_DIR, validate
 
 ROOT = Path(__file__).resolve().parent.parent
+
+# Blockchain / SBOM paths
+_REPO_NAME = ROOT.name
 
 
 def _stage(name: str, fn, *args, **kwargs) -> None:
@@ -104,6 +108,38 @@ def _stage_global_tests() -> bool:
     return result.returncode == 0
 
 
+def _stage_sbom() -> bool:
+    """Generate SBOM, append to blockchain, and store in PostgreSQL."""
+    from scripts.blockchain.generate_sbom import generate
+    from scripts.blockchain.sbom import Blockchain
+
+    # 1. Generate the manifest + composite hash
+    manifest, composite = generate()
+
+    # 2. Load the blockchain, append, mine, save
+    chain = Blockchain.load()
+    chain.add_sbom_hash(repo_name=_REPO_NAME, sha256_hash=composite)
+    proof = chain.proof_of_work()
+    chain.new_block(proof=proof)
+    if not chain.verify_chain():
+        print("[sbom] Blockchain integrity check FAILED.", file=sys.stderr)
+        return False
+    chain.save()
+    print(f"[sbom] Blockchain: block #{chain.last_block['index']} mined (proof={proof}).")
+
+    # 3. Store in PostgreSQL
+    try:
+        from scripts.blockchain.db import ensure_table, store_sbom
+
+        ensure_table()
+        store_sbom(manifest, composite)
+    except Exception as exc:
+        print(f"[sbom] PostgreSQL storage failed: {exc}", file=sys.stderr)
+        return False
+
+    return True
+
+
 def run(skip_deploy: bool = False) -> int:
     """Execute the full pipeline. Returns 0 on success, 1 on any failure."""
     print("\n[pipeline] Master Automation Pipeline")
@@ -122,11 +158,12 @@ def run(skip_deploy: bool = False) -> int:
 
     _stage("9. validate (WCAG 2.1)", _stage_validate)
     _stage("10. test (Web Components)", run_all_tests)
+    _stage("11. sbom (blockchain)", _stage_sbom)
 
     if not skip_deploy:
-        _stage("11. deploy", _deploy)
+        _stage("12. deploy", _deploy)
     else:
-        print("\n[pipeline] Stage 11 (deploy) skipped (--skip-deploy).")
+        print("\n[pipeline] Stage 12 (deploy) skipped (--skip-deploy).")
 
     print("\n[pipeline] ✓ All stages completed successfully.")
     return 0

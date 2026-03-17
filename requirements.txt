@@ -3,6 +3,7 @@
 # Python dependencies (install with: pip install -r requirements.txt)
 jinja2>=3.1.4
 pre-commit>=3.7.0
+psycopg2-binary>=2.9.0
 pytest>=8.0.0
 ruff>=0.4.0
 #

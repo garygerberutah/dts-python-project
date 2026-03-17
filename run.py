@@ -15,8 +15,10 @@ Commands:
     lint       Run static analysis
     validate   Run WCAG 2.1 accessibility checks
     test       Run Web Component test suites
+    sbom       Generate SBOM manifest + append to blockchain
+    sbom-db    Create/verify the PostgreSQL sbom_version table
     pipeline   Run the full automation pipeline (format → lint → validate →
-               clean → build → test → deploy)
+               clean → build → test → sbom → deploy)
 """
 
 import argparse
@@ -54,6 +56,8 @@ def main() -> int:
     )
     subparsers.add_parser("validate-mime", help="Validate binary file mime-type content")
     subparsers.add_parser("test", help="Run Web Component test suites")
+    subparsers.add_parser("sbom", help="Generate SBOM manifest + append to blockchain")
+    subparsers.add_parser("sbom-db", help="Create/verify the PostgreSQL sbom_version table")
 
     pipeline_p = subparsers.add_parser("pipeline", help="Run the full automation pipeline")
     pipeline_p.add_argument(
@@ -112,6 +116,14 @@ def main() -> int:
         return fn()
     elif args.command == "test":
         from scripts.ui.test_components import main as fn
+
+        return fn()
+    elif args.command == "sbom":
+        from scripts.blockchain.generate_sbom import main as fn
+
+        return fn()
+    elif args.command == "sbom-db":
+        from scripts.blockchain.db import main as fn
 
         return fn()
     elif args.command == "pipeline":
