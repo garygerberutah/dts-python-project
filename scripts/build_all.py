@@ -132,9 +132,16 @@ def _stage_sbom() -> bool:
         from scripts.blockchain.db import ensure_table, store_sbom
 
         ensure_table()
-        store_sbom(manifest, composite)
+        row_id = store_sbom(manifest, composite)
     except Exception as exc:
         print(f"[sbom] PostgreSQL storage failed: {exc}", file=sys.stderr)
+        return False
+
+    if not isinstance(row_id, int) or row_id <= 0:
+        print(
+            f"[sbom] SBOM record not stored — expected positive row id, got {row_id!r}.",
+            file=sys.stderr,
+        )
         return False
 
     return True

@@ -104,7 +104,7 @@ def test_stage_global_tests_returns_false_on_failure():
 
 
 def test_stage_sbom_succeeds():
-    """_stage_sbom returns True when all sub-steps succeed."""
+    """_stage_sbom returns True when store_sbom returns a valid row id."""
     mock_chain = MagicMock()
     mock_chain.verify_chain.return_value = True
     mock_chain.last_block = {"index": 1}
@@ -120,6 +120,7 @@ def test_stage_sbom_succeeds():
     mock_sbom_module.Blockchain = mock_blockchain_cls
 
     mock_db_module = MagicMock()
+    mock_db_module.store_sbom.return_value = 1
 
     with patch.dict("sys.modules", {
         "scripts.blockchain.generate_sbom": mock_gen_module,
@@ -128,6 +129,56 @@ def test_stage_sbom_succeeds():
     }):
         result = ba_mod._stage_sbom()
         assert result is True
+        mock_db_module.ensure_table.assert_called_once()
+        mock_db_module.store_sbom.assert_called_once()
+
+
+def test_stage_sbom_fails_when_no_row_stored():
+    """_stage_sbom returns False when store_sbom returns a non-positive id."""
+    mock_chain = MagicMock()
+    mock_chain.verify_chain.return_value = True
+    mock_chain.last_block = {"index": 1}
+
+    mock_gen_module = MagicMock()
+    mock_gen_module.generate.return_value = ({"files": []}, "abc123")
+
+    mock_sbom_module = MagicMock()
+    mock_sbom_module.Blockchain.load.return_value = mock_chain
+
+    mock_db_module = MagicMock()
+    mock_db_module.store_sbom.return_value = None  # no row inserted
+
+    with patch.dict("sys.modules", {
+        "scripts.blockchain.generate_sbom": mock_gen_module,
+        "scripts.blockchain.sbom": mock_sbom_module,
+        "scripts.blockchain.db": mock_db_module,
+    }):
+        result = ba_mod._stage_sbom()
+        assert result is False
+
+
+def test_stage_sbom_fails_when_row_id_zero():
+    """_stage_sbom returns False when store_sbom returns 0."""
+    mock_chain = MagicMock()
+    mock_chain.verify_chain.return_value = True
+    mock_chain.last_block = {"index": 1}
+
+    mock_gen_module = MagicMock()
+    mock_gen_module.generate.return_value = ({"files": []}, "abc123")
+
+    mock_sbom_module = MagicMock()
+    mock_sbom_module.Blockchain.load.return_value = mock_chain
+
+    mock_db_module = MagicMock()
+    mock_db_module.store_sbom.return_value = 0
+
+    with patch.dict("sys.modules", {
+        "scripts.blockchain.generate_sbom": mock_gen_module,
+        "scripts.blockchain.sbom": mock_sbom_module,
+        "scripts.blockchain.db": mock_db_module,
+    }):
+        result = ba_mod._stage_sbom()
+        assert result is False
 
 
 def test_main_parses_skip_deploy():
