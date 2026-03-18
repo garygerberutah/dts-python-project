@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-18T23:07:23.102831+00:00",
-  "file_count": 174,
+  "timestamp": "2026-03-18T23:11:34.327753+00:00",
+  "file_count": 178,
   "files": [
     {
       "path": ".githooks/pre-commit",
@@ -116,6 +116,18 @@
       "sha256": "c53306bd40c9b237784c2dcf7be0a8c05887028d780310c6c8dab5d9eac66bfd"
     },
     {
+      "path": "resources/postgres-data/docker-compose.yml",
+      "sha256": "f1d701aa6cb17c7d6ceb660e962b34d4e307a1d23a39e8e8e1e344e32b2a44b7"
+    },
+    {
+      "path": "resources/postgres-data/init/001-create-tables.sql",
+      "sha256": "22c6c5884397d08c80d888f8a814c34b949a159b93acf3122643a802733408ea"
+    },
+    {
+      "path": "resources/postgres-data/sbom_version_20260318-230913.sql",
+      "sha256": "bce78f231b80a41d4a21a1df6659f58ac9156bdb8841a933e557fbca082281a1"
+    },
+    {
       "path": "resources/user-instructions/README.md",
       "sha256": "94b8771c03221b790ffebcc5fdbcef03b6dfc2f8d6416a6fd8688e3870b750f5"
     },
@@ -173,7 +185,7 @@
     },
     {
       "path": "scripts/blockchain/chain.json",
-      "sha256": "8763e6e4bbcbf57f28c0c012bd8d254387f0082496fd732b597cc1215e246c36"
+      "sha256": "d00bf86d1b351f514a612db07ce520387080bf77f3bd6870e63fe0e96b687ee2"
     },
     {
       "path": "scripts/blockchain/db.py",
@@ -278,6 +290,10 @@
     {
       "path": "tests/test_all.py",
       "sha256": "e45516b706a231faa4a7d7dc3477ea9db825dcf77339219f65179a4cb2ff5de5"
+    },
+    {
+      "path": "tests/test_db.py",
+      "sha256": "3ff08b074287ee2f57fee3da032de077b7b9c5b72523a4164467f511858b5333"
     },
     {
       "path": "tests/test_format.py",
