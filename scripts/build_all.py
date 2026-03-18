@@ -108,43 +108,81 @@ def _stage_global_tests() -> bool:
     return result.returncode == 0
 
 
+def _git_has_untracked() -> bool:
+    """Return True if the working tree has untracked or unstaged changes."""
+    result = subprocess.run(
+        ["git", "status", "--porcelain"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    return bool(result.stdout.strip())
+
+
 def _stage_sbom() -> bool:
-    """Generate SBOM, append to blockchain, and store in PostgreSQL."""
+    """Generate SBOM, append to blockchain, and store in PostgreSQL.
+
+    Uses a temporary git commit so ``git ls-files`` sees all new/changed
+    files.  After generation the temp commit is soft-reset so that
+    ``sbom.json`` and ``chain.json`` end up in the same final commit as
+    every other change — guaranteeing a 1-to-1 revision relationship.
+    """
     from scripts.blockchain.generate_sbom import generate
     from scripts.blockchain.sbom import Blockchain
 
-    # 1. Generate the manifest + composite hash
-    manifest, composite = generate()
-
-    # 2. Load the blockchain, append, mine, save
-    chain = Blockchain.load()
-    chain.add_sbom_hash(repo_name=_REPO_NAME, sha256_hash=composite)
-    proof = chain.proof_of_work()
-    chain.new_block(proof=proof)
-    if not chain.verify_chain():
-        print("[sbom] Blockchain integrity check FAILED.", file=sys.stderr)
-        return False
-    chain.save()
-    print(f"[sbom] Blockchain: block #{chain.last_block['index']} mined (proof={proof}).")
-
-    # 3. Store in PostgreSQL
-    try:
-        from scripts.blockchain.db import ensure_table, store_sbom
-
-        ensure_table()
-        row_id = store_sbom(manifest, composite)
-    except Exception as exc:
-        print(f"[sbom] PostgreSQL storage failed: {exc}", file=sys.stderr)
-        return False
-
-    if not isinstance(row_id, int) or row_id <= 0:
-        print(
-            f"[sbom] SBOM record not stored — expected positive row id, got {row_id!r}.",
-            file=sys.stderr,
+    # ---- 1. Temp-commit so git ls-files includes new files ----
+    did_temp_commit = False
+    if _git_has_untracked():
+        subprocess.run(["git", "add", "-A"], cwd=ROOT, check=True)
+        cp = subprocess.run(
+            ["git", "commit", "-m", "temp: sbom generation", "--allow-empty"],
+            cwd=ROOT,
+            text=True,
         )
-        return False
+        did_temp_commit = cp.returncode == 0
 
-    return True
+    try:
+        # ---- 2. Generate the manifest + composite hash ----
+        manifest, composite = generate()
+
+        # ---- 3. Load the blockchain, append, mine, save ----
+        chain = Blockchain.load()
+        chain.add_sbom_hash(repo_name=_REPO_NAME, sha256_hash=composite)
+        proof = chain.proof_of_work()
+        chain.new_block(proof=proof)
+        if not chain.verify_chain():
+            print("[sbom] Blockchain integrity check FAILED.", file=sys.stderr)
+            return False
+        chain.save()
+        print(f"[sbom] Blockchain: block #{chain.last_block['index']} mined (proof={proof}).")
+
+        # ---- 4. Store in PostgreSQL ----
+        try:
+            from scripts.blockchain.db import ensure_table, store_sbom
+
+            ensure_table()
+            row_id = store_sbom(manifest, composite)
+        except Exception as exc:
+            print(f"[sbom] PostgreSQL storage failed: {exc}", file=sys.stderr)
+            return False
+
+        if not isinstance(row_id, int) or row_id <= 0:
+            print(
+                f"[sbom] SBOM record not stored — expected positive row id, got {row_id!r}.",
+                file=sys.stderr,
+            )
+            return False
+
+        return True
+
+    finally:
+        # ---- 5. Undo the temp commit, keeping changes staged ----
+        if did_temp_commit:
+            subprocess.run(
+                ["git", "reset", "--soft", "HEAD~1"],
+                cwd=ROOT,
+                check=True,
+            )
 
 
 def run(skip_deploy: bool = False) -> int:

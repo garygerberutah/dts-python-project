@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-18T18:04:51.324053+00:00",
-  "file_count": 191,
+  "timestamp": "2026-03-18T18:19:41.820678+00:00",
+  "file_count": 209,
   "files": [
     {
       "path": ".githooks/pre-commit",
@@ -78,6 +78,46 @@
     {
       "path": "api/README.md",
       "sha256": "161f72f7839fd93ba7702eb8f84a28b996f53adc43482d04276b21dedae25e6f"
+    },
+    {
+      "path": "api/__init__.py",
+      "sha256": "265bc3aac671d314f140acb17efdc9be7ed576615352392ef53b6d438795d6ae"
+    },
+    {
+      "path": "api/src/__init__.py",
+      "sha256": "6ba1e0e50ac6f3f8502ec2a4935ad0b6e67c09097d99ef9ebaaae804731f4e67"
+    },
+    {
+      "path": "api/src/auth/__init__.py",
+      "sha256": "667d05bda80351a4daa029c72a74cfd08638cb52d0f4e289d586c275293cb742"
+    },
+    {
+      "path": "api/src/config/__init__.py",
+      "sha256": "46ccbc63666746fc7c1a2c121106f8d0b08bf76c391a5c5b2ae8d073893ce949"
+    },
+    {
+      "path": "api/src/lambda_pkg/__init__.py",
+      "sha256": "58e72af8e1d5cd83705ac191c6aad6f9f5a41a7f14f9bf199f086b26c5fda2aa"
+    },
+    {
+      "path": "api/src/lambda_pkg/assets.py",
+      "sha256": "c86d759ef4eb5a83c9562a82d39baaa248cbac40553e79781ca7dec07b476d30"
+    },
+    {
+      "path": "api/src/lambda_pkg/health.py",
+      "sha256": "bd3fcde651d64bc219b66109f926df7cdead7fa91387016b4a37475c1ea1d702"
+    },
+    {
+      "path": "api/src/lambda_pkg/repository.py",
+      "sha256": "95a86580f09332de3ef65321463eb3e2c49b663e1d2d4770b9f74c193b603780"
+    },
+    {
+      "path": "api/src/lambda_pkg/response.py",
+      "sha256": "d57b33233425af466d2db838cdd9b0e262589975a4006b50979e689151927e24"
+    },
+    {
+      "path": "api/src/schema/__init__.py",
+      "sha256": "076ae01d25fc3a9c03b36ea46f3ce2f82814dfcfdc10e82978785c0edba7a1eb"
     },
     {
       "path": "docker-compose.yml",
@@ -173,7 +213,7 @@
     },
     {
       "path": "scripts/blockchain/chain.json",
-      "sha256": "ca1c6ad2b234cefd64b0d4c6e1d3510f754f9eb968cae262f31ccaa39986ff64"
+      "sha256": "71bb0db0dc92346476eb9abf5d9126b9df9bcced39c0ff78ada6ab61f31a4e6b"
     },
     {
       "path": "scripts/blockchain/db.py",
@@ -193,7 +233,7 @@
     },
     {
       "path": "scripts/build_all.py",
-      "sha256": "f2d24fe8ce478d5d175a1bba1c4205751f7f5497f39ee85883e5cb8542e5a142"
+      "sha256": "f9e309938211d009381a3c943b5e5b401b1630503b55b48c21e8cc56f8ae4463"
     },
     {
       "path": "scripts/ui/__init__.py",
@@ -284,6 +324,34 @@
       "sha256": "c53306bd40c9b237784c2dcf7be0a8c05887028d780310c6c8dab5d9eac66bfd"
     },
     {
+      "path": "tests/api/test_assets_handler.py",
+      "sha256": "e9aeb2ceb7170eea16c56aa11a6dcb1807ad46eeda59081bc7ca3812f4354fe0"
+    },
+    {
+      "path": "tests/api/test_auth.py",
+      "sha256": "7f4aff6121cf0aca1406ce60631308122317ecd348a6eeba57af7eb53aadf0ca"
+    },
+    {
+      "path": "tests/api/test_config.py",
+      "sha256": "aa179814df58f3200e3853f9f2c2dbb351e44db3e363bab116e4f241bda1f7f4"
+    },
+    {
+      "path": "tests/api/test_health.py",
+      "sha256": "5a6117f8ec4b8f4db692786dd32dc38655b03620c2568f45362846cc470061e3"
+    },
+    {
+      "path": "tests/api/test_repository.py",
+      "sha256": "79d4643cad88ebd93ab4c4550604abd1bb2e193329805d18e7ddd26b9b00e853"
+    },
+    {
+      "path": "tests/api/test_response.py",
+      "sha256": "4deea9ae1e4ab685ae83f0fe6dfe3a5ecc0a2b8c47192a807a48d482471d1af3"
+    },
+    {
+      "path": "tests/api/test_schema.py",
+      "sha256": "378e3f5033e5fb57dc4b08d37a11e2e09fba799bda0abfa079ce4aec14ec64cb"
+    },
+    {
       "path": "tests/conftest.py",
       "sha256": "4d4defbed12f3fc044546aa65a84e886297bdfcfb9b722a9e5006ba350c79d78"
     },
@@ -302,6 +370,10 @@
     {
       "path": "tests/test_blockchain_generate.py",
       "sha256": "c9b3a7e4bbcf47ad8125a68f77eeafce8607626c666b226b02254db1dc0d7f68"
+    },
+    {
+      "path": "tests/test_blockchain_git_integrity.py",
+      "sha256": "3afb2ab607016538304ff796f57a31a8dd0e192b8e9e8c6015b8d5de4f8a183d"
     },
     {
       "path": "tests/test_blockchain_sbom.py",
