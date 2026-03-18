@@ -7,6 +7,7 @@ which makes direct import expensive. Tests mock external dependencies.
 """
 
 import json
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -61,7 +62,14 @@ def test_models_json_s3_bucket():
 def test_models_json_required_fields():
     """Every model entry has all required fields."""
     data = json.loads(MODELS_JSON.read_text())
-    required = {"repo_id", "s3_prefix", "category", "architecture", "display_name", "description"}
+    required = {
+        "repo_id",
+        "s3_prefix",
+        "category",
+        "architecture",
+        "display_name",
+        "description",
+    }
     for model in data["models"]:
         missing = required - set(model.keys())
         assert not missing, f"{model.get('repo_id', '?')} missing fields: {missing}"
@@ -173,3 +181,63 @@ def test_default_models_json_path(_mock_external_deps):
 
     mod = importlib.import_module("scripts.util.model-downloader")
     assert mod.DEFAULT_MODELS_JSON.name == "all-guidogerb-models.json"
+
+
+def test_min_age_days_constant(_mock_external_deps):
+    """MIN_AGE_DAYS is set to 30."""
+    import importlib
+
+    mod = importlib.import_module("scripts.util.model-downloader")
+    assert mod.MIN_AGE_DAYS == 30
+
+
+def test_model_last_modified_function_exists(_mock_external_deps):
+    """model_last_modified function is defined."""
+    import importlib
+
+    mod = importlib.import_module("scripts.util.model-downloader")
+    assert callable(mod.model_last_modified)
+
+
+def test_is_model_mature_function_exists(_mock_external_deps):
+    """is_model_mature function is defined."""
+    import importlib
+
+    mod = importlib.import_module("scripts.util.model-downloader")
+    assert callable(mod.is_model_mature)
+
+
+def test_is_model_mature_old_model(_mock_external_deps):
+    """is_model_mature returns True for a model modified 60 days ago."""
+    import importlib
+
+    mod = importlib.import_module("scripts.util.model-downloader")
+    old_date = datetime.now(timezone.utc) - timedelta(days=60)
+    mock_info = MagicMock()
+    mock_info.last_modified = old_date
+    mod.api.repo_info.return_value = mock_info
+    assert mod.is_model_mature("test/old-model", min_age_days=30) is True
+
+
+def test_is_model_mature_new_model(_mock_external_deps):
+    """is_model_mature returns False for a model modified 5 days ago."""
+    import importlib
+
+    mod = importlib.import_module("scripts.util.model-downloader")
+    recent_date = datetime.now(timezone.utc) - timedelta(days=5)
+    mock_info = MagicMock()
+    mock_info.last_modified = recent_date
+    mod.api.repo_info.return_value = mock_info
+    assert mod.is_model_mature("test/new-model", min_age_days=30) is False
+
+
+def test_is_model_mature_exactly_30_days(_mock_external_deps):
+    """is_model_mature returns True for a model modified exactly 30 days ago."""
+    import importlib
+
+    mod = importlib.import_module("scripts.util.model-downloader")
+    boundary_date = datetime.now(timezone.utc) - timedelta(days=30)
+    mock_info = MagicMock()
+    mock_info.last_modified = boundary_date
+    mod.api.repo_info.return_value = mock_info
+    assert mod.is_model_mature("test/boundary-model", min_age_days=30) is True

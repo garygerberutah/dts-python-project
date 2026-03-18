@@ -3,6 +3,7 @@ import argparse
 import json
 import os
 import sys
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 import boto3
@@ -25,6 +26,24 @@ transfer_config = TransferConfig(
     max_concurrency=4,  # 4 threads to save RAM
     multipart_chunksize=8 * 1024 * 1024,  # 8 MB chunks
 )
+
+
+MIN_AGE_DAYS = 30
+
+
+def model_last_modified(repo_id: str) -> datetime:
+    """Return the last-modified datetime (UTC) of a HuggingFace repo."""
+    info = api.repo_info(repo_id=repo_id, token=HF_TOKEN)
+    return info.last_modified
+
+
+def is_model_mature(repo_id: str, min_age_days: int = MIN_AGE_DAYS) -> bool:
+    """Return True if the repo's latest commit is at least min_age_days old."""
+    last_mod = model_last_modified(repo_id)
+    if last_mod.tzinfo is None:
+        last_mod = last_mod.replace(tzinfo=timezone.utc)
+    age = datetime.now(timezone.utc) - last_mod
+    return age >= timedelta(days=min_age_days)
 
 
 def load_models(json_path: str) -> tuple[str, list[dict]]:
@@ -65,7 +84,9 @@ def stream_model_to_s3(bucket: str, model: dict) -> None:
     repo_files = api.list_repo_files(repo_id=repo_id, token=HF_TOKEN)
 
     valid_extensions = (".safetensors", ".pt", ".ckpt", ".json", ".yaml", ".txt")
-    files_to_download = [f for f in repo_files if f.endswith(valid_extensions) and "onnx" not in f]
+    files_to_download = [
+        f for f in repo_files if f.endswith(valid_extensions) and "onnx" not in f
+    ]
 
     skipped = 0
     uploaded = 0
@@ -110,11 +131,28 @@ def verify_all(bucket: str, models: list[dict]) -> bool:
     return all_ok
 
 
-def stream_models_to_s3(bucket: str, models: list[dict]) -> None:
-    """Download all models from Hugging Face, skipping files already in S3."""
+def stream_models_to_s3(
+    bucket: str, models: list[dict], min_age_days: int = MIN_AGE_DAYS
+) -> None:
+    """Download all models from Hugging Face, skipping files already in S3.
+
+    Only uploads models whose latest HuggingFace commit is at least
+    min_age_days old. Set min_age_days=0 to skip the maturity check.
+    """
     for model in models:
+        repo_id = model["repo_id"]
+        if min_age_days > 0:
+            try:
+                if not is_model_mature(repo_id, min_age_days):
+                    print(
+                        f"\n[{repo_id}] Skipped — last modified less than {min_age_days} days ago"
+                    )
+                    continue
+            except Exception as exc:
+                print(f"\n[{repo_id}] Could not check age ({exc}), skipping")
+                continue
         stream_model_to_s3(bucket, model)
-    print("\nAll models synced.")
+    print("\nAll mature models synced.")
 
 
 def main() -> int:
@@ -129,6 +167,17 @@ def main() -> int:
         action="store_true",
         help="Only verify models exist in S3, do not download",
     )
+    parser.add_argument(
+        "--min-age-days",
+        type=int,
+        default=MIN_AGE_DAYS,
+        help=f"Only upload models whose latest commit is this many days old (default: {MIN_AGE_DAYS})",
+    )
+    parser.add_argument(
+        "--ignore-age",
+        action="store_true",
+        help="Ignore the age check and upload all models regardless of last commit date",
+    )
     args = parser.parse_args()
 
     bucket, models = load_models(args.models)
@@ -141,8 +190,13 @@ def main() -> int:
         ok = verify_all(bucket, models)
         return 0 if ok else 1
 
-    print("=== Starting direct memory stream to S3 (Disk usage: 0MB) ===")
-    stream_models_to_s3(bucket, models)
+    age_days = 0 if args.ignore_age else args.min_age_days
+    if age_days > 0:
+        print(f"Only uploading models whose latest commit is >= {age_days} days old.")
+    else:
+        print("Age check disabled — uploading all models.")
+    print("\n=== Starting direct memory stream to S3 (Disk usage: 0MB) ===")
+    stream_models_to_s3(bucket, models, min_age_days=age_days)
 
     print("\n=== Verifying uploads ===")
     verify_all(bucket, models)
