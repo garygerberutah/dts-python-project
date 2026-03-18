@@ -1,0 +1,23 @@
+# Copyright 2026 by GuidoGerb Publishing, LLC
+#
+# Docker Compose for the project PostgreSQL database.
+# Port 5433 on the host to avoid collisions with any host-native PostgreSQL (5432).
+#
+# Usage:
+#   docker compose -f resources/postgres-data/docker-compose.yml up -d
+#   docker compose -f resources/postgres-data/docker-compose.yml down
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ggp3d-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: assman
+      POSTGRES_PASSWORD: "1324QEWRFD7sdf!1!"
+      POSTGRES_DB: asset_catalog
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d:ro

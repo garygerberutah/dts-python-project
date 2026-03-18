@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-18T22:28:27.502000+00:00",
-  "file_count": 173,
+  "timestamp": "2026-03-18T23:07:23.102831+00:00",
+  "file_count": 174,
   "files": [
     {
       "path": ".githooks/pre-commit",
@@ -45,7 +45,7 @@
     },
     {
       "path": ".gitignore",
-      "sha256": "e80cb283f8be1cd378368fc2f0258ebc5aa72c094a1162f4846aadf571a670d4"
+      "sha256": "a7ae3b6238e9355df7228f879bde01c6512cfff8174b8e423f9ee6614e24e022"
     },
     {
       "path": ".pre-commit-config.yaml",
@@ -173,11 +173,11 @@
     },
     {
       "path": "scripts/blockchain/chain.json",
-      "sha256": "3583e6dbc49b452a6c4d0de102f411a60d1a6e0bc12e1836884e6fc28bfd3827"
+      "sha256": "8763e6e4bbcbf57f28c0c012bd8d254387f0082496fd732b597cc1215e246c36"
     },
     {
       "path": "scripts/blockchain/db.py",
-      "sha256": "ce6150c32d1c46056bf24032ba1f91ff81961c16785e52247065f5eb77ed87ce"
+      "sha256": "f34369115b87daf56ec6beeecc41a54ebb2e543fc8a2697a6caf859b4c3bb7e7"
     },
     {
       "path": "scripts/blockchain/generate_sbom.py",
@@ -189,7 +189,7 @@
     },
     {
       "path": "scripts/build_all.py",
-      "sha256": "a3f26e546238f3bbc6b7551cdb0d167ed81fd26d2bbd2eb6d30a63ee5b951099"
+      "sha256": "3a487ec62913ddf332385fec10ad2d135c4678bcb7c9efcddd22a6240f23f62c"
     },
     {
       "path": "scripts/ui/__init__.py",
@@ -286,6 +286,10 @@
     {
       "path": "tests/test_lint.py",
       "sha256": "db2fbfbdee3ce9294783a39e20ddb5286b1411a8a4b0461fe1a11dc43576664d"
+    },
+    {
+      "path": "tests/test_sbom.py",
+      "sha256": "fd93e538fb87a595d7b0b1d79e02926d645641e606c14ccd243981f00d5cbfcc"
     },
     {
       "path": "tests/test_validate_assets.py",

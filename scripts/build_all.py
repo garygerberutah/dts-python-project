@@ -129,10 +129,11 @@ def _stage_sbom() -> bool:
 
     # 3. Store in PostgreSQL
     try:
-        from scripts.blockchain.db import ensure_table, store_sbom
+        from scripts.blockchain.db import ensure_table, export_sbom_version_sql, store_sbom
 
         ensure_table()
-        store_sbom(manifest, composite)
+        store_sbom(manifest, composite, chain_data=chain.chain)
+        export_sbom_version_sql()
     except Exception as exc:
         print(f"[sbom] PostgreSQL storage failed: {exc}", file=sys.stderr)
         return False
