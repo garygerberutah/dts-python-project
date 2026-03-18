@@ -1,0 +1,35 @@
+{
+    "python.defaultInterpreterPath": "python",
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "tests/",
+        "tests/ui/",
+        "-v"
+    ],
+    "editor.formatOnSave": true,
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+        }
+    },
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/dist": false,
+        "**/ui/src/wasm/pkg": true,
+        "**/ui/src/wasm/target": true
+    },
+    "search.exclude": {
+        "**/dist": true,
+        "**/ui/src/wasm/pkg": true,
+        "**/ui/src/wasm/target": true
+    },
+    "files.associations": {
+        "*.j2": "jinja-html"
+    }
+}

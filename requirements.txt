@@ -1,0 +1,32 @@
+# Copyright 2026 by GuidoGerb Publishing, LLC
+#
+# Python dependencies (install with: pip install -r requirements.txt)
+jinja2>=3.1.4
+pre-commit>=3.7.0
+psycopg2-binary>=2.9.0
+pytest>=8.0.0
+ruff>=0.4.0
+#
+# --------------------------------------------------------------------------
+# External (non-pip) dependencies — install manually before running the pipeline
+# --------------------------------------------------------------------------
+#
+# Rust toolchain (provides cargo, rustc, rustfmt, clippy)
+#   Required for: WASM build, cargo fmt, cargo clippy
+#
+#   Linux / WSL2:
+#     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+#     source "$HOME/.cargo/env"
+#
+#   Windows (native):
+#     Download and run rustup-init.exe from https://rustup.rs
+#     Requires the "Visual Studio C++ Build Tools" workload
+#     After install, open a new terminal so PATH includes cargo
+#
+#   All platforms — after install:
+#     rustup target add wasm32-unknown-unknown   # WASM compile target
+#     cargo install wasm-pack                    # WASM packager
+#
+#   Verify:
+#     cargo --version
+#     wasm-pack --version

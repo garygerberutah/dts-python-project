@@ -1,0 +1,40 @@
+/* Copyright 2026 by GuidoGerb Publishing, LLC */
+@import "../../../1-settings/class-vars";
+
+#{$base-class} {
+  .block-quote {
+    padding: var(--spacing) var(--spacing-l);
+    position: relative;
+
+    &::before {
+      content: '';
+      height: 100%;
+      width: 5px;
+      border-top-left-radius: var(--radius-small);
+      border-bottom-right-radius: var(--radius-small);
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: var(--primary-color-light);
+    }
+
+    &--quotation-marks {
+      &::before {
+        content: '“';
+        font-size: var(--font-size-5xl);
+        width: 5px;
+        background-color: transparent;
+      }
+
+      &::after {
+        content: '”';
+        height: 100%;
+        font-size: var(--font-size-5xl);
+        width: 5px;
+        position: absolute;
+        right: var(--spacing);
+        background-color: transparent;
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Copyright 2026 by GuidoGerb Publishing, LLC
+#
+# Pre-commit hook — runs the full pipeline (excluding deploy).
+# Commits are rejected if any stage fails.
+
+set -e
+
+echo "[pre-commit] Running pipeline (format → lint → validate → build → test)…"
+python run.py pipeline --skip-deploy
+
+echo "[pre-commit] All stages passed."

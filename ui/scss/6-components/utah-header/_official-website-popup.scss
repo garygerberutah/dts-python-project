@@ -1,0 +1,78 @@
+/* Copyright 2026 by GuidoGerb Publishing, LLC */
+.ggpds-design-system {
+  &.utds-official-website-popup {
+    &__wrapper {
+      background: var(--gray-color);
+      color: white;
+      padding: var(--spacing-l);
+      position: relative;
+
+      &.visually-hidden {
+        position: absolute;
+      }
+    }
+  }
+  button.utds-official-website-popup__close-button {
+    position: absolute;
+    top: var(--spacing);
+    right: var(--spacing);
+
+    &.icon-button [class*=utds-icon-before-] {
+      color: white;
+      &::before {
+        font-size: .9rem;
+      }
+    }
+  }
+  .utds-official-website-popup {
+    &__heading {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semi-bold);
+      font-family: var(--normal-font-family);
+      padding: 0 var(--spacing-xl) 0 0;
+      line-height: 1;
+      margin-bottom: var(--spacing-s);
+      color: white;
+    }
+    &__content {
+      display: flex;
+      gap: var(--spacing-2xl);
+      font-family: var(--normal-font-family);
+    }
+    &__col {
+      max-width: 400px;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-xs);
+
+      [class*=utds-icon-before-]::before {
+        margin: 0;
+      }
+
+      .big-icon[class*=utds-icon-before-] {
+        &::before {
+          font-size: 2.5rem;
+          margin: 0;
+        }
+      }
+    }
+    &__address-bar {
+      width: 315px;
+      height: 36px;
+      background-image: url("data:image/webp;base64,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");
+      background-size: contain;
+      margin-top: var(--spacing-xs);
+    }
+    &__official-image {
+      width: 150px;
+      font-family: 'Source Sans 3', 'Source Sans Pro', Arial, Helvetica, sans-serif;
+      font-weight: normal;
+      font-size: 14px;
+      display: block;
+      fill: white;
+    }
+    &__copyright {
+      font-size: var(--font-size-s);
+    }
+  }
+}

@@ -1,0 +1,330 @@
+/* Copyright 2026 by GuidoGerb Publishing, LLC */
+// ==========================================================================
+// FlowState: Phase Themes Component (from flowstate.json)
+// ==========================================================================
+// Provides CSS custom properties for each cognitive flow phase.
+// Apply via: data-flowstate-phase="focus|ideation|execution|review"
+// Or via class: .flowstate-phase--focus, etc.
+//
+// Usage:
+//   <body data-flowstate-phase="focus">
+//   <section class="flowstate-phase--execution">
+
+// Phase theme mixins (for use in component SCSS)
+@mixin fs-phase-focus {
+    --fs-color-bg: #{$fs-focus-bg};
+    --fs-color-primary: #{$fs-focus-primary};
+    --fs-color-accent: #{$fs-focus-accent};
+}
+
+@mixin fs-phase-ideation {
+    --fs-color-bg: #{$fs-ideation-bg};
+    --fs-color-primary: #{$fs-ideation-primary};
+    --fs-color-accent: #{$fs-ideation-accent};
+}
+
+@mixin fs-phase-execution {
+    --fs-color-bg: #{$fs-execution-bg};
+    --fs-color-primary: #{$fs-execution-primary};
+    --fs-color-accent: #{$fs-execution-accent};
+}
+
+@mixin fs-phase-review {
+    --fs-color-bg: #{$fs-review-bg};
+    --fs-color-primary: #{$fs-review-primary};
+    --fs-color-accent: #{$fs-review-accent};
+}
+
+// Generated CSS classes
+:root[data-flowstate-phase="focus"],
+.flowstate-phase--focus {
+    @include fs-phase-focus;
+    background-color: var(--fs-color-bg);
+    color: var(--fs-color-primary);
+}
+
+:root[data-flowstate-phase="ideation"],
+.flowstate-phase--ideation {
+    @include fs-phase-ideation;
+    background-color: var(--fs-color-bg);
+    color: var(--fs-color-primary);
+}
+
+:root[data-flowstate-phase="execution"],
+.flowstate-phase--execution {
+    @include fs-phase-execution;
+    background-color: var(--fs-color-bg);
+    color: #E0E0E0;
+}
+
+:root[data-flowstate-phase="review"],
+.flowstate-phase--review {
+    @include fs-phase-review;
+    background-color: var(--fs-color-bg);
+    color: var(--fs-color-primary);
+}
+
+// -- FlowState App Layout --
+.fs-app-container {
+    display: grid;
+    grid-template-columns: $fs-sidebar-width 1fr $fs-specs-panel-width;
+    height: 100vh;
+
+    @media (max-width: $fs-responsive-breakpoint) {
+        grid-template-columns: $fs-sidebar-width-compact 1fr;
+        grid-template-rows: 1fr auto;
+    }
+}
+
+.fs-sidebar {
+    background: var(--fs-color-bg, #f4f7f6);
+    border-right: 1px solid #e1e4e8;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.fs-sidebar__brand {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    letter-spacing: -0.5px;
+    color: var(--fs-color-accent, #2471A3);
+}
+
+.fs-sidebar__nav {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.fs-nav-item {
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+    color: #555;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    font-size: inherit;
+    font-family: inherit;
+
+    &:hover {
+        background: rgba(36, 113, 163, 0.1);
+        color: var(--fs-color-accent, #2471A3);
+    }
+
+    &.active {
+        background: var(--fs-color-accent, #2471A3);
+        color: white;
+        box-shadow: 0 4px 6px rgba(36, 113, 163, 0.2);
+    }
+}
+
+.fs-main-stage {
+    background: #eef2f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+}
+
+.fs-content-card {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    background: white;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+// -- Specs / Detail Panel --
+.fs-specs-panel {
+    background: white;
+    border-left: 1px solid #e1e4e8;
+    padding: 2rem;
+    overflow-y: auto;
+
+    @media (max-width: $fs-responsive-breakpoint) {
+        grid-column: 1 / -1;
+        height: $fs-specs-panel-height-compact;
+        border-left: none;
+        border-top: 1px solid #ddd;
+    }
+}
+
+.fs-specs-panel__header {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--fs-color-accent, #2471A3);
+    padding-bottom: 1rem;
+}
+
+.fs-specs-panel__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--fs-color-primary, #2C3E50);
+}
+
+.fs-specs-panel__meta {
+    font-size: 0.9rem;
+    color: #777;
+    font-style: italic;
+}
+
+.fs-specs-panel__body {
+    min-height: 0; // Flex/grid item sizing
+}
+
+.fs-spec-section {
+    margin-bottom: 2rem;
+
+    h3 {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        line-height: 1.6;
+    }
+}
+
+// -- Color Swatches --
+.fs-color-swatch-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.fs-color-swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: help;
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: scale(1.15);
+    }
+}
+
+// -- Download / Action Button --
+.fs-download-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 10px 20px;
+    background: var(--fs-color-primary, #2C3E50);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    border: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+        background: var(--fs-color-accent, #2471A3);
+        transform: translateY(-1px);
+    }
+}
+
+// -- Execution Phase Dark Overrides --
+// When inside an execution phase, adapt component backgrounds
+.flowstate-phase--execution,
+:root[data-flowstate-phase="execution"] {
+    .fs-sidebar {
+        background: #151515;
+        border-right-color: #333;
+    }
+
+    .fs-nav-item {
+        color: #888;
+
+        &:hover {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--fs-color-accent);
+        }
+
+        &.active {
+            background: var(--fs-color-accent);
+            color: #111;
+        }
+    }
+
+    .fs-main-stage {
+        background: #0a0a0a;
+    }
+
+    .fs-content-card {
+        background: #1E1E1E;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    .fs-specs-panel {
+        background: #151515;
+        border-left-color: #333;
+    }
+
+    .fs-specs-panel__title {
+        color: #E0E0E0;
+    }
+
+    .fs-specs-panel__meta {
+        color: #888;
+    }
+
+    .fs-spec-section h3 {
+        color: #666;
+    }
+
+    .fs-download-btn {
+        background: var(--fs-color-accent, #2ECC71);
+        color: #111;
+    }
+}
+
+// -- Focus Halo (AI attentiveness indicator) --
+.fs-focus-halo {
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: -4px;
+        border-radius: inherit;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s, box-shadow 0.3s;
+    }
+
+    &--active::after {
+        opacity: 1;
+        box-shadow: 0 0 12px 2px var(--fs-color-accent, #2471A3);
+    }
+
+    &--suggestion::after {
+        opacity: 1;
+        box-shadow: 0 0 12px 2px #F0A500; // Amber: AI has a suggestion waiting
+    }
+}
+
+// -- Reduced Motion (WCAG 2.1 AA) --
+@media (prefers-reduced-motion: reduce) {
+
+    .fs-nav-item,
+    .fs-content-card,
+    .fs-focus-halo::after {
+        transition: none;
+    }
+}

@@ -1,0 +1,43 @@
+<!-- Copyright 2026 by GuidoGerb Publishing, LLC -->
+<!DOCTYPE html>
+<html lang="{{ lang | default('en') }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Primary Meta Tags -->
+    <title>{% block title %}{{ app_title }}{% endblock %}</title>
+    <meta
+      name="description"
+      content="{% block description %}{{ app_description | default('Zero-dependency 3D geometry processor powered by Rust WebAssembly and native Web Components.') }}{% endblock %}"
+    />
+    <meta name="theme-color" content="#0d1117" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{ app_title }}" />
+    <meta
+      property="og:description"
+      content="{{ app_description | default('Zero-dependency 3D geometry processor.') }}"
+    />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/{{ favicon_filename }}" />
+
+    <!-- Global styles — loaded before components to avoid FOUC -->
+    <link rel="stylesheet" href="/styles/main.css" />
+
+    {% block head_extra %}{% endblock %}
+  </head>
+  <body>
+    <!-- Skip navigation for keyboard and assistive-technology users -->
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    {% block body %}{% endblock %}
+
+    <!-- ES Module entry point — loads all Web Components -->
+    <script type="module" src="/js/main.js"></script>
+    {% block scripts_extra %}{% endblock %}
+  </body>
+</html>

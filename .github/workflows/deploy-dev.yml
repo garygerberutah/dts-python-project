@@ -1,0 +1,89 @@
+# Copyright 2026 by GuidoGerb Publishing, LLC
+
+name: Deploy to AWS (dev)
+
+on:
+  push:
+    branches: ["dev"]
+
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: true
+
+env:
+  RUST_BACKTRACE: 1
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+
+jobs:
+  deploy:
+    name: Build & Deploy → S3 + CloudFront (dev)
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # Required for OIDC
+      contents: read
+
+    steps:
+      # ── Checkout ──────────────────────────────
+      - uses: actions/checkout@v4
+
+      # ── Python ────────────────────────────────
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      # ── Rust / wasm-pack ──────────────────────
+      - name: Install Rust stable + wasm32 target
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: rustfmt, clippy
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ui/src/wasm/target
+          key: ${{ runner.os }}-cargo-wasm-${{ hashFiles('ui/src/wasm/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-wasm-
+
+      - name: Install wasm-pack
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+      # ── Pipeline (format → lint → validate → clean → build → test) ──
+      - name: Run pipeline (no deploy stage)
+        run: python run.py pipeline --skip-deploy
+
+      # ── AWS Credentials ───────────────────────
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      # ── Deploy to S3 ──────────────────────────
+      - name: Sync dist/ to S3
+        run: |
+          aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET_DEV }}/ \
+            --delete \
+            --cache-control "public, max-age=31536000, immutable" \
+            --exclude "*.html"
+          # HTML: short cache for instant updates
+          aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET_DEV }}/ \
+            --delete \
+            --cache-control "no-cache" \
+            --include "*.html"
+
+      # ── Invalidate CloudFront ─────────────────
+      - name: Create CloudFront invalidation
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID_DEV }} \
+            --paths "/*"

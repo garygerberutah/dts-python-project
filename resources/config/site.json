@@ -1,0 +1,17 @@
+{
+  "project_name": "ggp3d",
+  "project_description": "Zero-dependency 3D geometry processor powered by Rust WebAssembly and native Web Components.",
+  "wasm_crate": "ggp3d-wasm",
+  "wasm_module": "ggp3d_wasm",
+  "lang": "en",
+  "repository": {
+    "url": "https://github.com/guidogerb/ggp3d",
+    "ssh": "git@github.com:guidogerb/ggp3d.git",
+    "owner": "guidogerb",
+    "name": "ggp3d"
+  },
+  "copyright": {
+    "holder": "GuidoGerb Publishing, LLC",
+    "year": "2026"
+  }
+}

@@ -1,0 +1,82 @@
+/* Copyright 2026 by GuidoGerb Publishing, LLC */
+@import "../1-settings/class-vars";
+
+#{$base-class} {
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes drop-in {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -100px);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  @keyframes pop-in {
+    0% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes pop-in-center {
+    0% {
+      opacity: 0;
+      transform: scale(0.7) translateX(-50%);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateX(-50%);
+    }
+  }
+
+  @keyframes left-in {
+    0% {
+      opacity: 0;
+      transform: translate(-100%, 0);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes right-in {
+    0% {
+      opacity: 0;
+      transform: translate(100%, 0);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes skeleton {
+    0% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.4;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+}

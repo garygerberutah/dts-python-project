@@ -1,0 +1,55 @@
+/* Copyright 2026 by GuidoGerb Publishing, LLC */
+@import "../../../1-settings/class-vars";
+
+#{$base-class} {
+  .pre-code {
+    &__wrapper {
+      position: relative;
+      width: 100%;
+
+      .copy-button .icon-button--borderless {
+        background: var(--gray-light-color);
+
+        &:hover {
+          background: white;
+        }
+      }
+    }
+  }
+
+  pre {
+    position: relative;
+    font-family: var(--fixed-width-font-family);
+    font-size: .95rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0 0 var(--spacing) 0;
+
+    &.gray-block {
+      background: var(--gray-light-color);
+      padding: var(--spacing-s) var(--spacing-3xl) var(--spacing-s) var(--spacing);
+      border-radius: var(--radius-medium);
+    }
+
+    &.pre-code {
+      &--overflow {
+        width: 100%;
+        overflow-x: scroll;
+        box-sizing: border-box;
+      }
+
+      &--padded {
+        padding: 0 var(--spacing);
+      }
+    }
+
+    .pre-code__overflow-content {
+      width: max-content;
+    }
+
+    &.size-small {
+      max-height: 200px;
+      overflow: scroll;
+    }
+  }
+}

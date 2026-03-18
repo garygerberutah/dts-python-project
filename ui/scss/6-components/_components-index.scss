@@ -1,0 +1,66 @@
+/* Copyright 2026 by GuidoGerb Publishing, LLC */
+/*
+############     _components-index.scss      ############
+component specific, BEM (Block, Element, Modifier)
+@media for each component should be contained with the component.
+*/
+
+/* ---- Base Components ---- */
+@import "base-components/containers/accordion";
+@import "base-components/containers/action-card";
+@import "base-components/containers/card";
+@import "base-components/containers/drawer";
+@import "base-components/containers/tab-group";
+@import "base-components/buttons/button";
+@import "base-components/buttons/icon-button";
+@import "base-components/buttons/tag";
+@import "base-components/footer/footer-agency-information";
+@import "base-components/footer/footer-social-media-bar";
+@import "base-components/forms/input-wrapper";
+@import "base-components/forms/text-area";
+@import "base-components/forms/text-input";
+@import "base-components/forms/combo-box-input";
+@import "base-components/forms/multi-select-input";
+@import "base-components/forms/date-input";
+@import "base-components/forms/calendar-input";
+@import "base-components/forms/time-input";
+@import "base-components/forms/character-count";
+@import "base-components/forms/checkbox";
+@import "base-components/forms/select-input";
+@import "base-components/forms/info-box";
+@import "base-components/forms/radio-button";
+@import "base-components/forms/switch";
+@import "base-components/forms/fieldset";
+@import "base-components/forms/file-input";
+@import "base-components/navigation/main-menu";
+@import "base-components/navigation/menu-item";
+@import "base-components/navigation/pagination";
+@import "base-components/navigation/side-panel-navigation";
+@import "base-components/navigation/skip-link";
+@import "base-components/navigation/vertical-menu";
+@import "base-components/navigation/mega-menu";
+@import "base-components/popups/banner";
+@import "base-components/popups/popups";
+@import "base-components/popups/tooltips";
+@import "base-components/popups/modal";
+@import "base-components/popups/search-modal";
+@import "base-components/templates/documentation-template";
+@import "base-components/templates/landing-page-template";
+@import "base-components/text/block-quote";
+@import "base-components/text/pre-code";
+@import "base-components/forms/input";
+@import "base-components/widgetsIndicators/badge";
+@import "base-components/widgetsIndicators/skeleton";
+@import "base-components/widgetsIndicators/spinner";
+@import "base-components/tablesAndLists/table";
+@import "base-components/templates/on-this-page";
+
+/* ---- Project Components ---- */
+@import "project-components/swatch-list";
+@import "project-components/ggpds-docs";
+
+/* ---- ggpds Header ---- */
+@import "ggpds-header/index.scss";
+
+/* ---- FlowState ---- */
+@import "flowstate";

@@ -1,0 +1,71 @@
+/* Copyright 2026 by GuidoGerb Publishing, LLC */
+@import "../../../1-settings/class-vars";
+
+#{$base-class} {
+  .info-box {
+    display: flex;
+    align-items: center;
+    background: white;
+    position: relative;
+    border-radius: var(--radius-small);
+    padding-left: var(--spacing-xs);
+
+    &::before {
+      content: '';
+      display: block;
+      width: var(--spacing-xs);
+      height: 100%;
+      border-top-left-radius: var(--radius-small);
+      border-bottom-left-radius: var(--radius-small);
+      background-color: var(--gray-color);
+      position: absolute;
+      left: 0;
+    }
+
+    &__content {
+      display: flex;
+      align-items: center;
+      padding: var(--spacing-xs) var(--spacing-s);
+    }
+
+    &__gray {
+      background-color: var(--gray-light-color);
+    }
+
+    &__primary {
+      &::before {
+        background-color: var(--primary-color);
+      }
+    }
+
+    &__secondary {
+      &::before {
+        background-color: var(--secondary-color);
+      }
+    }
+
+    &__info {
+      &::before {
+        background-color: var(--info-color);
+      }
+    }
+
+    &__danger {
+      &::before {
+        background-color: var(--danger-color);
+      }
+    }
+
+    &__warning {
+      &::before {
+        background-color: var(--warning-color);
+      }
+    }
+
+    &__success {
+      &::before {
+        background-color: var(--success-color);
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+/* Copyright 2026 by GuidoGerb Publishing, LLC */
+@import "../../../1-settings/class-vars";
+@import "../../../1-settings/media-size-vars";
+
+#{$base-class} {
+  .landing-page-template {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .content-width {
+      max-width: calc(var(--content-width-narrow) + (2 * var(--spacing-2xl)));
+      padding: 0 var(--spacing-2xl);
+      box-sizing: border-box;
+    }
+  }
+}
+
+@media screen and (max-width: #{$media-size-mobile}) {
+  #{$base-class} {
+    .landing-page-template {
+      .content-width {
+        padding: 0 var(--spacing-l);
+      }
+    }
+  }
+}

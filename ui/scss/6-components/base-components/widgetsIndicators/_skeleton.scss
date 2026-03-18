@@ -1,0 +1,29 @@
+/* Copyright 2026 by GuidoGerb Publishing, LLC */
+@import "../../../1-settings/color-swatches";
+@import "../../../1-settings/class-vars";
+@import "../../../1-settings/font-stuff";
+@import "../../../7-utilities/animation";
+
+#{$base-class} {
+  .skeleton {
+    animation: skeleton 2s ease-in-out .5s infinite;
+    background-color: var(--gray-3-1-contrast);
+    border-radius: var(--radius-small1x);
+
+    &--rectangle {
+      min-width: calc(2 * var(--spacing-6xl));
+      min-height: var(--spacing-4xl);
+    }
+
+    &--circle {
+      min-height: var(--spacing-4xl);
+      min-width: var(--spacing-4xl);
+      border-radius: var(--radius-circle);
+    }
+
+    &--line {
+      min-width: calc(2 * var(--spacing-6xl));
+      min-height: var(--spacing-l);
+    }
+  }
+}

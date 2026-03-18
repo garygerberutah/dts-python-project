@@ -1,0 +1,266 @@
+/* Copyright 2026 by GuidoGerb Publishing, LLC */
+// ==========================================================================
+// GGPDS Documentation Layout Components
+// ==========================================================================
+// Reusable layout primitives for documentation sites: sidebar + main grid,
+// example previews, sandboxes, props tables, color swatches, etc.
+// All color references use var(--ggp-*) tokens from _ggp-tokens.scss.
+// ==========================================================================
+
+/* ---- Layout grid ---- */
+.ggpds-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+
+    &--no-sidebar {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---- Sidebar ---- */
+.ggpds-sidebar {
+    padding: 1.5rem;
+    border-right: 1px solid var(--ggp-color-gray-200);
+    background: var(--ggp-color-gray-50);
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.ggpds-sidebar__nav-group {
+    margin-bottom: 1.5rem;
+}
+
+.ggpds-sidebar__title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ggp-color-gray-500);
+    margin-bottom: 0.5rem;
+}
+
+.ggpds-sidebar__link {
+    display: block;
+    padding: 0.25rem 0;
+    color: var(--ggp-color-gray-800);
+    text-decoration: none;
+    font-size: 0.875rem;
+
+    &:hover {
+        color: var(--ggp-color-primary);
+    }
+
+    &--active {
+        font-weight: 600;
+        color: var(--ggp-color-primary);
+        border-left: 3px solid var(--ggp-color-primary);
+        padding-left: 0.5rem;
+    }
+}
+
+/* ---- Sidebar toggle (injected by JS at mobile) ---- */
+.ggpds-sidebar-toggle {
+    box-sizing: border-box;
+}
+
+/* ---- Main content area ---- */
+.ggpds-main {
+    padding: 2rem 3rem;
+    max-width: 960px;
+    box-sizing: border-box;
+    min-width: 0;
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+}
+
+/* ---- Example preview + code ---- */
+.ggpds-example {
+    border: 1px solid var(--ggp-color-gray-200);
+    border-radius: 0.5rem;
+    margin: 1.5rem 0;
+    overflow: hidden;
+}
+
+.ggpds-example__preview {
+    padding: 2rem;
+    background: var(--ggp-color-white);
+}
+
+.ggpds-example__code {
+    background: var(--ggp-color-gray-50);
+    border-top: 1px solid var(--ggp-color-gray-200);
+    padding: 1rem;
+    overflow-x: auto;
+
+    pre {
+        margin: 0;
+        font-size: 0.8125rem;
+    }
+}
+
+/* ---- Color swatches grid ---- */
+.ggpds-color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.ggpds-color-swatch {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid var(--ggp-color-gray-200);
+}
+
+.ggpds-color-swatch__preview {
+    height: 64px;
+}
+
+.ggpds-color-swatch__label {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+/* ---- Props reference table ---- */
+.ggpds-props-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.875rem;
+
+    th,
+    td {
+        padding: 0.625rem 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--ggp-color-gray-200);
+    }
+
+    th {
+        background: var(--ggp-color-gray-50);
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--ggp-color-gray-500);
+    }
+
+    code {
+        background: var(--ggp-color-gray-50);
+        padding: 0.1em 0.4em;
+        border-radius: 3px;
+        font-size: 0.8125rem;
+    }
+}
+
+/* ---- Sandbox container ---- */
+.ggpds-sandbox {
+    border: 1px solid var(--ggp-color-gray-200);
+    border-radius: 0.5rem;
+    margin: 1.5rem 0;
+    overflow: hidden;
+}
+
+.ggpds-sandbox__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: var(--ggp-color-gray-50);
+    border-bottom: 1px solid var(--ggp-color-gray-200);
+}
+
+.ggpds-sandbox__title {
+    flex: 1;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.ggpds-sandbox__toggle,
+.ggpds-sandbox__copy {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    border: 1px solid var(--ggp-color-gray-200);
+    border-radius: 0.25rem;
+    background: var(--ggp-color-white);
+    cursor: pointer;
+    transition: background-color 0.15s;
+
+    &:hover {
+        background: var(--ggp-color-gray-50);
+    }
+}
+
+.ggpds-sandbox__preview {
+    padding: 2rem;
+    background: var(--ggp-color-white);
+}
+
+.ggpds-sandbox__code {
+    background: var(--ggp-color-gray-50);
+    border-top: 1px solid var(--ggp-color-gray-200);
+    padding: 1rem;
+    overflow-x: auto;
+
+    pre {
+        margin: 0;
+        font-size: 0.8125rem;
+    }
+}
+
+/* ---- Copy button overlay ---- */
+.ggpds-copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    border: 1px solid var(--ggp-color-gray-200);
+    border-radius: 0.25rem;
+    background: var(--ggp-color-white);
+    cursor: pointer;
+
+    &:hover {
+        background: var(--ggp-color-gray-50);
+    }
+}
+
+/* ---- Component description ---- */
+.ggpds-component-desc {
+    font-size: 1.125rem;
+    color: var(--ggp-color-gray-600);
+    margin-bottom: 2rem;
+    line-height: 1.7;
+}
+
+/* ---- Accessibility notes ---- */
+.ggpds-a11y-notes {
+    background: var(--ggp-color-info, #f0f7ff);
+    border-left: 4px solid var(--ggp-color-primary);
+    padding: 1rem 1.5rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+    margin: 1rem 0;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: #{$media-size-tablet-landscape}) {
+    .ggpds-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .ggpds-sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--ggp-color-gray-200);
+    }
+
+    .ggpds-main {
+        padding: 1rem;
+    }
+}

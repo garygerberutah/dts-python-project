@@ -1,0 +1,84 @@
+/* Copyright 2026 by GuidoGerb Publishing, LLC */
+// ==========================================================================
+// GGP Design Tokens — CSS Custom Properties Bridge
+// ==========================================================================
+// Maps SCSS design tokens from _variables.scss → CSS custom properties
+// at :root so all ggpds-* components and the ColorPicker can use them.
+// ==========================================================================
+
+@import "../../static/css/variables";
+
+:root {
+    // Primary palette
+    --ggp-color-primary: #{$color-primary};
+    --ggp-color-primary-light: #{$color-primary-light};
+    --ggp-color-primary-dark: #{$color-primary-dark};
+
+    // Secondary palette
+    --ggp-color-secondary: #{$color-secondary};
+    --ggp-color-secondary-light: #{$color-secondary-light};
+    --ggp-color-secondary-dark: #{$color-secondary-dark};
+
+    // Accent
+    --ggp-color-accent: #{$color-accent};
+    --ggp-color-accent-glow: #{$color-accent-glow};
+
+    // Neutrals
+    --ggp-color-white: #{$color-white};
+    --ggp-color-black: #{$color-black};
+    --ggp-color-gray-50: #{$color-gray-50};
+    --ggp-color-gray-100: #{$color-gray-100};
+    --ggp-color-gray-200: #{$color-gray-200};
+    --ggp-color-gray-300: #{$color-gray-300};
+    --ggp-color-gray-400: #{$color-gray-400};
+    --ggp-color-gray-500: #{$color-gray-500};
+    --ggp-color-gray-600: #{$color-gray-600};
+    --ggp-color-gray-700: #{$color-gray-700};
+    --ggp-color-gray-800: #{$color-gray-800};
+    --ggp-color-gray-900: #{$color-gray-900};
+
+    // Semantic
+    --ggp-color-success: #{$color-success};
+    --ggp-color-warning: #{$color-warning};
+    --ggp-color-error: #{$color-error};
+    --ggp-color-info: #{$color-info};
+
+    // Surfaces
+    --ggp-color-bg: #{$color-bg};
+    --ggp-color-bg-surface: #{$color-bg-surface};
+    --ggp-color-bg-elevated: #{$color-bg-elevated};
+    --ggp-color-text: #{$color-text};
+    --ggp-color-text-muted: #{$color-text-muted};
+    --ggp-color-border: #{$color-border};
+
+    // Typography
+    --ggp-font-family-base: #{$font-family-base};
+    --ggp-font-family-mono: #{$font-family-mono};
+
+    // Transitions
+    --ggp-transition-fast: #{$transition-fast};
+    --ggp-transition-base: #{$transition-base};
+    --ggp-transition-slow: #{$transition-slow};
+
+    // Radius
+    --ggp-radius-sm: #{$radius-sm};
+    --ggp-radius-md: #{$radius-md};
+    --ggp-radius-lg: #{$radius-lg};
+    --ggp-radius-xl: #{$radius-xl};
+
+    // Shadows
+    --ggp-shadow-sm: #{$shadow-sm};
+    --ggp-shadow-md: #{$shadow-md};
+    --ggp-shadow-lg: #{$shadow-lg};
+    --ggp-shadow-glow: #{$shadow-glow};
+}
+
+// Light mode
+:root[data-theme="light"] {
+    --ggp-color-bg: #{$color-gray-50};
+    --ggp-color-bg-surface: #{$color-white};
+    --ggp-color-bg-elevated: #{$color-gray-100};
+    --ggp-color-text: #{$color-gray-900};
+    --ggp-color-text-muted: #{$color-gray-500};
+    --ggp-color-border: #{$color-gray-200};
+}

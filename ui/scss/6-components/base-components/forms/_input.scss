@@ -1,0 +1,15 @@
+/* Copyright 2026 by GuidoGerb Publishing, LLC */
+@import "../../../1-settings/class-vars";
+
+#{$base-class} {
+  input.input,
+  .input {
+    &--height-small {
+      min-height: var(--form-ele-small);
+    }
+
+    &--height-small1x {
+      min-height: var(--form-ele-small1x);
+    }
+  }
+}

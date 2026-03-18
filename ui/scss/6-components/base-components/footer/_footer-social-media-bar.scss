@@ -1,0 +1,45 @@
+/* Copyright 2026 by GuidoGerb Publishing, LLC */
+@import "../../../1-settings/class-vars";
+
+#{$base-class} {
+  .footer-social-media-bar {
+    background: var(--primary-color);
+    padding: 0 var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing);
+    color: white;
+
+    &__icon-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+
+      a.icon-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: var(--spacing-xs);
+        border-radius: var(--radius-circle);
+        transition: all var(--timing-fast) ease-in-out;
+        text-decoration: none;
+        svg {
+          fill: white;
+          height: 30px;
+          width: 30px;
+        }
+        [class*="utds-icon-before-"]::after,
+        [class*="utds-icon-before-"]::before {
+          font-size: 1.6rem;
+          color: white;
+          margin: 0;
+          padding: 2.5px;
+        }
+        &:hover {
+          box-shadow: none;
+          background: var(--primary-color-dark);
+        }
+      }
+    }
+  }
+}

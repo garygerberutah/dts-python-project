@@ -1,0 +1,17 @@
+/* Copyright 2026 by GuidoGerb Publishing, LLC */
+@import "../../../1-settings/class-vars";
+
+#{$base-class} {
+  fieldset {
+    border: none;
+    padding: 0;
+
+    legend {
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .input-wrapper:last-of-type {
+      margin: 0 0 var(--spacing-xs) 0;
+    }
+  }
+}

@@ -1,0 +1,14 @@
+# Copyright 2026 by GuidoGerb Publishing, LLC
+#
+# Pre-commit configuration — runs the project pipeline before every commit.
+# Install with: python run.py setup
+repos:
+  - repo: local
+    hooks:
+      - id: pipeline
+        name: "ggp3d pipeline (format → lint → validate → build → test)"
+        entry: python run.py pipeline --skip-deploy
+        language: system
+        always_run: true
+        pass_filenames: false
+        stages: [pre-commit]
