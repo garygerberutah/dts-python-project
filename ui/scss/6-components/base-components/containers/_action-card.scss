@@ -15,54 +15,69 @@
       all 200ms ease-in-out,
       outline-offset 0ms ease;
     box-sizing: border-box;
+
     &:hover {
       box-shadow: none;
       background: var(--gray-color);
       color: white;
     }
+
     &:focus-visible {
       outline-offset: var(--spacing-2xs);
     }
+
     &--primary-color {
       border: 2px solid var(--primary-color);
       color: var(--primary-color);
+
       &:hover {
         background: var(--primary-color);
       }
     }
+
     &--secondary-color {
       border: 2px solid var(--secondary-color);
       color: var(--secondary-color);
+
       &:hover {
         background: var(--secondary-color);
       }
     }
+
     &--accent-color {
       border: 2px solid var(--accent-color);
       color: var(--accent-color);
+
       &:hover {
         background: var(--accent-color);
       }
     }
+
     &--solid {
       background: var(--gray-color);
       color: white;
+
       &.action-card--primary-color {
         background: var(--primary-color);
+
         &:hover {
           color: var(--primary-color);
           background: white;
         }
       }
+
       &.action-card--secondary-color {
         background: var(--secondary-color);
+
         &:hover {
           color: var(--secondary-color);
           background: white;
         }
       }
+
       &.action-card--accent-color {
         background: var(--accent-color);
+
         &:hover {
           color: var(--accent-color);
           background: white;
@@ -70,7 +85,11 @@
       }
     }
 
-    // TODO: Primary color is light
+    &--light-primary {
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
 
     &__title {
       display: flex;

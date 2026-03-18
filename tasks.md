@@ -3,7 +3,7 @@
 Copyright 2026 by GuidoGerb Publishing, LLC
 
 **Created**: 2026-03-18
-**Status**: Complete
+**Status**: Complete (updated 2026-03-18)
 
 ---
 
@@ -80,6 +80,21 @@ pipeline integration, and README accuracy.
 | 5.2 | `.venv` missing from `SKIP_DIRS` in `validate_mime_type_content.py` — same issue | Medium | Fixed: added `.venv` to SKIP_DIRS |
 | 5.3 | `validate_wcag.py` default parameter `dist_dir=DIST_DIR` binds at definition time — monkeypatching module-level `DIST_DIR` doesn't affect `main()` | Low | Documented; test works around it |
 | 5.4 | PostgreSQL stage 11 fails hard in environments without a database | Info | By design — `build_all.py` treats DB failure as pipeline failure; environments without PostgreSQL should use `--skip-deploy` or run stages individually |
+| 5.5 | `store_sbom()` return value was discarded — no verification of DB insert | Medium | Fixed: `_stage_sbom` now verifies positive int row ID, fails if not stored |
+| 5.6 | `model-downloader.py` imports `boto3`, `requests`, `huggingface_hub` — none in `requirements.txt` | Critical | Fixed: added all three to `requirements.txt` |
+| 5.7 | SCSS TODO in `_action-card.scss` — "Primary color is light" | Low | Fixed: replaced with `&--light-primary` modifier |
+| 5.8 | Utility scripts in `scripts/util/` had 0% test coverage | Medium | Fixed: added 35 tests across 4 new test files |
+
+---
+
+### 6. SBOM Blockchain & PostgreSQL Documentation
+
+| # | Task | Status |
+|---|------|--------|
+| 6.1 | Add SBOM/blockchain/PostgreSQL section to root README.md | ✅ Added |
+| 6.2 | Document cross-instance blockchain maintenance workflow | ✅ Documented (chain.json as source of truth, sync-db for rebuilding PG) |
+| 6.3 | Document Docker PostgreSQL setup and connection | ✅ Documented |
+| 6.4 | Add test verifying pipeline stage 11 records SBOM in DB | ✅ 3 new tests: valid ID, None ID, zero ID |
 
 ---
 
@@ -97,6 +112,10 @@ pipeline integration, and README accuracy.
 | `tests/test_format_full.py` | 7 | `scripts/ui/format_code.py` |
 | `tests/test_test_components.py` | 5 | `scripts/ui/test_components.py` |
 | `tests/test_serve.py` | 4 | `scripts/ui/serve.py` |
+| `tests/test_scrape_directory_listing.py` | 8 | `scripts/util/scrape_directory_listing.py` |
+| `tests/test_list_repos.py` | 8 | `scripts/util/list_all_guidogerb_repos.py` |
+| `tests/test_add_submodules.py` | 13 | `scripts/util/add_guidogerb_submodules.py` |
+| `tests/test_model_downloader.py` | 6 | `scripts/util/model-downloader.py` |
 
 ## Files Modified
 
@@ -111,6 +130,9 @@ pipeline integration, and README accuracy.
 | `README.md` | Updated project structure, pipeline stages, commands, testing paths |
 | `ui/README.md` | Updated to match actual directory structure |
 | `resources/README.md` | Added missing subdirectory listings |
+| `requirements.txt` | Added `boto3`, `requests`, `huggingface-hub`, `pytest-cov` |
+| `scripts/build_all.py` | `_stage_sbom` now verifies store_sbom returns a positive row ID |
+| `ui/scss/6-components/base-components/containers/_action-card.scss` | Replaced TODO with `&--light-primary` modifier |
 
 ---
 
@@ -119,5 +141,6 @@ pipeline integration, and README accuracy.
 - Pipeline is fail-fast: any stage failure aborts subsequent stages
 - PostgreSQL storage (stage 11 sub-step 3) fails in environments without a DB — this is by design
 - `--no-verify` and `-n` flags are forbidden on `git commit` and `git push`
-- Overall test coverage: 61% (includes uncovered utility scripts in `scripts/util/`)
+- Overall test coverage: 71% (272 tests, up from 61% / 237 tests)
 - Core pipeline scripts: all ≥ 90% coverage
+- Utility scripts (`scripts/util/`): now tested (35 new tests)
