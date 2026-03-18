@@ -27,12 +27,14 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 
 SKIP_DIRS = {
     ".git",
+    ".pytest_cache",
+    ".ruff_cache",
     "dist",
     "node_modules",
     "__pycache__",
-    ".ruff_cache",
-    "target",
     "pkg",
+    "target",
+    "venv",
 }
 
 # Map of extension → validation function name

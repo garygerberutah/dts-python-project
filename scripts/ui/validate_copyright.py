@@ -39,12 +39,14 @@ SOURCE_EXTENSIONS = {
 # Directories and files to skip entirely
 SKIP_DIRS = {
     ".git",
+    ".pytest_cache",
+    ".ruff_cache",
     "dist",
     "node_modules",
     "__pycache__",
-    ".ruff_cache",
-    "target",
     "pkg",
+    "target",
+    "venv",
 }
 
 SKIP_FILES = {

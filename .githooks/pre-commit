@@ -9,4 +9,8 @@ set -e
 echo "[pre-commit] Running pipeline (format → lint → validate → build → test)…"
 python run.py pipeline --skip-deploy
 
+# The SBOM stage may modify chain.json / sbom.json — re-stage them so the
+# commit index stays consistent with the working tree.
+git add scripts/blockchain/chain.json scripts/blockchain/sbom.json 2>/dev/null || true
+
 echo "[pre-commit] All stages passed."

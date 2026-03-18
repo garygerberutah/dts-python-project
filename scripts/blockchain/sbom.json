@@ -1,11 +1,11 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-17T19:41:22.403908+00:00",
-  "file_count": 164,
+  "timestamp": "2026-03-18T22:22:02.672685+00:00",
+  "file_count": 173,
   "files": [
     {
       "path": ".githooks/pre-commit",
-      "sha256": "3771c5dffc668ffaf044d390e9e031aa4d00bc5c9650645ae8620e2219661906"
+      "sha256": "8477df55e28337f896cc0c1318f3947d80699c40cba1313f897f39824379636b"
     },
     {
       "path": ".github/copilot-instructions.md",
@@ -49,7 +49,11 @@
     },
     {
       "path": ".pre-commit-config.yaml",
-      "sha256": "82607b6250112f3069725cd0c3a2d6ce2104a05935eea49a30b3e06bc95a3be0"
+      "sha256": "ac43d89e916b6719640b9f6213f1afb73281111398b181a34ebdd6b025796cc1"
+    },
+    {
+      "path": ".python-version",
+      "sha256": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d"
     },
     {
       "path": ".vscode/launch.json",
@@ -73,7 +77,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "1922764f5246124cbf344c254e3840296662c6de137fde7890bcbc4d122b4b6b"
+      "sha256": "1247deb637a218ebea5a21c0d151f0d9e074f4ad00fb78377bb7f2f9007ae1bb"
     },
     {
       "path": "api/README.md",
@@ -102,6 +106,14 @@
     {
       "path": "resources/guidogerb/repos.txt",
       "sha256": "cc77276d23ec353cee498f202825db64826f44af012b7db07de1c163140cb106"
+    },
+    {
+      "path": "resources/ollama/README.md",
+      "sha256": "5902c2c4838bb146690a1f1bc957aa682b11dd2f78bc9ea62f4382f5aa8ea898"
+    },
+    {
+      "path": "resources/ollama/install.sh",
+      "sha256": "c53306bd40c9b237784c2dcf7be0a8c05887028d780310c6c8dab5d9eac66bfd"
     },
     {
       "path": "resources/user-instructions/README.md",
@@ -152,6 +164,30 @@
       "sha256": "6d6f2003d3add72d870da6ebd9dd3731fbd70d1abe3e402d354e00e5e45876c4"
     },
     {
+      "path": "scripts/blockchain/README.md",
+      "sha256": "0103b4f4d0abec5a288a9ea466eef8fcaebb43bb9b2184bd6b86bc827d94311b"
+    },
+    {
+      "path": "scripts/blockchain/__init__.py",
+      "sha256": "c5bc4be54efcbe766e72d71ed6d65dda94a0c5d2e4fba08ffb1ce692cfe241ab"
+    },
+    {
+      "path": "scripts/blockchain/chain.json",
+      "sha256": "b86df8626bbceaf568cfdc1854fb03e53069051f412a5fabcf641ef7302b018e"
+    },
+    {
+      "path": "scripts/blockchain/db.py",
+      "sha256": "ce6150c32d1c46056bf24032ba1f91ff81961c16785e52247065f5eb77ed87ce"
+    },
+    {
+      "path": "scripts/blockchain/generate_sbom.py",
+      "sha256": "0419da7c9e2458bf25e4efe8bfd74df897ff801f8e135dfc73f297b4bb65e2be"
+    },
+    {
+      "path": "scripts/blockchain/sbom.py",
+      "sha256": "704c586bd7cecfdf6af9589a8b11fff86f62348763b3c5fd30d4c635a769de71"
+    },
+    {
       "path": "scripts/build_all.py",
       "sha256": "a3f26e546238f3bbc6b7551cdb0d167ed81fd26d2bbd2eb6d30a63ee5b951099"
     },
@@ -197,11 +233,11 @@
     },
     {
       "path": "scripts/ui/validate_copyright.py",
-      "sha256": "292978def2bc85e69407068f138766e2c91ac62992d7c72529bc3b050c753357"
+      "sha256": "ab1ff868a08b1145dee3b54473fdd8221e799281d398f9e32e6c3f8d7a443a82"
     },
     {
       "path": "scripts/ui/validate_mime_type_content.py",
-      "sha256": "132bca4f6ed0bce37d3c0c90c10b7daccfe2dc4fdb10aab3c8522b2635bfbd30"
+      "sha256": "fa7311da6e203529e2ef8e817e6306444aecd03f75d31f83c5526bd0f1d1ce4e"
     },
     {
       "path": "scripts/ui/validate_wcag.py",
