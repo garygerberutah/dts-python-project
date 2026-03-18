@@ -71,3 +71,55 @@ def test_asset_extensions_include_common_formats():
     assert ".jpg" in ASSET_EXTENSIONS
     assert ".svg" in ASSET_EXTENSIONS
     assert ".gif" in ASSET_EXTENSIONS
+
+
+def test_validate_file_invalid_name(tmp_path):
+    """A file that doesn't match the naming pattern returns an error."""
+    f = tmp_path / "bad_name.png"
+    f.write_bytes(b"\x89PNG")
+    errors = validate_file(f, tmp_path)
+    assert len(errors) == 1
+    assert "does not match pattern" in errors[0]
+
+
+def test_validate_with_errors(tmp_path):
+    """validate() returns errors for invalid asset files."""
+    import scripts.ui.validate_assets as va_mod
+
+    f = tmp_path / "bad.png"
+    f.write_bytes(b"\x89PNG")
+    # Use tmp_path as root so relative_to works
+    old_root = va_mod.ROOT
+    va_mod.ROOT = tmp_path
+    try:
+        errors = validate(directories=[tmp_path])
+    finally:
+        va_mod.ROOT = old_root
+    assert len(errors) >= 1
+
+
+def test_main_returns_zero_no_assets(tmp_path, monkeypatch):
+    """main() returns 0 with no asset files."""
+    import scripts.ui.validate_assets as va_mod
+
+    monkeypatch.setattr(va_mod, "ROOT", tmp_path)
+    monkeypatch.setattr("sys.argv", ["validate_assets.py"])
+    result = va_mod.main()
+    assert result == 0
+
+
+def test_main_returns_one_on_errors(tmp_path, monkeypatch):
+    """main() returns 1 when validation finds errors."""
+    import scripts.ui.validate_assets as va_mod
+
+    (tmp_path / "bad.png").write_bytes(b"\x89PNG")
+    monkeypatch.setattr(va_mod, "ROOT", tmp_path)
+    monkeypatch.setattr("sys.argv", ["validate_assets.py", str(tmp_path)])
+    result = va_mod.main()
+    assert result == 1
+
+
+def test_find_asset_files_nonexistent_directory(tmp_path):
+    """find_asset_files skips directories that don't exist."""
+    files = find_asset_files([tmp_path / "nope"])
+    assert files == []

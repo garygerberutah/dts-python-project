@@ -39,6 +39,7 @@ SOURCE_EXTENSIONS = {
 # Directories and files to skip entirely
 SKIP_DIRS = {
     ".git",
+    ".venv",
     "dist",
     "node_modules",
     "__pycache__",

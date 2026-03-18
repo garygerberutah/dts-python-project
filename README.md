@@ -62,8 +62,10 @@ python run.py <command> [options]
 | `format` | Auto-format Rust (rustfmt), Python (ruff) |
 | `lint` | Static analysis — Python JS linter, cargo clippy, ruff check |
 | `validate` | WCAG 2.1 compliance check on compiled HTML |
+| `validate-copyright` | Verify copyright notice in all source files |
+| `validate-mime` | Verify binary files match their mime-type encoding |
 | `test` | Run all component test suites (pytest) |
-| `pipeline` | Full automation: format → lint → clean → build → validate → test → deploy |
+| `pipeline` | Full 12-stage automation: test → format → lint → validate → build → test → SBOM → deploy |
 | `pipeline --skip-deploy` | As above but skip the git commit/push stage |
 
 ---
@@ -76,56 +78,90 @@ python run.py pipeline --skip-deploy
 
 Stages (fail-fast):
 
-1. **Format** — auto-formats Rust, Python
-2. **Lint** — Python JS linter, cargo clippy (`-D warnings`), ruff
-3. **Clean** — purge prior artefacts
-4. **Build** — compile WASM, render templates, copy assets
-5. **Validate** — WCAG 2.1 Level AA checks on rendered HTML
-6. **Test** — pytest component tests (source analysis, Shadow DOM patterns, accessibility)
-7. **Deploy** — `git commit` + `git push` *(gated behind 100% success)*
+1. **Test (global)** — run toolchain tests (`tests/`)
+2. **Format** — auto-format Rust (rustfmt), Python (ruff)
+3. **Lint** — Python JS linter, cargo clippy (`-D warnings`), ruff check
+4. **Validate (copyright)** — copyright notice in all source files
+5. **Validate (assets)** — asset naming conventions
+6. **Validate (mime-type)** — binary files match their extension encoding
+7. **Clean** — purge prior artefacts (`dist/`, `wasm/pkg/`)
+8. **Build** — compile WASM, render Jinja2 templates, copy assets → `dist/`
+9. **Validate (WCAG 2.1)** — accessibility checks on rendered HTML
+10. **Test (components)** — pytest Web Component source-analysis tests
+11. **SBOM (blockchain)** — generate SBOM manifest, append to blockchain, store in PostgreSQL
+12. **Deploy** — `git commit` + `git push` *(skipped with `--skip-deploy`)*
 
 ---
 
 ## Project Structure
 
 ```
-ggp3d/
-├── wasm/                   # Rust WASM crate (3D math engine)
-│   ├── Cargo.toml
-│   └── src/lib.rs
-├── frontend/
-│   ├── components/         # Web Components (source only, no test files)
-│   │   ├── app-root.js
-│   │   ├── app-header.js
-│   │   └── app-3d-viewer.js
-│   ├── js/main.js          # ES module entry point
-│   └── styles/main.css     # Global CSS reset
-├── tests/                  # pytest component test suites
-│   ├── conftest.py         # Source-analysis fixtures
-│   ├── test_app_root.py
-│   ├── test_app_header.py
-│   └── test_app_3d_viewer.py
-├── templates/              # Jinja2 HTML templates (build-time only)
-│   ├── base.html.j2
-│   └── index.html.j2
-├── scripts/                # Python toolchain scripts
-│   ├── build.py
-│   ├── clean.py
-│   ├── serve.py
-│   ├── format_code.py
-│   ├── lint.py
-│   ├── lint_js.py
-│   ├── validate_wcag.py
-│   ├── test_components.py
-│   └── pipeline.py
-├── .github/
-│   ├── copilot-instructions.md
-│   └── workflows/
-│       ├── ci.yml
-│       └── deploy-dev.yml
-├── run.py                  # Single CLI entry point
-├── requirements.txt        # Python deps only (jinja2, pytest, ruff)
-└── ruff.toml
+ggp-python-project/
+├── run.py                          # Single CLI entry point
+├── requirements.txt                # Python deps (jinja2, pytest, ruff, etc.)
+├── COPYRIGHT                       # Copyright notice (required in all source files)
+├── LICENSE                         # MIT license
+├── ui/
+│   ├── scss/                       # ITCSS SCSS stylesheets
+│   │   ├── index.scss
+│   │   ├── 1-settings/             # Design tokens, CSS variables
+│   │   ├── 2-tools/                # Mixins, functions
+│   │   ├── 3-generic/              # Reset, normalize
+│   │   ├── 4-elements/             # Bare element styles
+│   │   ├── 5-objects/              # Layout patterns
+│   │   ├── 6-components/           # Component styles
+│   │   ├── 7-utilities/            # Utility classes
+│   │   ├── 8-super/                # Print styles
+│   │   └── 9-tip/                  # Tooltip styles
+│   └── src/
+│       ├── main.js                 # ES module entry point
+│       ├── components/             # Web Components (Shadow DOM)
+│       │   ├── app-root.js
+│       │   ├── app-header.js
+│       │   └── app-3d-viewer.js
+│       ├── templates/              # Jinja2 build-time templates
+│       │   ├── base.html.j2
+│       │   └── index.html.j2
+│       └── wasm/                   # Rust → WASM crate (3D math engine)
+│           ├── Cargo.toml
+│           └── src/lib.rs
+├── scripts/
+│   ├── build_all.py                # Master pipeline (12 stages, fail-fast)
+│   └── ui/
+│       ├── build.py                # WASM compile + Jinja2 render + asset copy
+│       ├── clean.py                # Remove dist/ and wasm/pkg/
+│       ├── serve.py                # Local HTTP dev server
+│       ├── format_code.py          # rustfmt + ruff format
+│       ├── lint.py                 # ruff check + cargo clippy + JS linter
+│       ├── lint_js.py              # Python-based JS linter
+│       ├── validate_wcag.py        # WCAG 2.1 Level AA validator
+│       ├── validate_copyright.py   # Copyright notice checker
+│       ├── validate_assets.py      # Asset naming convention checker
+│       ├── validate_mime_type_content.py  # Binary mime-type validator
+│       └── test_components.py      # pytest test runner
+│   └── blockchain/
+│       ├── sbom.py                 # Append-only blockchain with PoW
+│       ├── generate_sbom.py        # SBOM manifest generator (SHA-256)
+│       ├── db.py                   # PostgreSQL SBOM storage
+│       ├── chain.json              # Blockchain data file
+│       └── sbom.json               # Generated SBOM manifest
+├── tests/
+│   ├── conftest.py                 # Global test fixtures
+│   ├── test_*.py                   # Toolchain script tests
+│   └── ui/
+│       ├── conftest.py             # Source-analysis fixtures
+│       ├── test_app_root.py
+│       ├── test_app_header.py
+│       └── test_app_3d_viewer.py
+├── resources/
+│   ├── config/
+│   │   ├── site.json               # Project metadata
+│   │   └── ruff.toml               # Ruff linter config
+│   └── user-instructions/          # Portable Copilot instruction files
+├── api/                            # RESTful API (AWS Lambda + API Gateway)
+└── .github/
+    ├── copilot-instructions.md     # Project-level AI instructions
+    └── instructions/               # Scope-specific instruction files
 ```
 
 ---
@@ -150,14 +186,14 @@ The `deploy-dev.yml` workflow triggers on every push to the `dev` branch.
 
 ### Rust (native)
 ```bash
-cd wasm && cargo test
+cd ui/src/wasm && cargo test
 ```
 
 ### Web Components (pytest)
 ```bash
 python run.py test
 # or directly:
-pytest tests/ -v
+pytest tests/ tests/ui/ -v
 ```
 
 ### WCAG Validation (after build)

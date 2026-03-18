@@ -5,10 +5,15 @@ Copyright 2026 by GuidoGerb Publishing, LLC
 
 Stores every generated ``sbom.json`` manifest in the ``sbom_version`` table
 so every commit's bill-of-materials is permanently auditable.
+
+Connection strategy (ordered):
+  1. Localhost PostgreSQL (port 5432) — your development machine
+  2. Docker container ``ggp3d-postgres`` (port 5433) — auto-started if needed
 """
 
 import json
 import platform
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -16,6 +21,15 @@ from pathlib import Path
 import psycopg2
 
 ROOT = Path(__file__).resolve().parent.parent.parent
+
+# --- Connection parameters ------------------------------------------------
+
+_PG_USER = "assman"
+_PG_PASSWORD = "1324QEWRFD7sdf!1!"
+_PG_DB = "asset_catalog"
+_LOCALHOST_PORT = 5432
+_DOCKER_PORT = 5433
+_DOCKER_CONTAINER = "ggp3d-postgres"
 
 
 def _pg_host() -> str:
@@ -32,9 +46,82 @@ def _pg_host() -> str:
     return "localhost"
 
 
-def _dsn() -> str:
+def _dsn(host: str = "localhost", port: int = _LOCALHOST_PORT) -> str:
+    return f"postgresql://{_PG_USER}:{_PG_PASSWORD}@{host}:{port}/{_PG_DB}"
+
+
+def _try_connect(host: str, port: int) -> psycopg2.extensions.connection | None:
+    """Attempt a connection; return it on success or None on failure."""
+    try:
+        conn = psycopg2.connect(_dsn(host, port), connect_timeout=3)
+        return conn
+    except psycopg2.OperationalError:
+        return None
+
+
+def _ensure_docker_pg() -> bool:
+    """Start the Docker Compose PostgreSQL service if not already running."""
+    if not shutil.which("docker"):
+        print("[sbom-db] Docker not found — cannot start fallback PostgreSQL.", file=sys.stderr)
+        return False
+
+    # Check if container is already running
+    result = subprocess.run(
+        ["docker", "inspect", "-f", "{{.State.Running}}", _DOCKER_CONTAINER],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode == 0 and result.stdout.strip() == "true":
+        return True
+
+    # Start via docker compose
+    print("[sbom-db] Starting Docker PostgreSQL…")
+    compose_file = ROOT / "docker-compose.yml"
+    if not compose_file.exists():
+        print("[sbom-db] docker-compose.yml not found.", file=sys.stderr)
+        return False
+
+    result = subprocess.run(
+        ["docker", "compose", "-f", str(compose_file), "up", "-d", "--wait"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        print(f"[sbom-db] Docker Compose failed: {result.stderr}", file=sys.stderr)
+        return False
+
+    print("[sbom-db] Docker PostgreSQL started on port 5433.")
+    return True
+
+
+def get_connection() -> psycopg2.extensions.connection:
+    """Connect to PostgreSQL: try localhost:5432 first, then Docker:5433.
+
+    Raises ``psycopg2.OperationalError`` if neither is reachable.
+    """
     host = _pg_host()
-    return f"postgresql://assman:1324QEWRFD7sdf!1!@{host}:5432/asset_catalog"
+
+    # 1. Try localhost (or WSL2 gateway)
+    conn = _try_connect(host, _LOCALHOST_PORT)
+    if conn is not None:
+        return conn
+
+    # 2. Try existing Docker container on port 5433
+    conn = _try_connect("localhost", _DOCKER_PORT)
+    if conn is not None:
+        return conn
+
+    # 3. Start Docker and retry
+    if _ensure_docker_pg():
+        conn = _try_connect("localhost", _DOCKER_PORT)
+        if conn is not None:
+            return conn
+
+    raise psycopg2.OperationalError(
+        f"Cannot connect to PostgreSQL on {host}:{_LOCALHOST_PORT} "
+        f"or localhost:{_DOCKER_PORT} (Docker)."
+    )
 
 
 CREATE_TABLE_SQL = """\
@@ -89,7 +176,7 @@ def _git_branch() -> str:
 
 def ensure_table() -> None:
     """Create the ``sbom_version`` table if it does not already exist."""
-    conn = psycopg2.connect(_dsn())
+    conn = get_connection()
     try:
         with conn, conn.cursor() as cur:
             cur.execute(CREATE_TABLE_SQL)
@@ -104,7 +191,7 @@ def store_sbom(manifest: dict, composite_sha256: str) -> int:
     branch = _git_branch()
     file_count = manifest.get("file_count", len(manifest.get("files", [])))
 
-    conn = psycopg2.connect(_dsn())
+    conn = get_connection()
     try:
         with conn, conn.cursor() as cur:
             cur.execute(

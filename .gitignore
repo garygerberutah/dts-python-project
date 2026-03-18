@@ -3,6 +3,9 @@ dist/
 wasm/pkg/
 wasm/target/
 
+# ─── Docker volumes (PG data lives in named volume, never in git) ─────────
+pgdata/
+
 # ─── Node.js ────────────────────────────────────────────────────────────────
 node_modules/
 npm-debug.log*

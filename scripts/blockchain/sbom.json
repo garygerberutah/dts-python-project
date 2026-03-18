@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-17T19:41:22.403908+00:00",
-  "file_count": 164,
+  "timestamp": "2026-03-18T16:49:02.432063+00:00",
+  "file_count": 170,
   "files": [
     {
       "path": ".githooks/pre-commit",
@@ -45,7 +45,7 @@
     },
     {
       "path": ".gitignore",
-      "sha256": "e80cb283f8be1cd378368fc2f0258ebc5aa72c094a1162f4846aadf571a670d4"
+      "sha256": "55f64bd0860b01ac39f7b2f5ca41cf4dd7fe83224656711e3f9cf5625b05d4fa"
     },
     {
       "path": ".pre-commit-config.yaml",
@@ -73,7 +73,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "1922764f5246124cbf344c254e3840296662c6de137fde7890bcbc4d122b4b6b"
+      "sha256": "9bb07066f8b7a7775f57109c7f5069c76c1652facc77512cf8e2b0c3fc040d26"
     },
     {
       "path": "api/README.md",
@@ -85,7 +85,7 @@
     },
     {
       "path": "resources/README.md",
-      "sha256": "2d3313a4d185345709391e871af9e92b0b6b64d482ad1fa70ce1b1e58dab9119"
+      "sha256": "7a0553338d64d050225e3582d4a27402975e25473c1b104d0cb2dbd4c5f34d2b"
     },
     {
       "path": "resources/config/ruff.toml",
@@ -141,7 +141,7 @@
     },
     {
       "path": "run.py",
-      "sha256": "0882fae5b3c7901d4c057378842b892bc76cfb70fed963c0722b9ad42408053b"
+      "sha256": "5d053d75beeac803b14475a1cd0ff37989b5cfeac9bacd3f863cd962f0d153cd"
     },
     {
       "path": "scripts/__init__.py",
@@ -150,6 +150,30 @@
     {
       "path": "scripts/api/__init__.py",
       "sha256": "6d6f2003d3add72d870da6ebd9dd3731fbd70d1abe3e402d354e00e5e45876c4"
+    },
+    {
+      "path": "scripts/blockchain/README.md",
+      "sha256": "0103b4f4d0abec5a288a9ea466eef8fcaebb43bb9b2184bd6b86bc827d94311b"
+    },
+    {
+      "path": "scripts/blockchain/__init__.py",
+      "sha256": "05bb91dc0f81ba7a37a8a957b0f6edca0f08744bfd0d3785189ab1ac29d8d31b"
+    },
+    {
+      "path": "scripts/blockchain/chain.json",
+      "sha256": "8b11c663301697bc32855611275ac5fcbd0e138e147551d40e99dd210dd40b96"
+    },
+    {
+      "path": "scripts/blockchain/db.py",
+      "sha256": "6c8dc12335efb9055c304f7c8cc3fa082c3d58603682e4488f8bbf0b36dfba69"
+    },
+    {
+      "path": "scripts/blockchain/generate_sbom.py",
+      "sha256": "5720b3e83685881faf5b3c3934d1611ea66755e8a3470599684c6ad93c8fe06b"
+    },
+    {
+      "path": "scripts/blockchain/sbom.py",
+      "sha256": "8355c5b04e47099151fb2fef95874ce617a84bb4c121a31bce74295822e130da"
     },
     {
       "path": "scripts/build_all.py",
@@ -197,11 +221,11 @@
     },
     {
       "path": "scripts/ui/validate_copyright.py",
-      "sha256": "292978def2bc85e69407068f138766e2c91ac62992d7c72529bc3b050c753357"
+      "sha256": "5874bfa1520594fb9d9265eea7f9d33569aede9d621ab90f37c87542ebcf008f"
     },
     {
       "path": "scripts/ui/validate_mime_type_content.py",
-      "sha256": "132bca4f6ed0bce37d3c0c90c10b7daccfe2dc4fdb10aab3c8522b2635bfbd30"
+      "sha256": "79e90eeeb705448bb1df3ca98ac6fc692d6320f5113ac0010a5ad140c2b5547b"
     },
     {
       "path": "scripts/ui/validate_wcag.py",
@@ -253,19 +277,19 @@
     },
     {
       "path": "tests/test_validate_assets.py",
-      "sha256": "7715b67123a7356091eb485bcb9c9b87d1cfa648e356cf797b2ea8b2af69cfbd"
+      "sha256": "925d729d9d9602cf03c7cf3fee3d16846a49cf44fe6a55972100e6543dd44e5c"
     },
     {
       "path": "tests/test_validate_copyright.py",
-      "sha256": "0e6e3ccd4fae427d14c38db43bc50c5330caf3319b004c9777515cb5d4bf29c9"
+      "sha256": "76fc04a5d907c4bb09e74f8930f9ce0792f0f9c7a8b9a614da31eb60737289a9"
     },
     {
       "path": "tests/test_validate_mime_type_content.py",
-      "sha256": "8319648104876879108d8b9ef1754bc1128dc1d648cf23d827fa1aec8e1d47cd"
+      "sha256": "01bd27d913fcce4919fb430ccbb74320294bc8bd4b2bd753b639311621f6f566"
     },
     {
       "path": "tests/test_validate_wcag.py",
-      "sha256": "e92fd3be06139e6252695e3da458778b5c567c4e8d9faaf3e449eeb345ae5211"
+      "sha256": "dcc502914bcc972a2e82caedfb746c2c86a19d128dde3a60990ddc2f89979d06"
     },
     {
       "path": "tests/ui/__init__.py",
@@ -289,7 +313,7 @@
     },
     {
       "path": "ui/README.md",
-      "sha256": "c5b108e70df65db3ec969ae3765585625a030837371798c078793ac85fc2f759"
+      "sha256": "66ca0135a676ce6389cd4808873399d537c02802b3929db383139248417bc99b"
     },
     {
       "path": "ui/scss/1-settings/_class-vars.scss",

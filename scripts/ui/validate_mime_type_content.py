@@ -27,6 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 
 SKIP_DIRS = {
     ".git",
+    ".venv",
     "dist",
     "node_modules",
     "__pycache__",

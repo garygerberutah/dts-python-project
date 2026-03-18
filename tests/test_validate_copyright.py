@@ -102,3 +102,87 @@ def test_validate_fix_replaces_wrong_copyright(tmp_tree, monkeypatch):
     content = f.read_text(encoding="utf-8")
     assert "Copyright 2026 by GuidoGerb Publishing, LLC" in content
     assert "SomeOther Corp" not in content
+
+
+def test_validate_missing_copyright_file(tmp_path, monkeypatch):
+    """validate returns error when COPYRIGHT file doesn't exist."""
+    monkeypatch.setattr(vc_mod, "ROOT", tmp_path)
+    monkeypatch.setattr(vc_mod, "COPYRIGHT_FILE", tmp_path / "COPYRIGHT")
+    errors = validate(directories=[tmp_path])
+    assert any("COPYRIGHT file not found" in e for e in errors)
+
+
+def test_validate_no_source_files(tmp_tree, monkeypatch):
+    """validate returns empty list when no source files are found."""
+    monkeypatch.setattr(vc_mod, "ROOT", tmp_tree)
+    monkeypatch.setattr(vc_mod, "COPYRIGHT_FILE", tmp_tree / "COPYRIGHT")
+    empty = tmp_tree / "empty_dir"
+    empty.mkdir()
+    errors = validate(directories=[empty])
+    assert errors == []
+
+
+def test_fix_inserts_into_python_docstring(tmp_tree, monkeypatch):
+    """Fix inserts copyright into Python file starting with docstring."""
+    monkeypatch.setattr(vc_mod, "ROOT", tmp_tree)
+    monkeypatch.setattr(vc_mod, "COPYRIGHT_FILE", tmp_tree / "COPYRIGHT")
+    f = tmp_tree / "docstring.py"
+    f.write_text('"""My module docstring.\n"""\npass\n', encoding="utf-8")
+    errors = validate(directories=[tmp_tree], fix=True)
+    assert errors == []
+    content = f.read_text(encoding="utf-8")
+    assert "Copyright 2026 by GuidoGerb Publishing, LLC" in content
+
+
+def test_fix_inserts_after_shebang(tmp_tree, monkeypatch):
+    """Fix inserts copyright after shebang line in Python file."""
+    monkeypatch.setattr(vc_mod, "ROOT", tmp_tree)
+    monkeypatch.setattr(vc_mod, "COPYRIGHT_FILE", tmp_tree / "COPYRIGHT")
+    f = tmp_tree / "shebang.py"
+    f.write_text("#!/usr/bin/env python3\npass\n", encoding="utf-8")
+    errors = validate(directories=[tmp_tree], fix=True)
+    assert errors == []
+    content = f.read_text(encoding="utf-8")
+    assert content.startswith("#!/usr/bin/env python3\n")
+    assert "Copyright 2026 by GuidoGerb Publishing, LLC" in content
+
+
+def test_make_comment_js():
+    """_make_comment wraps copyright text in JS comment style."""
+    from scripts.ui.validate_copyright import _make_comment
+
+    result = _make_comment("Test", ".js")
+    assert result == "/** Test */"
+
+
+def test_make_comment_html():
+    """_make_comment wraps copyright text in HTML comment style."""
+    from scripts.ui.validate_copyright import _make_comment
+
+    result = _make_comment("Test", ".html")
+    assert result == "<!-- Test -->"
+
+
+def test_main_returns_zero_on_success(tmp_tree, monkeypatch):
+    """main returns 0 when all files pass."""
+    monkeypatch.setattr(vc_mod, "ROOT", tmp_tree)
+    monkeypatch.setattr(vc_mod, "COPYRIGHT_FILE", tmp_tree / "COPYRIGHT")
+    (tmp_tree / "ok.py").write_text(
+        "# Copyright 2026 by GuidoGerb Publishing, LLC\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr("sys.argv", ["validate_copyright.py"])
+    from scripts.ui.validate_copyright import main
+
+    assert main() == 0
+
+
+def test_main_returns_one_on_errors(tmp_tree, monkeypatch):
+    """main returns 1 when files have copyright issues."""
+    monkeypatch.setattr(vc_mod, "ROOT", tmp_tree)
+    monkeypatch.setattr(vc_mod, "COPYRIGHT_FILE", tmp_tree / "COPYRIGHT")
+    (tmp_tree / "bad.py").write_text("pass\n", encoding="utf-8")
+    monkeypatch.setattr("sys.argv", ["validate_copyright.py"])
+    from scripts.ui.validate_copyright import main
+
+    assert main() == 1

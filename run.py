@@ -17,6 +17,7 @@ Commands:
     test       Run Web Component test suites
     sbom       Generate SBOM manifest + append to blockchain
     sbom-db    Create/verify the PostgreSQL sbom_version table
+    sync-db    Rebuild PostgreSQL sbom_version table from chain.json
     pipeline   Run the full automation pipeline (format → lint → validate →
                clean → build → test → sbom → deploy)
 """
@@ -58,6 +59,7 @@ def main() -> int:
     subparsers.add_parser("test", help="Run Web Component test suites")
     subparsers.add_parser("sbom", help="Generate SBOM manifest + append to blockchain")
     subparsers.add_parser("sbom-db", help="Create/verify the PostgreSQL sbom_version table")
+    subparsers.add_parser("sync-db", help="Rebuild PostgreSQL from chain.json")
 
     pipeline_p = subparsers.add_parser("pipeline", help="Run the full automation pipeline")
     pipeline_p.add_argument(
@@ -124,6 +126,10 @@ def main() -> int:
         return fn()
     elif args.command == "sbom-db":
         from scripts.blockchain.db import main as fn
+
+        return fn()
+    elif args.command == "sync-db":
+        from scripts.blockchain.sync_db import main as fn
 
         return fn()
     elif args.command == "pipeline":

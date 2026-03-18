@@ -1,0 +1,27 @@
+# Copyright 2026 by GuidoGerb Publishing, LLC
+
+# PostgreSQL for SBOM blockchain audit trail.
+# Data lives in a Docker-managed named volume (NOT in git).
+# The authoritative blockchain is chain.json — PostgreSQL is a queryable mirror.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ggp3d-postgres
+    environment:
+      POSTGRES_USER: assman
+      POSTGRES_PASSWORD: 1324QEWRFD7sdf!1!
+      POSTGRES_DB: asset_catalog
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./resources/postgres-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U assman -d asset_catalog"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  pgdata:
