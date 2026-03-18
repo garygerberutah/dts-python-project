@@ -36,7 +36,16 @@ def _run(cmd: list[str], cwd: Path | None = None, label: str = "") -> bool:
 def lint_python() -> bool:
     """Run ruff check over Python sources."""
     return _run(
-        ["ruff", "check", "--config", "resources/config/ruff.toml", "scripts/", "run.py"],
+        [
+            sys.executable,
+            "-m",
+            "ruff",
+            "check",
+            "--config",
+            "resources/config/ruff.toml",
+            "scripts/",
+            "run.py",
+        ],
         cwd=ROOT,
         label="ruff",
     )

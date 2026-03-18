@@ -43,7 +43,16 @@ def format_rust() -> bool:
 def format_python() -> bool:
     """Format Python source with ruff."""
     return _run(
-        ["ruff", "format", "--config", "resources/config/ruff.toml", "scripts/", "run.py"],
+        [
+            sys.executable,
+            "-m",
+            "ruff",
+            "format",
+            "--config",
+            "resources/config/ruff.toml",
+            "scripts/",
+            "run.py",
+        ],
         cwd=ROOT,
         label="ruff",
     )
