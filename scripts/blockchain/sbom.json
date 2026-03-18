@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-18T19:47:02.267142+00:00",
-  "file_count": 250,
+  "timestamp": "2026-03-18T19:54:30.894308+00:00",
+  "file_count": 251,
   "files": [
     {
       "path": ".githooks/pre-commit",
@@ -248,6 +248,10 @@
       "sha256": "cc5799ba81996b8e2207413b78e30366e54c6c43527c97e215c85ab9249ffbf1"
     },
     {
+      "path": "resources/postgres-init/02_model_category.sql",
+      "sha256": "851f34c1bc103df6a7c4bc2782419e4392070a6dae2b458659f9bc08ac8e35e7"
+    },
+    {
       "path": "resources/user-instructions/README.md",
       "sha256": "94b8771c03221b790ffebcc5fdbcef03b6dfc2f8d6416a6fd8688e3870b750f5"
     },
@@ -309,11 +313,11 @@
     },
     {
       "path": "scripts/blockchain/chain.json",
-      "sha256": "f83440411614cd9c6acc43dfe768be31bbc3b93bb2caf4a7fd2ccaf4ab4527fc"
+      "sha256": "2d861b93862c40cd1242488230718cf7787c89b9d587cc9eb73b49e7196052fd"
     },
     {
       "path": "scripts/blockchain/db.py",
-      "sha256": "6c8dc12335efb9055c304f7c8cc3fa082c3d58603682e4488f8bbf0b36dfba69"
+      "sha256": "4785a00592e645e7010c1ef75c1c7c90e65825cd6452977298c67b15eaff2405"
     },
     {
       "path": "scripts/blockchain/generate_sbom.py",
@@ -413,7 +417,7 @@
     },
     {
       "path": "scripts/util/model-downloader.py",
-      "sha256": "b721f01419625cdc0b44926633d471b43dd569fe83994657c3b8447e7bf5e988"
+      "sha256": "b1b2fba08a59255d2e89beddf840f16ecc6a28ed8a9feaeef6c298602b2ab36f"
     },
     {
       "path": "scripts/util/scrape_directory_listing.py",
@@ -529,7 +533,7 @@
     },
     {
       "path": "tests/test_blockchain_db.py",
-      "sha256": "f2b8f2e0c949605dc61334facf0acaafd57c7eba4368fc8a008ac510b54eaeed"
+      "sha256": "349c79aa8d7115849a21b00cece221a0c9ac08d1670d60a37abd9a76918c6a63"
     },
     {
       "path": "tests/test_blockchain_generate.py",

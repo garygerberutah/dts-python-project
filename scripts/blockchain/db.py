@@ -139,6 +139,32 @@ CREATE INDEX IF NOT EXISTS idx_sbom_version_commit
     ON public.sbom_version (commit_sha);
 """
 
+CREATE_MODEL_CATEGORY_SQL = """\
+CREATE TABLE IF NOT EXISTS public.model_category (
+    id              SERIAL          PRIMARY KEY,
+    name            VARCHAR(256)    NOT NULL,
+    parent_id       INTEGER         REFERENCES public.model_category(id) ON DELETE CASCADE,
+    description     TEXT            NOT NULL DEFAULT '',
+    created_at      TIMESTAMPTZ     NOT NULL DEFAULT NOW()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_model_category_unique_name_parent
+    ON public.model_category (name, COALESCE(parent_id, 0));
+
+CREATE TABLE IF NOT EXISTS public.model_registry (
+    id              SERIAL          PRIMARY KEY,
+    repo_id         VARCHAR(256)    NOT NULL UNIQUE,
+    category_id     INTEGER         NOT NULL REFERENCES public.model_category(id),
+    s3_prefix       VARCHAR(512)    NOT NULL,
+    display_name    VARCHAR(256)    NOT NULL DEFAULT '',
+    description     TEXT            NOT NULL DEFAULT '',
+    created_at      TIMESTAMPTZ     NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_model_registry_category
+    ON public.model_registry (category_id);
+"""
+
 INSERT_SQL = """\
 INSERT INTO public.sbom_version
     (commit_sha, branch, composite_sha256, file_count, sbom_content)
@@ -175,14 +201,16 @@ def _git_branch() -> str:
 
 
 def ensure_table() -> None:
-    """Create the ``sbom_version`` table if it does not already exist."""
+    """Create the ``sbom_version`` and model category tables if they do not already exist."""
     conn = get_connection()
     try:
         with conn, conn.cursor() as cur:
             cur.execute(CREATE_TABLE_SQL)
+            cur.execute(CREATE_MODEL_CATEGORY_SQL)
     finally:
         conn.close()
     print("[sbom-db] Table public.sbom_version ready.")
+    print("[sbom-db] Tables public.model_category and public.model_registry ready.")
 
 
 def store_sbom(manifest: dict, composite_sha256: str) -> int:

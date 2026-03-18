@@ -17,6 +17,10 @@ MODEL_MAPPINGS = {
     # Large checkpoints that will stream directly to S3
     "Wan-AI/Wan2.2-T2V-A14B": "Wan-AI",
     "black-forest-labs/FLUX.1-schnell": "checkpoints",
+    # DeepSeek foundation LLM (already uploaded)
+    "deepseek-ai/DeepSeek-V3.2": "LLM - Foundation/Transformer/Deep-Seek",
+    # DeepSeek multimodal OCR
+    "deepseek-ai/DeepSeek-OCR-2": "Vision - OCR/Transformer/Deep-Seek",
 }
 
 api = HfApi()

@@ -12,6 +12,7 @@ from unittest.mock import MagicMock, patch
 
 import scripts.blockchain.db as db_mod
 from scripts.blockchain.db import (
+    CREATE_MODEL_CATEGORY_SQL,
     CREATE_TABLE_SQL,
     INSERT_SQL,
     _git_branch,
@@ -76,7 +77,9 @@ def test_ensure_table_calls_execute(mock_get_conn):
     ensure_table()
 
     mock_get_conn.assert_called_once()
-    mock_cursor.execute.assert_called_once_with(CREATE_TABLE_SQL)
+    assert mock_cursor.execute.call_count == 2
+    mock_cursor.execute.assert_any_call(CREATE_TABLE_SQL)
+    mock_cursor.execute.assert_any_call(CREATE_MODEL_CATEGORY_SQL)
     mock_conn.close.assert_called_once()
 
 
@@ -124,6 +127,25 @@ def test_main_returns_one_on_connection_failure():
         side_effect=psycopg2.OperationalError("connection refused"),
     ):
         assert main() == 1
+
+
+def test_create_model_category_sql_has_tables():
+    """CREATE_MODEL_CATEGORY_SQL defines model_category and model_registry tables."""
+    assert "model_category" in CREATE_MODEL_CATEGORY_SQL
+    assert "model_registry" in CREATE_MODEL_CATEGORY_SQL
+    assert "CREATE TABLE IF NOT EXISTS" in CREATE_MODEL_CATEGORY_SQL
+
+
+def test_create_model_category_sql_has_expected_columns():
+    """model_category has name, parent_id, description columns."""
+    for col in ("name", "parent_id", "description"):
+        assert col in CREATE_MODEL_CATEGORY_SQL
+
+
+def test_create_model_registry_sql_has_expected_columns():
+    """model_registry has repo_id, category_id, s3_prefix columns."""
+    for col in ("repo_id", "category_id", "s3_prefix", "display_name"):
+        assert col in CREATE_MODEL_CATEGORY_SQL
 
 
 def test_pg_host_wsl2_returns_gateway_ip():
