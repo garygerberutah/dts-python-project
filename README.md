@@ -166,6 +166,116 @@ ggp-python-project/
 
 ---
 
+## SBOM Blockchain & PostgreSQL
+
+### Overview
+
+Every pipeline run (stage 11) generates a **Software Bill of Materials** (SBOM) — a SHA-256 manifest of all git-tracked files — and appends it to an append-only blockchain with proof-of-work. The blockchain is stored in `scripts/blockchain/chain.json` (git-tracked, the **single source of truth**). A PostgreSQL database mirrors the chain for queryable auditing.
+
+### Data Flow
+
+```
+git ls-files → SHA-256 per file → composite hash → blockchain block (chain.json) → PostgreSQL (sbom_version)
+```
+
+### Source of Truth
+
+| Artifact | Location | Versioned? | Purpose |
+|---|---|---|---|
+| Blockchain | `scripts/blockchain/chain.json` | **Yes** (git) | Authoritative append-only ledger |
+| SBOM manifest | `scripts/blockchain/sbom.json` | Yes (git) | Latest file-level hashes |
+| PostgreSQL | Docker volume `pgdata` | No | Queryable audit mirror |
+
+`chain.json` travels with the repo. PostgreSQL is a **derived store** — it can be rebuilt from `chain.json` at any time.
+
+### Docker PostgreSQL Setup
+
+The pipeline auto-starts a Docker PostgreSQL container when no local instance is available.
+
+```yaml
+# docker-compose.yml
+Container:  ggp3d-postgres
+Image:      postgres:16-alpine
+Port:       5433 (host) → 5432 (container)
+Database:   asset_catalog
+User:       assman
+```
+
+**Connection fallback order** (handled automatically by `scripts/blockchain/db.py`):
+
+1. Localhost PostgreSQL on port **5432** (your dev machine)
+2. Docker container `ggp3d-postgres` on port **5433** (auto-started if needed)
+
+### Connecting to PostgreSQL
+
+```bash
+# Install psql client (if not available)
+sudo apt-get install -y postgresql-client
+
+# Connect to the Docker instance
+PGPASSWORD='1324QEWRFD7sdf!1!' psql -h localhost -p 5433 -U assman -d asset_catalog
+
+# Query SBOM records (exclude the large JSONB column)
+SELECT id, commit_sha, branch, composite_sha256, file_count, created_at FROM sbom_version;
+```
+
+### Maintaining the Blockchain Across Instances
+
+`chain.json` is the portable, git-tracked source of truth. PostgreSQL data does **not** transfer between machines — it must be rebuilt locally.
+
+#### New Environment Setup (Codespace, new machine, CI runner)
+
+```bash
+# 1. Clone the repo — chain.json comes with it
+git clone git@github.com:guidogerb/ggp-python-project.git
+cd ggp-python-project
+
+# 2. Start Docker PostgreSQL
+docker compose up -d --wait
+
+# 3. Rebuild the sbom_version table from chain.json
+python run.py sync-db
+```
+
+#### Workflow Between Codespace and Localhost
+
+```
+┌─────────────────────┐         git push / pull        ┌─────────────────────┐
+│   GitHub Codespace   │ ◄──────────────────────────► │      Localhost       │
+│                       │                               │                     │
+│  chain.json (git) ───────── shared via git ────────── chain.json (git)    │
+│  PostgreSQL :5433    │   (independent instances)      │  PostgreSQL :5432   │
+│  (Docker volume)     │                                │  (native or Docker) │
+└─────────────────────┘                                └─────────────────────┘
+```
+
+**After pulling new commits** (either direction):
+
+```bash
+git pull
+python run.py sync-db    # rebuild PostgreSQL from updated chain.json
+```
+
+**After running the pipeline** (commits a new block to chain.json):
+
+```bash
+python run.py pipeline   # stages 1-12: generates SBOM, mines block, stores in DB, pushes
+```
+
+The other environment pulls and runs `sync-db` to catch up.
+
+#### Key Commands
+
+| Command | Description |
+|---|---|
+| `python run.py pipeline` | Full pipeline — generates SBOM, mines block, stores in DB, deploys |
+| `python run.py sync-db` | Rebuild PostgreSQL from `chain.json` (run after `git pull`) |
+| `docker compose up -d` | Start PostgreSQL container |
+| `docker compose down` | Stop PostgreSQL container (data persists in volume) |
+| `docker compose down -v` | Stop and **destroy** PostgreSQL data volume |
+
+---
+
 ## AWS Deployment
 
 The `deploy-dev.yml` workflow triggers on every push to the `dev` branch.
