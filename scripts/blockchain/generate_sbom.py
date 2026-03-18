@@ -19,8 +19,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent.parent
 SBOM_PATH = Path(__file__).resolve().parent / "sbom.json"
 
-# Relative path of sbom.json from the repo root — excluded from the manifest.
-_SBOM_REL = SBOM_PATH.relative_to(ROOT).as_posix()
+# Paths excluded from the manifest — these are outputs of the SBOM stage.
+_CHAIN_PATH = Path(__file__).resolve().parent / "chain.json"
+_EXCLUDED_RELS = {
+    SBOM_PATH.relative_to(ROOT).as_posix(),
+    _CHAIN_PATH.relative_to(ROOT).as_posix(),
+}
 
 
 def _git_ls_files() -> list[str]:
@@ -56,7 +60,7 @@ def generate() -> tuple[dict, str]:
 
     entries: list[dict[str, str]] = []
     for rel in tracked:
-        if rel == _SBOM_REL:
+        if rel in _EXCLUDED_RELS:
             continue
         full = ROOT / rel
         if not full.is_file():

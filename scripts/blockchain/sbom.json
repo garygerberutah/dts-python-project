@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-18T23:21:58.552259+00:00",
-  "file_count": 177,
+  "timestamp": "2026-03-18T23:27:50.336581+00:00",
+  "file_count": 176,
   "files": [
     {
       "path": ".githooks/pre-commit",
@@ -180,16 +180,12 @@
       "sha256": "c5bc4be54efcbe766e72d71ed6d65dda94a0c5d2e4fba08ffb1ce692cfe241ab"
     },
     {
-      "path": "scripts/blockchain/chain.json",
-      "sha256": "de9a2d63a49f79578bfe1a0ac5e726fe7716963ccc871f8a99aed11e980c6f8d"
-    },
-    {
       "path": "scripts/blockchain/db.py",
       "sha256": "f34369115b87daf56ec6beeecc41a54ebb2e543fc8a2697a6caf859b4c3bb7e7"
     },
     {
       "path": "scripts/blockchain/generate_sbom.py",
-      "sha256": "0419da7c9e2458bf25e4efe8bfd74df897ff801f8e135dfc73f297b4bb65e2be"
+      "sha256": "4508e8f9d965ce0373221339c23936b4472134fdc96eec85fd1e31a513c1889a"
     },
     {
       "path": "scripts/blockchain/sbom.py",
@@ -301,7 +297,7 @@
     },
     {
       "path": "tests/test_sbom.py",
-      "sha256": "fd93e538fb87a595d7b0b1d79e02926d645641e606c14ccd243981f00d5cbfcc"
+      "sha256": "2bfb0dc4a6f7fe454202a373e619442b72ea5d31e4950bd94b59381f63e485a6"
     },
     {
       "path": "tests/test_validate_assets.py",

@@ -17,7 +17,12 @@ import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
 SBOM_PATH = ROOT / "scripts" / "blockchain" / "sbom.json"
-SBOM_REL = SBOM_PATH.relative_to(ROOT).as_posix()
+CHAIN_PATH = ROOT / "scripts" / "blockchain" / "chain.json"
+# These files are outputs of the SBOM stage — excluded from the manifest.
+_EXCLUDED_RELS = {
+    SBOM_PATH.relative_to(ROOT).as_posix(),
+    CHAIN_PATH.relative_to(ROOT).as_posix(),
+}
 
 
 @pytest.fixture(scope="module")
@@ -38,7 +43,7 @@ def git_tracked_files():
     )
     assert result.returncode == 0, f"git ls-files failed: {result.stderr}"
     paths = {line for line in result.stdout.splitlines() if line}
-    paths.discard(SBOM_REL)
+    paths -= _EXCLUDED_RELS
     return paths
 
 
