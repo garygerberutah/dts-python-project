@@ -21,6 +21,7 @@ from scripts.blockchain.db import (
     INSERT_SQL,
     SQL_EXPORT_DIR,
     export_sbom_version_sql,
+    validate_sbom_db_sync,
 )
 
 
@@ -299,3 +300,117 @@ def test_connect_starts_docker_when_both_fail(mock_try, mock_start):
     assert result is mock_conn
     mock_start.assert_called_once()
     assert mock_try.call_count == 3
+
+
+# ---------------------------------------------------------------------------
+# validate_sbom_db_sync tests (mocked DB + filesystem)
+# ---------------------------------------------------------------------------
+
+
+@patch("scripts.blockchain.db.SQL_EXPORT_DIR")
+@patch("scripts.blockchain.db.connect")
+def test_validate_sync_empty_db_no_files(mock_connect, mock_dir, tmp_path):
+    """No DB rows and no SQL files → pass (empty list)."""
+    mock_conn = MagicMock()
+    mock_cursor = MagicMock()
+    mock_cursor.fetchone.return_value = (0,)
+    mock_conn.cursor.return_value.__enter__ = lambda _: mock_cursor
+    mock_conn.cursor.return_value.__exit__ = MagicMock(return_value=False)
+    mock_connect.return_value = mock_conn
+    mock_dir.glob.return_value = []
+
+    errors = validate_sbom_db_sync()
+    assert errors == []
+
+
+@patch("scripts.blockchain.db.SQL_EXPORT_DIR")
+@patch("scripts.blockchain.db.connect")
+def test_validate_sync_db_rows_no_files(mock_connect, mock_dir, tmp_path):
+    """DB has rows but no SQL export files → error."""
+    mock_conn = MagicMock()
+    mock_cursor = MagicMock()
+    mock_cursor.fetchone.return_value = (5,)
+    mock_conn.cursor.return_value.__enter__ = lambda _: mock_cursor
+    mock_conn.cursor.return_value.__exit__ = MagicMock(return_value=False)
+    mock_connect.return_value = mock_conn
+    mock_dir.glob.return_value = []
+
+    errors = validate_sbom_db_sync()
+    assert len(errors) == 1
+    assert "5 row(s)" in errors[0]
+    assert "no SQL export files" in errors[0]
+
+
+@patch("scripts.blockchain.db.SQL_EXPORT_DIR")
+@patch("scripts.blockchain.db.connect")
+def test_validate_sync_counts_match(mock_connect, mock_dir, tmp_path):
+    """DB row count matches INSERT count in SQL file → pass."""
+    mock_conn = MagicMock()
+    mock_cursor = MagicMock()
+    mock_cursor.fetchone.return_value = (3,)
+    mock_conn.cursor.return_value.__enter__ = lambda _: mock_cursor
+    mock_conn.cursor.return_value.__exit__ = MagicMock(return_value=False)
+    mock_connect.return_value = mock_conn
+
+    sql_file = tmp_path / "sbom_version_20260101-000000.sql"
+    sql_file.write_text(
+        "INSERT INTO public.sbom_version VALUES (1);\n"
+        "INSERT INTO public.sbom_version VALUES (2);\n"
+        "INSERT INTO public.sbom_version VALUES (3);\n",
+        encoding="utf-8",
+    )
+    mock_dir.glob.return_value = sorted(tmp_path.glob("sbom_version_*.sql"))
+
+    errors = validate_sbom_db_sync()
+    assert errors == []
+
+
+@patch("scripts.blockchain.db.SQL_EXPORT_DIR")
+@patch("scripts.blockchain.db.connect")
+def test_validate_sync_db_exceeds_exports(mock_connect, mock_dir, tmp_path):
+    """DB has more rows than any SQL file → error."""
+    mock_conn = MagicMock()
+    mock_cursor = MagicMock()
+    mock_cursor.fetchone.return_value = (10,)
+    mock_conn.cursor.return_value.__enter__ = lambda _: mock_cursor
+    mock_conn.cursor.return_value.__exit__ = MagicMock(return_value=False)
+    mock_connect.return_value = mock_conn
+
+    sql_file = tmp_path / "sbom_version_20260101-000000.sql"
+    sql_file.write_text(
+        "INSERT INTO public.sbom_version VALUES (1);\n"
+        "INSERT INTO public.sbom_version VALUES (2);\n",
+        encoding="utf-8",
+    )
+    mock_dir.glob.return_value = sorted(tmp_path.glob("sbom_version_*.sql"))
+
+    errors = validate_sbom_db_sync()
+    assert len(errors) == 1
+    assert "10 row(s)" in errors[0]
+    assert "2 INSERT" in errors[0]
+
+
+@patch("scripts.blockchain.db.SQL_EXPORT_DIR")
+@patch("scripts.blockchain.db.connect")
+def test_validate_sync_picks_best_file(mock_connect, mock_dir, tmp_path):
+    """Multiple SQL files — validation passes if any file matches DB count."""
+    mock_conn = MagicMock()
+    mock_cursor = MagicMock()
+    mock_cursor.fetchone.return_value = (3,)
+    mock_conn.cursor.return_value.__enter__ = lambda _: mock_cursor
+    mock_conn.cursor.return_value.__exit__ = MagicMock(return_value=False)
+    mock_connect.return_value = mock_conn
+
+    old_file = tmp_path / "sbom_version_20260101-000000.sql"
+    old_file.write_text("INSERT INTO public.sbom_version VALUES (1);\n", encoding="utf-8")
+    new_file = tmp_path / "sbom_version_20260201-000000.sql"
+    new_file.write_text(
+        "INSERT INTO public.sbom_version VALUES (1);\n"
+        "INSERT INTO public.sbom_version VALUES (2);\n"
+        "INSERT INTO public.sbom_version VALUES (3);\n",
+        encoding="utf-8",
+    )
+    mock_dir.glob.return_value = sorted(tmp_path.glob("sbom_version_*.sql"))
+
+    errors = validate_sbom_db_sync()
+    assert errors == []

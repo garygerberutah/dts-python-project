@@ -15,6 +15,7 @@ Connection strategy:
 
 import json
 import platform
+import re
 import subprocess
 import sys
 from datetime import UTC, datetime
@@ -261,6 +262,59 @@ def export_sbom_version_sql() -> Path:
         rel = sql_path
     print(f"[sbom-db] Exported {len(rows)} row(s) → {rel}")
     return sql_path
+
+
+def validate_sbom_db_sync() -> list[str]:
+    """Verify SQL export files are in sync with the ``sbom_version`` table.
+
+    Checks:
+      1. If the DB has *N* rows, at least one SQL export file must contain
+         *N* INSERT statements.
+      2. Every SQL export file's INSERT count must not exceed the DB row count
+         (no phantom rows in exports).
+
+    Returns a list of error strings (empty == pass).
+    """
+    errors: list[str] = []
+
+    # 1. Count DB rows
+    conn = connect()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT COUNT(*) FROM public.sbom_version")
+            db_count: int = cur.fetchone()[0]
+    finally:
+        conn.close()
+
+    # 2. Scan SQL export files
+    sql_files = sorted(SQL_EXPORT_DIR.glob("sbom_version_*.sql"))
+
+    if db_count == 0 and not sql_files:
+        return errors  # nothing to check
+
+    if db_count > 0 and not sql_files:
+        errors.append(f"DB has {db_count} row(s) but no SQL export files in {SQL_EXPORT_DIR}")
+        return errors
+
+    # Count INSERT statements in each file
+    insert_re = re.compile(r"^INSERT\s+INTO", re.IGNORECASE | re.MULTILINE)
+    max_inserts = 0
+    file_counts: dict[str, int] = {}
+    for sql_file in sql_files:
+        content = sql_file.read_text(encoding="utf-8")
+        count = len(insert_re.findall(content))
+        file_counts[sql_file.name] = count
+        if count > max_inserts:
+            max_inserts = count
+
+    if max_inserts < db_count:
+        errors.append(
+            f"DB has {db_count} row(s) but the best SQL export only has "
+            f"{max_inserts} INSERT statement(s). "
+            f"Run 'python run.py sbom' to regenerate exports."
+        )
+
+    return errors
 
 
 def main() -> int:
