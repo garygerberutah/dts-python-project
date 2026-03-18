@@ -77,12 +77,14 @@ def test_render_templates_creates_index_html(tmp_path):
 
     site_json = tmp_path / "site.json"
     site_json.write_text(
-        json.dumps({
-            "project_name": "TestApp",
-            "project_description": "Test Description",
-            "lang": "en",
-            "repository": {"url": ""},
-        }),
+        json.dumps(
+            {
+                "project_name": "TestApp",
+                "project_description": "Test Description",
+                "lang": "en",
+                "repository": {"url": ""},
+            }
+        ),
         encoding="utf-8",
     )
 
@@ -116,18 +118,22 @@ def test_copy_assets_copies_main_js(tmp_path):
 
     scss_dir = ui_dir / "scss"
     scss_dir.mkdir(parents=True)
-    (scss_dir / "index.scss").write_text("/* Copyright 2026 by GuidoGerb Publishing, LLC */", encoding="utf-8")
+    (scss_dir / "index.scss").write_text(
+        "/* Copyright 2026 by GuidoGerb Publishing, LLC */", encoding="utf-8"
+    )
 
     dist = tmp_path / "dist"
     dist.mkdir()
 
     site_json = tmp_path / "site.json"
     site_json.write_text(
-        json.dumps({
-            "project_name": "Test",
-            "repository": {"url": ""},
-            "wasm_module": "test_wasm",
-        }),
+        json.dumps(
+            {
+                "project_name": "Test",
+                "repository": {"url": ""},
+                "wasm_module": "test_wasm",
+            }
+        ),
         encoding="utf-8",
     )
 
@@ -241,11 +247,13 @@ def test_copy_assets_with_existing_favicon(tmp_path):
 
     site_json = tmp_path / "site.json"
     site_json.write_text(
-        json.dumps({
-            "project_name": "Test",
-            "repository": {"url": ""},
-            "wasm_module": "test_wasm",
-        }),
+        json.dumps(
+            {
+                "project_name": "Test",
+                "repository": {"url": ""},
+                "wasm_module": "test_wasm",
+            }
+        ),
         encoding="utf-8",
     )
 
@@ -281,11 +289,13 @@ def test_copy_assets_resolves_env_vars(tmp_path):
 
     site_json = tmp_path / "site.json"
     site_json.write_text(
-        json.dumps({
-            "project_name": "MyApp",
-            "repository": {"url": "https://example.com"},
-            "wasm_module": "my_wasm",
-        }),
+        json.dumps(
+            {
+                "project_name": "MyApp",
+                "repository": {"url": "https://example.com"},
+                "wasm_module": "my_wasm",
+            }
+        ),
         encoding="utf-8",
     )
 

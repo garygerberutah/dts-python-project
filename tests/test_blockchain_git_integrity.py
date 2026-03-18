@@ -62,16 +62,12 @@ def _git_show(commit: str, path: str) -> str | None:
 
 def _block_hash(block: dict) -> str:
     """Compute the SHA-256 hash of a block (deterministic via sorted keys)."""
-    return hashlib.sha256(
-        json.dumps(block, sort_keys=True).encode()
-    ).hexdigest()
+    return hashlib.sha256(json.dumps(block, sort_keys=True).encode()).hexdigest()
 
 
 def _sbom_composite(manifest: dict) -> str:
     """Compute the composite SHA-256 of an SBOM manifest."""
-    return hashlib.sha256(
-        json.dumps(manifest, sort_keys=True).encode()
-    ).hexdigest()
+    return hashlib.sha256(json.dumps(manifest, sort_keys=True).encode()).hexdigest()
 
 
 def _verify_chain_links(chain: list[dict]) -> None:
@@ -151,9 +147,7 @@ class TestChainIntegrityAcrossRevisions:
         """Every revision starts with the same genesis block."""
         genesis = revision_pairs[0]["chain"][0]
         for entry in revision_pairs:
-            assert entry["chain"][0] == genesis, (
-                f"Genesis block differs at {entry['commit'][:7]}"
-            )
+            assert entry["chain"][0] == genesis, f"Genesis block differs at {entry['commit'][:7]}"
 
     def test_chain_grows_monotonically(self, revision_pairs):
         """Each revision has at least as many blocks as the previous one."""
@@ -161,8 +155,7 @@ class TestChainIntegrityAcrossRevisions:
         for entry in revision_pairs:
             current_len = len(entry["chain"])
             assert current_len >= prev_len, (
-                f"Chain shrank at {entry['commit'][:7]}: "
-                f"{prev_len} → {current_len}"
+                f"Chain shrank at {entry['commit'][:7]}: {prev_len} → {current_len}"
             )
             prev_len = current_len
 
@@ -173,7 +166,7 @@ class TestChainIntegrityAcrossRevisions:
             curr_len = len(revision_pairs[i]["chain"])
             assert curr_len > prev_len, (
                 f"Chain did not grow between "
-                f"{revision_pairs[i-1]['commit'][:7]} ({prev_len}) and "
+                f"{revision_pairs[i - 1]['commit'][:7]} ({prev_len}) and "
                 f"{revision_pairs[i]['commit'][:7]} ({curr_len})"
             )
 
@@ -190,7 +183,7 @@ class TestAppendOnlyProperty:
             for j in range(shared):
                 assert prev_chain[j] == curr_chain[j], (
                     f"Block {j} mutated between "
-                    f"{revision_pairs[i-1]['commit'][:7]} and "
+                    f"{revision_pairs[i - 1]['commit'][:7]} and "
                     f"{revision_pairs[i]['commit'][:7]}"
                 )
 
@@ -200,9 +193,7 @@ class TestAppendOnlyProperty:
         for entry in revision_pairs:
             curr_hashes = [_block_hash(b) for b in entry["chain"]]
             for j, h in enumerate(prev_hashes):
-                assert curr_hashes[j] == h, (
-                    f"Block {j} hash changed at {entry['commit'][:7]}"
-                )
+                assert curr_hashes[j] == h, f"Block {j} hash changed at {entry['commit'][:7]}"
             prev_hashes = curr_hashes
 
 
@@ -223,9 +214,7 @@ class TestSbomChainAgreement:
                     last_bom = block["sbom_hashes"][-1]["bom_hash"]
                     break
 
-            assert last_bom is not None, (
-                f"No bom_hash found in chain at {entry['commit'][:7]}"
-            )
+            assert last_bom is not None, f"No bom_hash found in chain at {entry['commit'][:7]}"
             assert composite == last_bom, (
                 f"SBOM composite mismatch at {entry['commit'][:7]}: "
                 f"computed={composite[:16]}…, chain={last_bom[:16]}…"
@@ -255,6 +244,7 @@ class TestProofOfWork:
     def test_pow_difficulty_matches_constant(self):
         """The test uses the same difficulty as the production code."""
         from scripts.blockchain.sbom import POW_DIFFICULTY as PROD_DIFFICULTY
+
         assert POW_DIFFICULTY == PROD_DIFFICULTY
 
 
@@ -309,8 +299,7 @@ class TestCurrentCommittedState:
 
         assert last_bom is not None, "No bom_hash found in chain.json at HEAD"
         assert composite == last_bom, (
-            f"HEAD SBOM composite mismatch: "
-            f"computed={composite[:16]}…, chain={last_bom[:16]}…"
+            f"HEAD SBOM composite mismatch: computed={composite[:16]}…, chain={last_bom[:16]}…"
         )
 
     def test_committed_chain_is_superset_of_disk(self):

@@ -88,9 +88,7 @@ class TestCORSConfig:
         assert mod.CORS_ALLOWED_ORIGINS == ["https://example.com"]
 
     def test_multiple_origins(self):
-        mod = _reload_config(
-            CORS_ALLOWED_ORIGINS="https://a.com, https://b.com"
-        )
+        mod = _reload_config(CORS_ALLOWED_ORIGINS="https://a.com, https://b.com")
         assert mod.CORS_ALLOWED_ORIGINS == ["https://a.com", "https://b.com"]
 
     def test_trailing_whitespace_stripped(self):

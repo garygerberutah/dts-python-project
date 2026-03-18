@@ -10,18 +10,14 @@ import scripts.ui.serve as serve_mod
 
 def test_cors_handler_guess_type_wasm():
     """WASM files return application/wasm mime type."""
-    handler = serve_mod._CORSHTTPRequestHandler.__new__(
-        serve_mod._CORSHTTPRequestHandler
-    )
+    handler = serve_mod._CORSHTTPRequestHandler.__new__(serve_mod._CORSHTTPRequestHandler)
     mime = handler.guess_type("module.wasm")
     assert mime == "application/wasm"
 
 
 def test_cors_handler_guess_type_js():
     """JS files return a JavaScript mime type."""
-    handler = serve_mod._CORSHTTPRequestHandler.__new__(
-        serve_mod._CORSHTTPRequestHandler
-    )
+    handler = serve_mod._CORSHTTPRequestHandler.__new__(serve_mod._CORSHTTPRequestHandler)
     mime = handler.guess_type("app.js")
     assert "javascript" in mime or "ecmascript" in mime.lower()
 

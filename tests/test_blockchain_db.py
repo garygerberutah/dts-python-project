@@ -119,7 +119,8 @@ def test_main_returns_one_on_connection_failure():
     import psycopg2
 
     with patch.object(
-        db_mod, "get_connection",
+        db_mod,
+        "get_connection",
         side_effect=psycopg2.OperationalError("connection refused"),
     ):
         assert main() == 1

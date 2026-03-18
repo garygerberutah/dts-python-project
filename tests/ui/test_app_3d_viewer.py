@@ -51,8 +51,10 @@ def test_template_vertex_count_element(app_viewer_template):
 
 
 def test_wasm_ready_listener(app_viewer_source):
-    assert 'addEventListener("wasm-ready"' in app_viewer_source or \
-           "addEventListener('wasm-ready'" in app_viewer_source
+    assert (
+        'addEventListener("wasm-ready"' in app_viewer_source
+        or "addEventListener('wasm-ready'" in app_viewer_source
+    )
 
 
 def test_wasm_event_once(app_viewer_source):

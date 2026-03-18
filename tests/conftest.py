@@ -38,7 +38,7 @@ def tmp_js_file(tmp_tree):
     """Create a JS file with correct copyright."""
     f = tmp_tree / "example.js"
     f.write_text(
-        '/** Copyright 2026 by GuidoGerb Publishing, LLC */\nconst x = 1;\n',
+        "/** Copyright 2026 by GuidoGerb Publishing, LLC */\nconst x = 1;\n",
         encoding="utf-8",
     )
     return f

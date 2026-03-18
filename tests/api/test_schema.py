@@ -149,9 +149,7 @@ class TestValidateAssetCreate:
 
     def test_tags_must_be_list(self):
         with pytest.raises(ValidationError, match="tags must be an array"):
-            validate_asset_create(
-                {"name": "Test", "asset_type": "model", "tags": "not-a-list"}
-            )
+            validate_asset_create({"name": "Test", "asset_type": "model", "tags": "not-a-list"})
 
     def test_non_dict_body(self):
         with pytest.raises(ValidationError, match="must be a JSON object"):

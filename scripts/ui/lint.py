@@ -44,6 +44,8 @@ def lint_python() -> bool:
             "--config",
             "resources/config/ruff.toml",
             "scripts/",
+            "mcp/",
+            "tests/mcp/",
             "run.py",
         ],
         cwd=ROOT,

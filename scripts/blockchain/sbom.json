@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-18T19:19:19.467168+00:00",
-  "file_count": 209,
+  "timestamp": "2026-03-18T19:47:02.267142+00:00",
+  "file_count": 250,
   "files": [
     {
       "path": ".githooks/pre-commit",
@@ -124,6 +124,102 @@
       "sha256": "f75c1bbd17d18640e3427ec8db38975f126e5367c52bd10b88bb97d1dd4f01d5"
     },
     {
+      "path": "infra/mcp/api-gateway.tf",
+      "sha256": "6482b410d8ea9e3f071e0f0dd72506b00bea93bcc0154aed0ac13ca38dc0d1cf"
+    },
+    {
+      "path": "infra/mcp/lambda.tf",
+      "sha256": "4454ff676e8a1164d84abdd27a44c5ef27046a5539f53aad5f31c6fe91725158"
+    },
+    {
+      "path": "infra/mcp/main.tf",
+      "sha256": "b2e7c0ba8a5439d7a97533f4b9bf44a89615ff3045754a094b0a02bcc139d5c5"
+    },
+    {
+      "path": "infra/mcp/outputs.tf",
+      "sha256": "aa3e48ee6839f3a888a80fe54f3070a34cd41b7f82ec204e26455cbf226f5e26"
+    },
+    {
+      "path": "infra/mcp/terraform.tfvars.example",
+      "sha256": "6ab995305bfb0fa47d75e3ce1aa9fc549b49d8b856a9e9d12c33085cb43cf7ce"
+    },
+    {
+      "path": "infra/mcp/variables.tf",
+      "sha256": "c72c550c94e5c1ef43a75ae5f565d13f7518336568e59045697c7ae335252adf"
+    },
+    {
+      "path": "mcp/README.md",
+      "sha256": "939db2d06dfb0404cd3603662a87312f73d49d6596def9e5ad7aeab8320f4b05"
+    },
+    {
+      "path": "mcp/__init__.py",
+      "sha256": "fa9cf94268362a35436f5469a5eb93c866ffcf9c5b09132c6e130ae6b67b3fd7"
+    },
+    {
+      "path": "mcp/deploy/__init__.py",
+      "sha256": "daf6097605f724172093e7e76e581e25164b91f1865ea9a93ee8d98e6251dba6"
+    },
+    {
+      "path": "mcp/protocol/__init__.py",
+      "sha256": "24e0d32e324ba11ae60ed1bf61784bb8b8ed8f3eade84f8eb5856a7be96b9520"
+    },
+    {
+      "path": "mcp/protocol/errors.py",
+      "sha256": "62aff7b55fa0014f00b44a8b5e449ac142fa7a7271b9b0de990dbe1bf48a11b6"
+    },
+    {
+      "path": "mcp/protocol/jsonrpc.py",
+      "sha256": "960837c00eac508031a1b6375879e5109b863b4f50d88171424fe9deda2d9ac6"
+    },
+    {
+      "path": "mcp/protocol/types.py",
+      "sha256": "d0e8b3b7429a0999b7252be8b599d08e4e9121532aaa4f416d4912e7d9f31d75"
+    },
+    {
+      "path": "mcp/server/__init__.py",
+      "sha256": "0b712a48b32b12c8817464d89d0417bffae4cc33b8062e9004c7384d00d7a783"
+    },
+    {
+      "path": "mcp/server/base.py",
+      "sha256": "0dc406f27d1e7659f4ba3cb93e08d2dd2bf2d9d57f7e25afdba4bc1958917d65"
+    },
+    {
+      "path": "mcp/server/handler.py",
+      "sha256": "f4b668335b5243d69d7b5df610ad27b2869c648d6092d874c80fd82e5ec0582d"
+    },
+    {
+      "path": "mcp/server/registry.py",
+      "sha256": "57e82da2730699252485683791946f7bddf2fb0e4c0613f328b3a50be001b8ba"
+    },
+    {
+      "path": "mcp/servers/__init__.py",
+      "sha256": "48610a1f6301adf9f5ecd86dc87e80686e91f18ebcf253f28cfb72f2060d2ce8"
+    },
+    {
+      "path": "mcp/servers/example.py",
+      "sha256": "d9e531c88b8a9e6ee41eeb2b390aed994e72af0863d63ba9d6afb81e0c17edbc"
+    },
+    {
+      "path": "mcp/servers/example_lambda.py",
+      "sha256": "288a0759a9dca9e6a5ede873aed53fbacd3d411d2221da25b982e9ea8e855ba7"
+    },
+    {
+      "path": "mcp/transport/__init__.py",
+      "sha256": "421e27681226617d5fab65f2d33b33dd36a7dffaa1d851c00fa7b53f1df22dd9"
+    },
+    {
+      "path": "mcp/transport/aws_lambda.py",
+      "sha256": "5e2011c019ce67be89946edff88cea8cdb916eb048053c3dec03400b52f4d40b"
+    },
+    {
+      "path": "mcp/transport/http.py",
+      "sha256": "e2473f65fa63bd78c3a7f955935c47b607261908dd361a6cb67b5a9230a0e5da"
+    },
+    {
+      "path": "mcp/transport/stdio.py",
+      "sha256": "03961a4468fd91cc29809c04127a671ce89fbaf0b5018042189c248bf6c2a754"
+    },
+    {
       "path": "requirements.txt",
       "sha256": "1e715ba23ce1f40215bb22d05dd8ff4ca1932751056ac83bad06c139a7178118"
     },
@@ -189,7 +285,7 @@
     },
     {
       "path": "run.py",
-      "sha256": "5d053d75beeac803b14475a1cd0ff37989b5cfeac9bacd3f863cd962f0d153cd"
+      "sha256": "1e3580ecb8e521b8e0a90cccc6c3612a97b84b093ac5e531822938a758f53260"
     },
     {
       "path": "scripts/README.md",
@@ -213,7 +309,7 @@
     },
     {
       "path": "scripts/blockchain/chain.json",
-      "sha256": "e4e89b5a395873489d4662e2260128c5da0cee7faedf9cc36c192c0377d9e47c"
+      "sha256": "f83440411614cd9c6acc43dfe768be31bbc3b93bb2caf4a7fd2ccaf4ab4527fc"
     },
     {
       "path": "scripts/blockchain/db.py",
@@ -236,6 +332,22 @@
       "sha256": "f9e309938211d009381a3c943b5e5b401b1630503b55b48c21e8cc56f8ae4463"
     },
     {
+      "path": "scripts/mcp/__init__.py",
+      "sha256": "c37170f807907f99cc752b1791261b6a5c72c386a94e3c0422c49f9f94e288af"
+    },
+    {
+      "path": "scripts/mcp/package_mcp.py",
+      "sha256": "3bebf73f456159df591015a80e1fb1d4905449c300df465a0ba11ae357a2fd7a"
+    },
+    {
+      "path": "scripts/mcp/serve_mcp.py",
+      "sha256": "ef67b97ec09adc1b3e1a2bdff357b7aed88fb7d6fdbba85038ad30d8edd72e0d"
+    },
+    {
+      "path": "scripts/mcp/test_mcp.py",
+      "sha256": "c30a49dd1c2ef3f49ed067a6aef15de8b1f2b941f121cf442ea7e9fccafefba3"
+    },
+    {
       "path": "scripts/ui/__init__.py",
       "sha256": "ca0994fd22b940e447f429477090f67285120c2c3af60c5a876ff11e840caae4"
     },
@@ -249,11 +361,11 @@
     },
     {
       "path": "scripts/ui/format_code.py",
-      "sha256": "bd22a00b9765eacf5c6c36063cdd862b09f58cd80f2e511049d6d8d90fb067b1"
+      "sha256": "f141defdf19b73197036e16efb75c4e1875fef11484c9641a685e18cb016ed92"
     },
     {
       "path": "scripts/ui/lint.py",
-      "sha256": "30cbce8d419d3a8a928f74e6683aeaa433154c0454327d75645fed6caa5af68d"
+      "sha256": "63b2a86edcce5835dedfb8a7c00936491d9dde32d5a613ae096fbd17cca9279b"
     },
     {
       "path": "scripts/ui/lint_js.py",
@@ -329,11 +441,11 @@
     },
     {
       "path": "tests/api/test_auth.py",
-      "sha256": "7f4aff6121cf0aca1406ce60631308122317ecd348a6eeba57af7eb53aadf0ca"
+      "sha256": "723e74fa6928c4392d2352f5b46322bec5798d1d01ee586002f465515cbf6b8d"
     },
     {
       "path": "tests/api/test_config.py",
-      "sha256": "aa179814df58f3200e3853f9f2c2dbb351e44db3e363bab116e4f241bda1f7f4"
+      "sha256": "9fa7589b93a76f095133c3d84f2ccbe82b7ee6f2e8d9094df2e830af809e5251"
     },
     {
       "path": "tests/api/test_health.py",
@@ -341,7 +453,7 @@
     },
     {
       "path": "tests/api/test_repository.py",
-      "sha256": "79d4643cad88ebd93ab4c4550604abd1bb2e193329805d18e7ddd26b9b00e853"
+      "sha256": "b782ac41ad3331d3c064e8de55d141722c76a47a5ab302a462fcb300cd9467c9"
     },
     {
       "path": "tests/api/test_response.py",
@@ -349,15 +461,67 @@
     },
     {
       "path": "tests/api/test_schema.py",
-      "sha256": "378e3f5033e5fb57dc4b08d37a11e2e09fba799bda0abfa079ce4aec14ec64cb"
+      "sha256": "756fb77bfb38831e0e50c1cb70463faaec80df57ac4f1d2783443e59914f0cab"
     },
     {
       "path": "tests/conftest.py",
-      "sha256": "4d4defbed12f3fc044546aa65a84e886297bdfcfb9b722a9e5006ba350c79d78"
+      "sha256": "107c0f4ab8a15492165fd56afd70738f0927b1ee7de39fa89563d3ace4d2a768"
+    },
+    {
+      "path": "tests/mcp/__init__.py",
+      "sha256": "8773aa0a5e22548f466b58cbb034e920a67b4a99535b23c9c43bccc1565f79d7"
+    },
+    {
+      "path": "tests/mcp/conftest.py",
+      "sha256": "c79d5ecf599c7a38cce5344101896fdca999f3babf18955afe37fd6f9b67169a"
+    },
+    {
+      "path": "tests/mcp/test_deploy.py",
+      "sha256": "708b5f0b76081542d0efac3412e7593efe9156747957545aa3f83157c0ab9c1e"
+    },
+    {
+      "path": "tests/mcp/test_errors.py",
+      "sha256": "5f23bcfdfbb6f7daa0d6777263656f796b437fc0f9f8ea6d5810d46eb14412a4"
+    },
+    {
+      "path": "tests/mcp/test_example.py",
+      "sha256": "9f0a4c17c042629aa6a13bcfd374744a79fd4175d25b5f6b25fb0df075e2f86e"
+    },
+    {
+      "path": "tests/mcp/test_handler.py",
+      "sha256": "f823af4e5b2c0ddad639febeaf6fef7e8c9a75e834b6f4fa4233acfaee45d390"
+    },
+    {
+      "path": "tests/mcp/test_http.py",
+      "sha256": "a6dac700d8b6aed44725834f3df1daa52aad9bddee5010c4760d7f10c9536b5a"
+    },
+    {
+      "path": "tests/mcp/test_jsonrpc.py",
+      "sha256": "761b97ee8f38a0a241ba087392e0e53187cac3c81b1d89ded13dea0c4dd05769"
+    },
+    {
+      "path": "tests/mcp/test_lambda.py",
+      "sha256": "edaf92f3c14723ef70babc6fa9ddbcb588ef2c079d3227aa5c3811e2b2a7b6dd"
+    },
+    {
+      "path": "tests/mcp/test_registry.py",
+      "sha256": "0b5a1de89112b8527f264c714436716774a2971af4c353033adf13f46832a278"
+    },
+    {
+      "path": "tests/mcp/test_server.py",
+      "sha256": "40d56694450d4df38441dbe3eb78e9681c9ca16ea618ef814863e974fdcae455"
+    },
+    {
+      "path": "tests/mcp/test_stdio.py",
+      "sha256": "06bd92e343cb70b8d5f446c19bc8b31fe6a41c26a230bea652371434a0206edc"
+    },
+    {
+      "path": "tests/mcp/test_types.py",
+      "sha256": "36f365d434543c77b9afe74550e481562b43a4cb67b202590de36b88427b64e0"
     },
     {
       "path": "tests/test_add_submodules.py",
-      "sha256": "e9c19e3f067eee435727e740f2e66c5c2e74e3be4ee8cf3fb1f38be8dc57c425"
+      "sha256": "6180a1f3005e7a2291548f442d8c5c61de1e192c458a9009a4a1814ab9cac29f"
     },
     {
       "path": "tests/test_all.py",
@@ -365,7 +529,7 @@
     },
     {
       "path": "tests/test_blockchain_db.py",
-      "sha256": "aeedcc7fe444593fed70cea200a9a7855dc085f9a27f46e659764f154fb214d4"
+      "sha256": "f2b8f2e0c949605dc61334facf0acaafd57c7eba4368fc8a008ac510b54eaeed"
     },
     {
       "path": "tests/test_blockchain_generate.py",
@@ -373,7 +537,7 @@
     },
     {
       "path": "tests/test_blockchain_git_integrity.py",
-      "sha256": "3afb2ab607016538304ff796f57a31a8dd0e192b8e9e8c6015b8d5de4f8a183d"
+      "sha256": "629b24b4e8ea0129891f6fa06ddf0fc967087db070251c4d832e1321088f33b6"
     },
     {
       "path": "tests/test_blockchain_sbom.py",
@@ -381,11 +545,11 @@
     },
     {
       "path": "tests/test_build.py",
-      "sha256": "f92dfdf069a031c3bb036daf48169f041371a41335f4afda69a6c5ebdb23cd6a"
+      "sha256": "ca6340b01258440ad3502cd39e10b4d5da89de28aec25d9f9e0dae7af6c46dbc"
     },
     {
       "path": "tests/test_build_all.py",
-      "sha256": "eab24d8f92ee824744ac40c48e56ddd4dd1e4e932e9653f1d9adc059bffb4935"
+      "sha256": "d45a244f942dcc489cc7101ee062dc24400cfe44c65f903c8a0401d00323b543"
     },
     {
       "path": "tests/test_clean.py",
@@ -401,7 +565,7 @@
     },
     {
       "path": "tests/test_lint.py",
-      "sha256": "db2fbfbdee3ce9294783a39e20ddb5286b1411a8a4b0461fe1a11dc43576664d"
+      "sha256": "40d96557de12977f59cfdf0313c4f0f127e00f5988cfad7ab0e01f6cb5dde3af"
     },
     {
       "path": "tests/test_lint_full.py",
@@ -409,11 +573,11 @@
     },
     {
       "path": "tests/test_list_repos.py",
-      "sha256": "93d339776203a22c132be1527b0df6dff0d5006fb059d814783ae1fdf64c99e2"
+      "sha256": "1888d57915a225a5fafeb1783a52f41e9b84e4fd0892f75d1ad6e62d9cbc2d22"
     },
     {
       "path": "tests/test_model_downloader.py",
-      "sha256": "20257a3b494c15bf4861583721cf5517fae33b43d117bfec4456dbc183c271f0"
+      "sha256": "df59fe67d935f68774b6711ee9648d37f4a7faf70284500d7052ae20f00ff542"
     },
     {
       "path": "tests/test_scrape_directory_listing.py",
@@ -421,11 +585,11 @@
     },
     {
       "path": "tests/test_serve.py",
-      "sha256": "6ebcb3040f7c1877faf4d2547867d26fcc820edba698f67dc02fc99cbc6ba4a2"
+      "sha256": "a0bd52c6d39ef7263099d61d4b6f612db931c00fbcec6f646fc9ec1d8a77ddb6"
     },
     {
       "path": "tests/test_sync_db.py",
-      "sha256": "f38dc771f815e9fd0e920dcf646807cd18f5c5818289274f2ef56afeb9dd69db"
+      "sha256": "b2717f1d249185feb13c44f20ff6bf917a7cdcc22a6f8bc085442961a8e6560a"
     },
     {
       "path": "tests/test_test_components.py",
@@ -445,7 +609,7 @@
     },
     {
       "path": "tests/test_validate_wcag.py",
-      "sha256": "dcc502914bcc972a2e82caedfb746c2c86a19d128dde3a60990ddc2f89979d06"
+      "sha256": "b491f8e3e0bea3a16e71fc8194a633cea390aff57eb721ed3ff9074d351c5ec2"
     },
     {
       "path": "tests/ui/__init__.py",
@@ -457,7 +621,7 @@
     },
     {
       "path": "tests/ui/test_app_3d_viewer.py",
-      "sha256": "f583efc9b82be8f169a196a1efa2ebef758890401edb78fba937ad1b8ac449d2"
+      "sha256": "228a9be92956e39c8c5f5a7d1d025be1aade317d9767564492a43a137b354b01"
     },
     {
       "path": "tests/ui/test_app_header.py",

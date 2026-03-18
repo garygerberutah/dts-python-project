@@ -82,7 +82,8 @@ def test_main_returns_one_on_connection_failure():
     import psycopg2
 
     with patch.object(
-        sync_mod, "sync",
+        sync_mod,
+        "sync",
         side_effect=psycopg2.OperationalError("fail"),
     ):
         assert sync_mod.main() == 1

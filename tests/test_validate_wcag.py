@@ -57,9 +57,7 @@ def test_validate_empty_directory(tmp_path):
 
 def test_wcag_parser_missing_title(tmp_path):
     html_file = tmp_path / "no_title.html"
-    html_file.write_text(
-        '<html lang="en"><head></head><body></body></html>', encoding="utf-8"
-    )
+    html_file.write_text('<html lang="en"><head></head><body></body></html>', encoding="utf-8")
     violations = _check_file(html_file)
     rules = [v.rule for v in violations]
     assert "2.4.2" in rules
@@ -70,8 +68,7 @@ def test_wcag_parser_link_without_text():
     ctx = _ParseContext(file="test.html")
     parser = WCAGParser(ctx)
     parser.feed(
-        '<html lang="en"><head><title>T</title></head>'
-        '<body><a href="/page"></a></body></html>'
+        '<html lang="en"><head><title>T</title></head><body><a href="/page"></a></body></html>'
     )
     rules = [v.rule for v in ctx.violations]
     assert "2.4.4" in rules
@@ -106,8 +103,7 @@ def test_wcag_parser_input_without_label():
     ctx = _ParseContext(file="test.html")
     parser = WCAGParser(ctx)
     parser.feed(
-        '<html lang="en"><head><title>T</title></head>'
-        '<body><input type="text"></body></html>'
+        '<html lang="en"><head><title>T</title></head><body><input type="text"></body></html>'
     )
     rules = [v.rule for v in ctx.violations]
     assert "4.1.2" in rules
@@ -170,8 +166,6 @@ def test_validate_main_returns_one(tmp_path, monkeypatch):
     )
     # Patch validate to call with our tmp_path instead of default DIST_DIR
     original_validate = wcag_mod.validate
-    monkeypatch.setattr(
-        wcag_mod, "validate", lambda dist_dir=tmp_path: original_validate(tmp_path)
-    )
+    monkeypatch.setattr(wcag_mod, "validate", lambda dist_dir=tmp_path: original_validate(tmp_path))
     result = wcag_mod.main()
     assert result == 1

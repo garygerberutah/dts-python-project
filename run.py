@@ -20,6 +20,9 @@ Commands:
     sync-db    Rebuild PostgreSQL sbom_version table from chain.json
     pipeline   Run the full automation pipeline (format → lint → validate →
                clean → build → test → sbom → deploy)
+    mcp-serve  Run an MCP server locally (stdio or HTTP)
+    mcp-package Package MCP server for AWS Lambda deployment
+    mcp-test   Run MCP framework tests
 """
 
 import argparse
@@ -67,6 +70,15 @@ def main() -> int:
         action="store_true",
         help="Skip the git deploy stage",
     )
+
+    mcp_serve_p = subparsers.add_parser("mcp-serve", help="Run an MCP server locally")
+    mcp_serve_p.add_argument("--server", default="example", help="Server module to run")
+    mcp_serve_p.add_argument("--http", action="store_true", help="Use HTTP transport")
+    mcp_serve_p.add_argument("--port", type=int, default=3000, help="HTTP port")
+    mcp_serve_p.add_argument("--host", default="127.0.0.1", help="HTTP bind address")
+
+    subparsers.add_parser("mcp-package", help="Package MCP server for AWS Lambda")
+    subparsers.add_parser("mcp-test", help="Run MCP framework tests")
 
     args = parser.parse_args()
 
@@ -136,6 +148,27 @@ def main() -> int:
         from scripts.build_all import run
 
         return run(skip_deploy=args.skip_deploy)
+    elif args.command == "mcp-serve":
+        from scripts.mcp.serve_mcp import main as fn
+
+        serve_args = []
+        if args.server != "example":
+            serve_args.extend(["--server", args.server])
+        if args.http:
+            serve_args.append("--http")
+        if args.port != 3000:
+            serve_args.extend(["--port", str(args.port)])
+        if args.host != "127.0.0.1":
+            serve_args.extend(["--host", args.host])
+        return fn(serve_args)
+    elif args.command == "mcp-package":
+        from scripts.mcp.package_mcp import main as fn
+
+        return fn()
+    elif args.command == "mcp-test":
+        from scripts.mcp.test_mcp import main as fn
+
+        return fn()
     else:
         parser.print_help()
         return 1

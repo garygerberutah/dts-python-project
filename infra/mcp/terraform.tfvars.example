@@ -1,0 +1,13 @@
+# Copyright 2026 by GuidoGerb Publishing, LLC
+#
+# Example variable values — copy to terraform.tfvars and fill in.
+# terraform.tfvars is gitignored; this file is safe to commit.
+
+aws_region            = "us-east-1"
+environment           = "dev"
+lambda_memory_size    = 256
+lambda_timeout        = 30
+cors_allowed_origins  = "https://example.com"
+cognito_user_pool_id  = ""
+cognito_app_client_id = ""
+lambda_zip_path       = "../../dist/mcp-lambda.zip"

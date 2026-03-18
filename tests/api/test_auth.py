@@ -231,6 +231,7 @@ class TestFetchJwks:
     def _clear_jwks_cache(self):
         """Clear the module-level JWKS cache before each test."""
         import api.src.auth as auth_mod
+
         auth_mod._jwks_cache = {}
         auth_mod._jwks_cache_ttl = 0.0
         yield

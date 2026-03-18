@@ -122,9 +122,7 @@ class TestUpdateAsset:
     """Tests for update_asset."""
 
     def test_updates_own_asset(self, mock_table):
-        mock_table.get_item.return_value = {
-            "Item": {"id": "abc", "owner": "user-1", "name": "Old"}
-        }
+        mock_table.get_item.return_value = {"Item": {"id": "abc", "owner": "user-1", "name": "Old"}}
         mock_table.update_item.return_value = {
             "Attributes": {"id": "abc", "owner": "user-1", "name": "New"}
         }
@@ -138,17 +136,13 @@ class TestUpdateAsset:
         assert result is None
 
     def test_returns_none_when_not_owner(self, mock_table):
-        mock_table.get_item.return_value = {
-            "Item": {"id": "abc", "owner": "other-user"}
-        }
+        mock_table.get_item.return_value = {"Item": {"id": "abc", "owner": "other-user"}}
         result = repo_mod.update_asset("abc", {"name": "X"}, "user-1")
         assert result is None
         mock_table.update_item.assert_not_called()
 
     def test_updates_timestamp(self, mock_table):
-        mock_table.get_item.return_value = {
-            "Item": {"id": "abc", "owner": "user-1"}
-        }
+        mock_table.get_item.return_value = {"Item": {"id": "abc", "owner": "user-1"}}
         mock_table.update_item.return_value = {"Attributes": {"id": "abc"}}
         repo_mod.update_asset("abc", {"name": "New"}, "user-1")
         call_kwargs = mock_table.update_item.call_args[1]
@@ -164,9 +158,7 @@ class TestDeleteAsset:
     """Tests for delete_asset."""
 
     def test_deletes_own_asset(self, mock_table):
-        mock_table.get_item.return_value = {
-            "Item": {"id": "abc", "owner": "user-1"}
-        }
+        mock_table.get_item.return_value = {"Item": {"id": "abc", "owner": "user-1"}}
         result = repo_mod.delete_asset("abc", "user-1")
         assert result is True
         mock_table.delete_item.assert_called_once_with(Key={"id": "abc"})
@@ -177,9 +169,7 @@ class TestDeleteAsset:
         assert result is False
 
     def test_returns_false_when_not_owner(self, mock_table):
-        mock_table.get_item.return_value = {
-            "Item": {"id": "abc", "owner": "other-user"}
-        }
+        mock_table.get_item.return_value = {"Item": {"id": "abc", "owner": "other-user"}}
         result = repo_mod.delete_asset("abc", "user-1")
         assert result is False
         mock_table.delete_item.assert_not_called()

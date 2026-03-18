@@ -3,7 +3,6 @@
 Copyright 2026 by GuidoGerb Publishing, LLC
 """
 
-
 from scripts.ui.lint_js import lint_js_files
 
 
@@ -12,11 +11,11 @@ def test_lint_js_clean_file(tmp_path):
     comp_dir = tmp_path / "ui" / "src" / "components"
     comp_dir.mkdir(parents=True)
     (comp_dir / "app-test.js").write_text(
-        '/** Copyright 2026 by GuidoGerb Publishing, LLC */\n'
-        'const x = 1;\n'
-        'if (x === 1) {\n'
+        "/** Copyright 2026 by GuidoGerb Publishing, LLC */\n"
+        "const x = 1;\n"
+        "if (x === 1) {\n"
         '  console.info("ok");\n'
-        '}\n',
+        "}\n",
         encoding="utf-8",
     )
     assert lint_js_files(root=tmp_path) is True
@@ -27,10 +26,7 @@ def test_lint_js_catches_double_equals(tmp_path):
     comp_dir = tmp_path / "ui" / "src" / "components"
     comp_dir.mkdir(parents=True)
     (comp_dir / "bad.js").write_text(
-        'const x = 1;\n'
-        'if (x == 1) {\n'
-        '  console.info("bad");\n'
-        '}\n',
+        'const x = 1;\nif (x == 1) {\n  console.info("bad");\n}\n',
         encoding="utf-8",
     )
     assert lint_js_files(root=tmp_path) is False
@@ -41,7 +37,7 @@ def test_lint_js_catches_var(tmp_path):
     comp_dir = tmp_path / "ui" / "src" / "components"
     comp_dir.mkdir(parents=True)
     (comp_dir / "bad.js").write_text(
-        'var x = 1;\n',
+        "var x = 1;\n",
         encoding="utf-8",
     )
     assert lint_js_files(root=tmp_path) is False
@@ -74,7 +70,7 @@ def test_lint_js_skips_test_files(tmp_path):
     comp_dir = tmp_path / "ui" / "src" / "components"
     comp_dir.mkdir(parents=True)
     (comp_dir / "widget.test.js").write_text(
-        'var bad = true;\nif (bad == false) {}\n',
+        "var bad = true;\nif (bad == false) {}\n",
         encoding="utf-8",
     )
     assert lint_js_files(root=tmp_path) is True
@@ -85,7 +81,7 @@ def test_lint_js_skips_wasm_directory(tmp_path):
     pkg_dir = tmp_path / "ui" / "src" / "wasm" / "pkg"
     pkg_dir.mkdir(parents=True)
     (pkg_dir / "ggp3d_wasm.js").write_text(
-        'var heap = new Array();\n',
+        "var heap = new Array();\n",
         encoding="utf-8",
     )
     assert lint_js_files(root=tmp_path) is True

@@ -30,8 +30,10 @@ def test_stage_passes_on_none_return():
 
 def test_stage_propagates_exception():
     """_stage propagates exceptions from the function."""
+
     def boom():
         raise RuntimeError("bang")
+
     with pytest.raises(RuntimeError, match="bang"):
         ba_mod._stage("boom-stage", boom)
 
@@ -122,11 +124,14 @@ def test_stage_sbom_succeeds():
     mock_db_module = MagicMock()
     mock_db_module.store_sbom.return_value = 1
 
-    with patch.dict("sys.modules", {
-        "scripts.blockchain.generate_sbom": mock_gen_module,
-        "scripts.blockchain.sbom": mock_sbom_module,
-        "scripts.blockchain.db": mock_db_module,
-    }):
+    with patch.dict(
+        "sys.modules",
+        {
+            "scripts.blockchain.generate_sbom": mock_gen_module,
+            "scripts.blockchain.sbom": mock_sbom_module,
+            "scripts.blockchain.db": mock_db_module,
+        },
+    ):
         result = ba_mod._stage_sbom()
         assert result is True
         mock_db_module.ensure_table.assert_called_once()
@@ -148,11 +153,14 @@ def test_stage_sbom_fails_when_no_row_stored():
     mock_db_module = MagicMock()
     mock_db_module.store_sbom.return_value = None  # no row inserted
 
-    with patch.dict("sys.modules", {
-        "scripts.blockchain.generate_sbom": mock_gen_module,
-        "scripts.blockchain.sbom": mock_sbom_module,
-        "scripts.blockchain.db": mock_db_module,
-    }):
+    with patch.dict(
+        "sys.modules",
+        {
+            "scripts.blockchain.generate_sbom": mock_gen_module,
+            "scripts.blockchain.sbom": mock_sbom_module,
+            "scripts.blockchain.db": mock_db_module,
+        },
+    ):
         result = ba_mod._stage_sbom()
         assert result is False
 
@@ -172,11 +180,14 @@ def test_stage_sbom_fails_when_row_id_zero():
     mock_db_module = MagicMock()
     mock_db_module.store_sbom.return_value = 0
 
-    with patch.dict("sys.modules", {
-        "scripts.blockchain.generate_sbom": mock_gen_module,
-        "scripts.blockchain.sbom": mock_sbom_module,
-        "scripts.blockchain.db": mock_db_module,
-    }):
+    with patch.dict(
+        "sys.modules",
+        {
+            "scripts.blockchain.generate_sbom": mock_gen_module,
+            "scripts.blockchain.sbom": mock_sbom_module,
+            "scripts.blockchain.db": mock_db_module,
+        },
+    ):
         result = ba_mod._stage_sbom()
         assert result is False
 
@@ -209,10 +220,13 @@ def test_stage_sbom_fails_on_bad_chain():
     mock_sbom_module = MagicMock()
     mock_sbom_module.Blockchain.load.return_value = mock_chain
 
-    with patch.dict("sys.modules", {
-        "scripts.blockchain.generate_sbom": mock_gen_module,
-        "scripts.blockchain.sbom": mock_sbom_module,
-    }):
+    with patch.dict(
+        "sys.modules",
+        {
+            "scripts.blockchain.generate_sbom": mock_gen_module,
+            "scripts.blockchain.sbom": mock_sbom_module,
+        },
+    ):
         result = ba_mod._stage_sbom()
         assert result is False
 
@@ -232,11 +246,14 @@ def test_stage_sbom_fails_on_db_error():
     mock_db_module = MagicMock()
     mock_db_module.ensure_table.side_effect = RuntimeError("no pg")
 
-    with patch.dict("sys.modules", {
-        "scripts.blockchain.generate_sbom": mock_gen_module,
-        "scripts.blockchain.sbom": mock_sbom_module,
-        "scripts.blockchain.db": mock_db_module,
-    }):
+    with patch.dict(
+        "sys.modules",
+        {
+            "scripts.blockchain.generate_sbom": mock_gen_module,
+            "scripts.blockchain.sbom": mock_sbom_module,
+            "scripts.blockchain.db": mock_db_module,
+        },
+    ):
         result = ba_mod._stage_sbom()
         assert result is False
 

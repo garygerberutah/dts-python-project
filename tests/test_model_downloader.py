@@ -18,12 +18,15 @@ def _mock_external_deps():
     mock_requests = MagicMock()
     mock_hf = MagicMock()
 
-    with patch.dict("sys.modules", {
-        "boto3": mock_boto3,
-        "boto3.s3.transfer": MagicMock(),
-        "requests": mock_requests,
-        "huggingface_hub": mock_hf,
-    }):
+    with patch.dict(
+        "sys.modules",
+        {
+            "boto3": mock_boto3,
+            "boto3.s3.transfer": MagicMock(),
+            "requests": mock_requests,
+            "huggingface_hub": mock_hf,
+        },
+    ):
         yield mock_boto3, mock_requests, mock_hf
 
 

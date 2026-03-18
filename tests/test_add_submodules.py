@@ -46,8 +46,7 @@ def test_get_existing_submodules_parses_gitmodules(tmp_path):
     mock_result = MagicMock()
     mock_result.returncode = 0
     mock_result.stdout = (
-        "submodule.foo.path=submodules/foo\n"
-        "submodule.foo.url=https://github.com/x/foo.git\n"
+        "submodule.foo.path=submodules/foo\nsubmodule.foo.url=https://github.com/x/foo.git\n"
     )
 
     with patch("scripts.util.add_guidogerb_submodules.subprocess.run", return_value=mock_result):
