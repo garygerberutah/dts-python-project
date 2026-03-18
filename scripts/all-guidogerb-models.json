@@ -1,0 +1,285 @@
+{
+    "s3_bucket": "ggp-models",
+    "models": [
+        {
+            "repo_id": "XLabs-AI/flux-RealismLora",
+            "s3_prefix": "loras",
+            "category": "Image Generation",
+            "architecture": "Diffusion",
+            "display_name": "FLUX Realism LoRA",
+            "description": "LoRA adapter for FLUX realism style"
+        },
+        {
+            "repo_id": "Wan-AI/Wan2.2-T2V-A14B",
+            "s3_prefix": "Wan-AI",
+            "category": "Video Generation",
+            "architecture": "Diffusion",
+            "display_name": "Wan 2.2 T2V A14B",
+            "description": "Wan-AI text-to-video 14B parameter model"
+        },
+        {
+            "repo_id": "black-forest-labs/FLUX.1-schnell",
+            "s3_prefix": "checkpoints",
+            "category": "Image Generation",
+            "architecture": "Diffusion",
+            "display_name": "FLUX.1 Schnell",
+            "description": "Fast FLUX.1 image generation checkpoint"
+        },
+        {
+            "repo_id": "deepseek-ai/DeepSeek-V3.2",
+            "s3_prefix": "LLM - Foundation/Transformer/deepseek-ai/DeepSeek-V3.2",
+            "category": "LLM - Foundation",
+            "architecture": "Transformer",
+            "display_name": "DeepSeek V3.2",
+            "description": "DeepSeek foundation LLM v3.2"
+        },
+        {
+            "repo_id": "deepseek-ai/DeepSeek-OCR-2",
+            "s3_prefix": "Vision - OCR/Transformer/deepseek-ai/DeepSeek-OCR-2",
+            "category": "Vision - OCR",
+            "architecture": "Transformer",
+            "display_name": "DeepSeek OCR 2",
+            "description": "DeepSeek multimodal OCR and document understanding model"
+        },
+        {
+            "repo_id": "deepseek-ai/DeepSeek-V3.2-Speciale",
+            "s3_prefix": "LLM - Foundation/Transformer/deepseek-ai",
+            "category": "LLM - Foundation",
+            "architecture": "Transformer",
+            "display_name": "DeepSeek V3.2 Speciale",
+            "description": "DeepSeek V3.2 Speciale variant foundation LLM"
+        },
+        {
+            "repo_id": "huihui-ai/Huihui-Qwen3.5-35B-A3B-abliterated",
+            "s3_prefix": "LLM - Foundation/MoE/huihui-ai",
+            "category": "LLM - Foundation",
+            "architecture": "MoE",
+            "display_name": "Huihui Qwen3.5 35B-A3B Abliterated",
+            "description": "Abliterated Qwen3.5 35B MoE with 3B active parameters"
+        },
+        {
+            "repo_id": "huihui-ai/Huihui-Qwen3.5-4B-Claude-4.6-Opus-abliterated",
+            "s3_prefix": "LLM - Foundation/Transformer/huihui-ai",
+            "category": "LLM - Foundation",
+            "architecture": "Transformer",
+            "display_name": "Huihui Qwen3.5 4B Claude Opus Abliterated",
+            "description": "Abliterated Qwen3.5 4B dense model fine-tuned on Claude Opus"
+        },
+        {
+            "repo_id": "huihui-ai/Huihui-Qwen3.5-35B-A3B-Claude-4.6-Opus-abliterated",
+            "s3_prefix": "LLM - Foundation/MoE/huihui-ai",
+            "category": "LLM - Foundation",
+            "architecture": "MoE",
+            "display_name": "Huihui Qwen3.5 35B-A3B Claude Opus Abliterated",
+            "description": "Abliterated Qwen3.5 35B MoE fine-tuned on Claude Opus"
+        },
+        {
+            "repo_id": "huihui-ai/Huihui-Qwen3.5-122B-A10B-abliterated-GGUF",
+            "s3_prefix": "LLM - Foundation/MoE/huihui-ai",
+            "category": "LLM - Foundation",
+            "architecture": "MoE",
+            "display_name": "Huihui Qwen3.5 122B-A10B Abliterated GGUF",
+            "description": "Abliterated Qwen3.5 122B MoE GGUF quantized, 10B active"
+        },
+        {
+            "repo_id": "huihui-ai/Huihui-LFM2-24B-A2B-abliterated",
+            "s3_prefix": "LLM - Foundation/Hybrid/huihui-ai",
+            "category": "LLM - Foundation",
+            "architecture": "Hybrid",
+            "display_name": "Huihui LFM2 24B-A2B Abliterated",
+            "description": "Abliterated Liquid Foundation Model 2, 24B with 2B active"
+        },
+        {
+            "repo_id": "LiquidAI/LFM2.5-1.2B-Thinking",
+            "s3_prefix": "LLM - Foundation/Hybrid/LiquidAI",
+            "category": "LLM - Foundation",
+            "architecture": "Hybrid",
+            "display_name": "LFM 2.5 1.2B Thinking",
+            "description": "Liquid Foundation Model 2.5 1.2B with chain-of-thought"
+        },
+        {
+            "repo_id": "LiquidAI/LFM2.5-1.2B-Instruct",
+            "s3_prefix": "LLM - Foundation/Hybrid/LiquidAI",
+            "category": "LLM - Foundation",
+            "architecture": "Hybrid",
+            "display_name": "LFM 2.5 1.2B Instruct",
+            "description": "Liquid Foundation Model 2.5 1.2B instruction-tuned"
+        },
+        {
+            "repo_id": "LiquidAI/LFM2.5-1.2B-JP",
+            "s3_prefix": "LLM - Foundation/Hybrid/LiquidAI",
+            "category": "LLM - Foundation",
+            "architecture": "Hybrid",
+            "display_name": "LFM 2.5 1.2B JP",
+            "description": "Liquid Foundation Model 2.5 1.2B Japanese language"
+        },
+        {
+            "repo_id": "ox-ox/MiniMax-M2.5-GGUF",
+            "s3_prefix": "LLM - Foundation/MoE/ox-ox",
+            "category": "LLM - Foundation",
+            "architecture": "MoE",
+            "display_name": "MiniMax M2.5 GGUF",
+            "description": "MiniMax M2.5 MoE model in GGUF format"
+        },
+        {
+            "repo_id": "tomngdev/MiniMax-M2.5-REAP-139B-A10B-GGUF",
+            "s3_prefix": "LLM - Foundation/MoE/tomngdev",
+            "category": "LLM - Foundation",
+            "architecture": "MoE",
+            "display_name": "MiniMax M2.5 REAP 139B-A10B GGUF",
+            "description": "MiniMax M2.5 REAP 139B MoE GGUF quantized, 10B active"
+        },
+        {
+            "repo_id": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+            "s3_prefix": "LLM - Foundation/MoE/nvidia",
+            "category": "LLM - Foundation",
+            "architecture": "MoE",
+            "display_name": "NVIDIA Nemotron 3 Super 120B-A12B BF16",
+            "description": "NVIDIA Nemotron 3 Super 120B MoE BF16 precision, 12B active"
+        },
+        {
+            "repo_id": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-FP8",
+            "s3_prefix": "LLM - Foundation/MoE/nvidia",
+            "category": "LLM - Foundation",
+            "architecture": "MoE",
+            "display_name": "NVIDIA Nemotron 3 Super 120B-A12B FP8",
+            "description": "NVIDIA Nemotron 3 Super 120B MoE FP8 precision, 12B active"
+        },
+        {
+            "repo_id": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4",
+            "s3_prefix": "LLM - Foundation/MoE/nvidia",
+            "category": "LLM - Foundation",
+            "architecture": "MoE",
+            "display_name": "NVIDIA Nemotron 3 Super 120B-A12B NVFP4",
+            "description": "NVIDIA Nemotron 3 Super 120B MoE NVFP4 precision, 12B active"
+        },
+        {
+            "repo_id": "zai-org/GLM-5",
+            "s3_prefix": "LLM - Foundation/Transformer/zai-org",
+            "category": "LLM - Foundation",
+            "architecture": "Transformer",
+            "display_name": "GLM-5",
+            "description": "General Language Model 5 by Zhipu AI"
+        },
+        {
+            "repo_id": "zai-org/GLM-5-FP8",
+            "s3_prefix": "LLM - Foundation/Transformer/zai-org",
+            "category": "LLM - Foundation",
+            "architecture": "Transformer",
+            "display_name": "GLM-5 FP8",
+            "description": "General Language Model 5 FP8 precision by Zhipu AI"
+        },
+        {
+            "repo_id": "Qwen/Qwen3-Coder-Next",
+            "s3_prefix": "LLM - Code/Transformer/Qwen",
+            "category": "LLM - Code",
+            "architecture": "Transformer",
+            "display_name": "Qwen3 Coder Next",
+            "description": "Qwen3 code generation model"
+        },
+        {
+            "repo_id": "Qwen/Qwen3-Coder-Next-FP8",
+            "s3_prefix": "LLM - Code/Transformer/Qwen",
+            "category": "LLM - Code",
+            "architecture": "Transformer",
+            "display_name": "Qwen3 Coder Next FP8",
+            "description": "Qwen3 code generation model FP8 precision"
+        },
+        {
+            "repo_id": "Qwen/Qwen3-Coder-Next-GGUF",
+            "s3_prefix": "LLM - Code/Transformer/Qwen",
+            "category": "LLM - Code",
+            "architecture": "Transformer",
+            "display_name": "Qwen3 Coder Next GGUF",
+            "description": "Qwen3 code generation model GGUF quantized"
+        },
+        {
+            "repo_id": "zai-org/GLM-OCR",
+            "s3_prefix": "Vision - OCR/Transformer/zai-org",
+            "category": "Vision - OCR",
+            "architecture": "Transformer",
+            "display_name": "GLM-OCR",
+            "description": "General Language Model OCR by Zhipu AI"
+        },
+        {
+            "repo_id": "google/translategemma-27b-it",
+            "s3_prefix": "NLP - Translation/Transformer/google",
+            "category": "NLP - Translation",
+            "architecture": "Transformer",
+            "display_name": "TranslateGemma 27B IT",
+            "description": "Google TranslateGemma 27B instruction-tuned translation model"
+        },
+        {
+            "repo_id": "google/translategemma-4b-it",
+            "s3_prefix": "NLP - Translation/Transformer/google",
+            "category": "NLP - Translation",
+            "architecture": "Transformer",
+            "display_name": "TranslateGemma 4B IT",
+            "description": "Google TranslateGemma 4B instruction-tuned translation model"
+        },
+        {
+            "repo_id": "google/translategemma-12b-it",
+            "s3_prefix": "NLP - Translation/Transformer/google",
+            "category": "NLP - Translation",
+            "architecture": "Transformer",
+            "display_name": "TranslateGemma 12B IT",
+            "description": "Google TranslateGemma 12B instruction-tuned translation model"
+        },
+        {
+            "repo_id": "nomic-ai/colnomic-embed-multimodal-7b",
+            "s3_prefix": "Embedding/Multimodal/nomic-ai",
+            "category": "Embedding",
+            "architecture": "Multimodal",
+            "display_name": "ColNomic Embed Multimodal 7B",
+            "description": "Nomic AI columnar multimodal embedding model 7B"
+        },
+        {
+            "repo_id": "nomic-ai/nomic-embed-multimodal-7b",
+            "s3_prefix": "Embedding/Multimodal/nomic-ai",
+            "category": "Embedding",
+            "architecture": "Multimodal",
+            "display_name": "Nomic Embed Multimodal 7B",
+            "description": "Nomic AI multimodal embedding model 7B"
+        },
+        {
+            "repo_id": "nomic-ai/colnomic-embed-multimodal-3b",
+            "s3_prefix": "Embedding/Multimodal/nomic-ai",
+            "category": "Embedding",
+            "architecture": "Multimodal",
+            "display_name": "ColNomic Embed Multimodal 3B",
+            "description": "Nomic AI columnar multimodal embedding model 3B"
+        },
+        {
+            "repo_id": "nomic-ai/nomic-embed-multimodal-3b",
+            "s3_prefix": "Embedding/Multimodal/nomic-ai",
+            "category": "Embedding",
+            "architecture": "Multimodal",
+            "display_name": "Nomic Embed Multimodal 3B",
+            "description": "Nomic AI multimodal embedding model 3B"
+        },
+        {
+            "repo_id": "nomic-ai/nomic-embed-code",
+            "s3_prefix": "Embedding/Code/nomic-ai",
+            "category": "Embedding",
+            "architecture": "Code",
+            "display_name": "Nomic Embed Code",
+            "description": "Nomic AI code embedding model"
+        },
+        {
+            "repo_id": "nomic-ai/CodeRankEmbed",
+            "s3_prefix": "Embedding/Code/nomic-ai",
+            "category": "Embedding",
+            "architecture": "Code",
+            "display_name": "CodeRank Embed",
+            "description": "Nomic AI code ranking embedding model"
+        },
+        {
+            "repo_id": "nomic-ai/CodeRankLLM",
+            "s3_prefix": "Embedding/Code/nomic-ai",
+            "category": "Embedding",
+            "architecture": "Code",
+            "display_name": "CodeRank LLM",
+            "description": "Nomic AI code ranking LLM for retrieval"
+        }
+    ]
+}

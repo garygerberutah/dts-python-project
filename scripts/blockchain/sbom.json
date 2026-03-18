@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-18T20:14:24.850363+00:00",
-  "file_count": 251,
+  "timestamp": "2026-03-18T21:01:21.037111+00:00",
+  "file_count": 252,
   "files": [
     {
       "path": ".githooks/pre-commit",
@@ -249,7 +249,7 @@
     },
     {
       "path": "resources/postgres-init/02_model_category.sql",
-      "sha256": "7a53501ed46273e8158b7c9b7b0de71f4eb5e6cf68cd69a7b7a9d33998259415"
+      "sha256": "872f06646c970fd0b87c95087afb890d7c6e4f43b2403b2a0494000e2b64d2c4"
     },
     {
       "path": "resources/user-instructions/README.md",
@@ -300,6 +300,10 @@
       "sha256": "e34654f65057241ac1b252f30fdc8d59b75dc651a8065867600bfbfb918d857a"
     },
     {
+      "path": "scripts/all-guidogerb-models.json",
+      "sha256": "203c5a64b12c0d2a34653d1e42cf0f90620f96fa912201384501822aaa2387cb"
+    },
+    {
       "path": "scripts/api/__init__.py",
       "sha256": "6d6f2003d3add72d870da6ebd9dd3731fbd70d1abe3e402d354e00e5e45876c4"
     },
@@ -313,7 +317,7 @@
     },
     {
       "path": "scripts/blockchain/chain.json",
-      "sha256": "d5f477e794a4c3432907f33585a2f7d53f9b653a9dbeb17ac6d2dd8ed65e43aa"
+      "sha256": "6dfb561bc35ce0bf0fcbbaf25052b36bc39932c16dc099757bc2d21f81d32c59"
     },
     {
       "path": "scripts/blockchain/db.py",
@@ -417,7 +421,7 @@
     },
     {
       "path": "scripts/util/model-downloader.py",
-      "sha256": "40b00d58076e9f55965ecb4d811e2ef3e08aea9f822e266382894f0dff6ff0db"
+      "sha256": "577bd044377660e3114f8b7664c1b5f2be7a09bdbf73244c41d2a4b3119c6149"
     },
     {
       "path": "scripts/util/scrape_directory_listing.py",
@@ -581,7 +585,7 @@
     },
     {
       "path": "tests/test_model_downloader.py",
-      "sha256": "df59fe67d935f68774b6711ee9648d37f4a7faf70284500d7052ae20f00ff542"
+      "sha256": "53fcef4293ffbe5fd0f9df210acf385d0d34d20dc61145602c88b76f3f94629c"
     },
     {
       "path": "tests/test_scrape_directory_listing.py",

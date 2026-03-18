@@ -293,5 +293,29 @@
       }
     ],
     "timestamp": 1773864864.8856587
+  },
+  {
+    "index": 26,
+    "previous_hash": "64c69c7d14ae27600619c89872f5fc9390a6f4107fae71276e41fe1786696d5f",
+    "proof": 89991,
+    "sbom_hashes": [
+      {
+        "bom_hash": "51f62228265d708bfc2393c6cc5f1fb88bdcad95dcab664382cdde513d9b1239",
+        "repo": "ggp-python-project"
+      }
+    ],
+    "timestamp": 1773867664.2735708
+  },
+  {
+    "index": 27,
+    "previous_hash": "45cfec1d496247a1f9af9810691857ffa504d094f327b53f95286b588b745b34",
+    "proof": 41327,
+    "sbom_hashes": [
+      {
+        "bom_hash": "1bcb97e3e77e2e0229bf2714ee0c87d170e918fcb198ff9a192405813f50fbaf",
+        "repo": "ggp-python-project"
+      }
+    ],
+    "timestamp": 1773867681.0773218
   }
 ]
