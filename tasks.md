@@ -141,6 +141,60 @@ pipeline integration, and README accuracy.
 - Pipeline is fail-fast: any stage failure aborts subsequent stages
 - PostgreSQL storage (stage 11 sub-step 3) fails in environments without a DB — this is by design
 - `--no-verify` and `-n` flags are forbidden on `git commit` and `git push`
-- Overall test coverage: 71% (272 tests, up from 61% / 237 tests)
+- Overall test coverage: 71% (272+ tests)
 - Core pipeline scripts: all ≥ 90% coverage
 - Utility scripts (`scripts/util/`): now tested (35 new tests)
+- API layer: 100% coverage (136 tests across 7 test files)
+
+---
+
+## 8. API Implementation
+
+| # | Task | Status |
+|---|------|--------|
+| 8.1 | Create `api/src/config/__init__.py` — env-based configuration | ✅ Done |
+| 8.2 | Create `api/src/auth/__init__.py` — JWT/Cognito token validation | ✅ Done |
+| 8.3 | Create `api/src/schema/__init__.py` — request validation + asset schemas | ✅ Done |
+| 8.4 | Create `api/src/lambda_pkg/response.py` — HTTP response builders with security headers | ✅ Done |
+| 8.5 | Create `api/src/lambda_pkg/repository.py` — DynamoDB CRUD with owner access control | ✅ Done |
+| 8.6 | Create `api/src/lambda_pkg/assets.py` — main Lambda handler (routes REST methods) | ✅ Done |
+| 8.7 | Create `api/src/lambda_pkg/health.py` — GET /health endpoint | ✅ Done |
+| 8.8 | Write tests: `tests/api/test_config.py` (19 tests) | ✅ Done |
+| 8.9 | Write tests: `tests/api/test_auth.py` (24 tests) | ✅ Done |
+| 8.10 | Write tests: `tests/api/test_schema.py` (32 tests) | ✅ Done |
+| 8.11 | Write tests: `tests/api/test_response.py` (18 tests) | ✅ Done |
+| 8.12 | Write tests: `tests/api/test_repository.py` (15 tests) | ✅ Done |
+| 8.13 | Write tests: `tests/api/test_assets_handler.py` (23 tests) | ✅ Done |
+| 8.14 | Write tests: `tests/api/test_health.py` (5 tests) | ✅ Done |
+| 8.15 | Update `api/README.md` — endpoints, auth, security, config | ✅ Done |
+
+### API Architecture
+
+- **Runtime**: AWS Lambda + API Gateway (HTTP API v2) + DynamoDB
+- **Auth**: OIDC + PKCE via AWS Cognito (Bearer token, JWT validation)
+- **Access control**: Owner-based — only asset creator can update/delete
+- **Security**: All responses include `nosniff`, `DENY`, `no-store`, HSTS headers
+- **CORS**: Whitelist-only (no wildcard `*`)
+- **Error responses**: Structured `{"error": "<code>", "message": "<text>"}`, never leaks internals
+
+### New Files
+
+| File | Description |
+|------|-------------|
+| `api/__init__.py` | Package init |
+| `api/src/__init__.py` | Package init |
+| `api/src/config/__init__.py` | Environment-based configuration |
+| `api/src/auth/__init__.py` | JWT token verification (Cognito OIDC) |
+| `api/src/schema/__init__.py` | Request validation + asset schemas |
+| `api/src/lambda_pkg/__init__.py` | Package init |
+| `api/src/lambda_pkg/response.py` | HTTP response builders |
+| `api/src/lambda_pkg/repository.py` | DynamoDB data access |
+| `api/src/lambda_pkg/assets.py` | Main Lambda handler |
+| `api/src/lambda_pkg/health.py` | Health check handler |
+| `tests/api/test_config.py` | Config tests |
+| `tests/api/test_auth.py` | Auth tests |
+| `tests/api/test_schema.py` | Schema tests |
+| `tests/api/test_response.py` | Response builder tests |
+| `tests/api/test_repository.py` | Repository tests |
+| `tests/api/test_assets_handler.py` | Handler routing + CRUD tests |
+| `tests/api/test_health.py` | Health endpoint tests |

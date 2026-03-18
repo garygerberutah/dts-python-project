@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-18T17:51:09.477208+00:00",
-  "file_count": 187,
+  "timestamp": "2026-03-18T18:04:51.324053+00:00",
+  "file_count": 191,
   "files": [
     {
       "path": ".githooks/pre-commit",
@@ -77,7 +77,7 @@
     },
     {
       "path": "api/README.md",
-      "sha256": "f5bc0bc4a39d5e186c2ea976ca92b6fb1759f732beee964a52eb618d94b230de"
+      "sha256": "161f72f7839fd93ba7702eb8f84a28b996f53adc43482d04276b21dedae25e6f"
     },
     {
       "path": "docker-compose.yml",
@@ -173,7 +173,7 @@
     },
     {
       "path": "scripts/blockchain/chain.json",
-      "sha256": "9c630c6c8d2b44be70ff13fd8cd7ef85d9698669ef88a65c31f5ddb691c4229d"
+      "sha256": "ca1c6ad2b234cefd64b0d4c6e1d3510f754f9eb968cae262f31ccaa39986ff64"
     },
     {
       "path": "scripts/blockchain/db.py",
@@ -269,7 +269,7 @@
     },
     {
       "path": "tasks.md",
-      "sha256": "9ee2a32f2cc56ad179ac4b2faeffdf46250c03bde3f3eb8a2f6f323771826030"
+      "sha256": "7aa1e2b9f4e49259e65c15acd35f8d78fd8d6dc64169b2383a1ba84470098caf"
     },
     {
       "path": "tests/README.md",
@@ -286,6 +286,10 @@
     {
       "path": "tests/conftest.py",
       "sha256": "4d4defbed12f3fc044546aa65a84e886297bdfcfb9b722a9e5006ba350c79d78"
+    },
+    {
+      "path": "tests/test_add_submodules.py",
+      "sha256": "e9c19e3f067eee435727e740f2e66c5c2e74e3be4ee8cf3fb1f38be8dc57c425"
     },
     {
       "path": "tests/test_all.py",
@@ -330,6 +334,18 @@
     {
       "path": "tests/test_lint_full.py",
       "sha256": "e421d7c1247cc62f24285fefdf6646e2aa7d9cab0d4d8afd4e5d2d5d1f1050c7"
+    },
+    {
+      "path": "tests/test_list_repos.py",
+      "sha256": "93d339776203a22c132be1527b0df6dff0d5006fb059d814783ae1fdf64c99e2"
+    },
+    {
+      "path": "tests/test_model_downloader.py",
+      "sha256": "20257a3b494c15bf4861583721cf5517fae33b43d117bfec4456dbc183c271f0"
+    },
+    {
+      "path": "tests/test_scrape_directory_listing.py",
+      "sha256": "1dbf6ccd5a7be432263e1ce106f275a217d039bb8e1e9979b36e26f86953fde0"
     },
     {
       "path": "tests/test_serve.py",
