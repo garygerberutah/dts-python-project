@@ -52,13 +52,13 @@ INSERT INTO public.model_registry (repo_id, category_id, s3_prefix, display_name
     ('deepseek-ai/DeepSeek-V3.2',
      (SELECT id FROM public.model_category WHERE name = 'Transformer'
       AND parent_id = (SELECT id FROM public.model_category WHERE name = 'LLM - Foundation' AND parent_id IS NULL)),
-     'LLM - Foundation/Transformer/Deep-Seek',
+     'LLM - Foundation/Transformer/deepseek-ai/DeepSeek-V3.2',
      'DeepSeek V3.2',
      'DeepSeek foundation LLM v3.2'),
     ('deepseek-ai/DeepSeek-OCR-2',
      (SELECT id FROM public.model_category WHERE name = 'Transformer'
       AND parent_id = (SELECT id FROM public.model_category WHERE name = 'Vision - OCR' AND parent_id IS NULL)),
-     'Vision - OCR/Transformer/Deep-Seek',
+     'Vision - OCR/Transformer/deepseek-ai/DeepSeek-OCR-2',
      'DeepSeek OCR 2',
      'DeepSeek multimodal OCR and document understanding model'),
     ('XLabs-AI/flux-RealismLora',

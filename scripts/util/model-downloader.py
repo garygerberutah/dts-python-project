@@ -18,9 +18,9 @@ MODEL_MAPPINGS = {
     "Wan-AI/Wan2.2-T2V-A14B": "Wan-AI",
     "black-forest-labs/FLUX.1-schnell": "checkpoints",
     # DeepSeek foundation LLM (already uploaded)
-    "deepseek-ai/DeepSeek-V3.2": "LLM - Foundation/Transformer/Deep-Seek",
+    "deepseek-ai/DeepSeek-V3.2": "LLM - Foundation/Transformer/deepseek-ai/DeepSeek-V3.2",
     # DeepSeek multimodal OCR
-    "deepseek-ai/DeepSeek-OCR-2": "Vision - OCR/Transformer/Deep-Seek",
+    "deepseek-ai/DeepSeek-OCR-2": "Vision - OCR/Transformer/deepseek-ai/DeepSeek-OCR-2",
 }
 
 api = HfApi()
