@@ -3,7 +3,7 @@ import argparse
 import json
 import os
 import sys
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import boto3
@@ -41,8 +41,8 @@ def is_model_mature(repo_id: str, min_age_days: int = MIN_AGE_DAYS) -> bool:
     """Return True if the repo's latest commit is at least min_age_days old."""
     last_mod = model_last_modified(repo_id)
     if last_mod.tzinfo is None:
-        last_mod = last_mod.replace(tzinfo=timezone.utc)
-    age = datetime.now(timezone.utc) - last_mod
+        last_mod = last_mod.replace(tzinfo=UTC)
+    age = datetime.now(UTC) - last_mod
     return age >= timedelta(days=min_age_days)
 
 
@@ -84,9 +84,7 @@ def stream_model_to_s3(bucket: str, model: dict) -> None:
     repo_files = api.list_repo_files(repo_id=repo_id, token=HF_TOKEN)
 
     valid_extensions = (".safetensors", ".pt", ".ckpt", ".json", ".yaml", ".txt")
-    files_to_download = [
-        f for f in repo_files if f.endswith(valid_extensions) and "onnx" not in f
-    ]
+    files_to_download = [f for f in repo_files if f.endswith(valid_extensions) and "onnx" not in f]
 
     skipped = 0
     uploaded = 0
@@ -131,9 +129,7 @@ def verify_all(bucket: str, models: list[dict]) -> bool:
     return all_ok
 
 
-def stream_models_to_s3(
-    bucket: str, models: list[dict], min_age_days: int = MIN_AGE_DAYS
-) -> None:
+def stream_models_to_s3(bucket: str, models: list[dict], min_age_days: int = MIN_AGE_DAYS) -> None:
     """Download all models from Hugging Face, skipping files already in S3.
 
     Only uploads models whose latest HuggingFace commit is at least
@@ -171,7 +167,7 @@ def main() -> int:
         "--min-age-days",
         type=int,
         default=MIN_AGE_DAYS,
-        help=f"Only upload models whose latest commit is this many days old (default: {MIN_AGE_DAYS})",
+        help=f"Only upload models >= {MIN_AGE_DAYS} days since last commit (default)",
     )
     parser.add_argument(
         "--ignore-age",

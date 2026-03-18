@@ -317,5 +317,17 @@
       }
     ],
     "timestamp": 1773867681.0773218
+  },
+  {
+    "index": 28,
+    "previous_hash": "d0b4d36fa3f12a76f3c6348a90893fee709ac3cfdc1c046574d9d84d9daad9b0",
+    "proof": 52656,
+    "sbom_hashes": [
+      {
+        "bom_hash": "677f5ccac05a24a309b753582cc9da2bd7ad6b1b5019483b14ea8e3f84c31ed3",
+        "repo": "ggp-python-project"
+      }
+    ],
+    "timestamp": 1773870265.4481568
   }
 ]

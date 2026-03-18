@@ -7,7 +7,7 @@ which makes direct import expensive. Tests mock external dependencies.
 """
 
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -212,7 +212,7 @@ def test_is_model_mature_old_model(_mock_external_deps):
     import importlib
 
     mod = importlib.import_module("scripts.util.model-downloader")
-    old_date = datetime.now(timezone.utc) - timedelta(days=60)
+    old_date = datetime.now(UTC) - timedelta(days=60)
     mock_info = MagicMock()
     mock_info.last_modified = old_date
     mod.api.repo_info.return_value = mock_info
@@ -224,7 +224,7 @@ def test_is_model_mature_new_model(_mock_external_deps):
     import importlib
 
     mod = importlib.import_module("scripts.util.model-downloader")
-    recent_date = datetime.now(timezone.utc) - timedelta(days=5)
+    recent_date = datetime.now(UTC) - timedelta(days=5)
     mock_info = MagicMock()
     mock_info.last_modified = recent_date
     mod.api.repo_info.return_value = mock_info
@@ -236,7 +236,7 @@ def test_is_model_mature_exactly_30_days(_mock_external_deps):
     import importlib
 
     mod = importlib.import_module("scripts.util.model-downloader")
-    boundary_date = datetime.now(timezone.utc) - timedelta(days=30)
+    boundary_date = datetime.now(UTC) - timedelta(days=30)
     mock_info = MagicMock()
     mock_info.last_modified = boundary_date
     mod.api.repo_info.return_value = mock_info

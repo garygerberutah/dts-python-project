@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-18T21:01:21.037111+00:00",
-  "file_count": 252,
+  "timestamp": "2026-03-18T21:44:25.393230+00:00",
+  "file_count": 253,
   "files": [
     {
       "path": ".githooks/pre-commit",
@@ -204,6 +204,10 @@
       "sha256": "288a0759a9dca9e6a5ede873aed53fbacd3d411d2221da25b982e9ea8e855ba7"
     },
     {
+      "path": "mcp/servers/filesystem-org/SPECIFICATION.md",
+      "sha256": "79ca5afa1f97dea1cd7901fd33aa200ad8bb3897b37f88fc0e9f8bd3b53046ff"
+    },
+    {
       "path": "mcp/transport/__init__.py",
       "sha256": "421e27681226617d5fab65f2d33b33dd36a7dffaa1d851c00fa7b53f1df22dd9"
     },
@@ -229,7 +233,7 @@
     },
     {
       "path": "resources/config/ruff.toml",
-      "sha256": "d4a2a06b0b3bd316b6598ea804b8b8531f52d2333e0a32100dfda757d9405e42"
+      "sha256": "018e1196fbd29000104727daae800e7c819913170e32995c318fa0b8076ca74e"
     },
     {
       "path": "resources/config/site.json",
@@ -317,7 +321,7 @@
     },
     {
       "path": "scripts/blockchain/chain.json",
-      "sha256": "6dfb561bc35ce0bf0fcbbaf25052b36bc39932c16dc099757bc2d21f81d32c59"
+      "sha256": "3e5b820f4f46055872a6af1b4ee66b1ef29316fec7c03860c47ba33e666d8fa1"
     },
     {
       "path": "scripts/blockchain/db.py",
@@ -397,11 +401,11 @@
     },
     {
       "path": "scripts/ui/validate_copyright.py",
-      "sha256": "5874bfa1520594fb9d9265eea7f9d33569aede9d621ab90f37c87542ebcf008f"
+      "sha256": "703a84198fb4083fcf61bb69086647ef2082d22f1feea9d71018bd81f6abe5d9"
     },
     {
       "path": "scripts/ui/validate_mime_type_content.py",
-      "sha256": "79e90eeeb705448bb1df3ca98ac6fc692d6320f5113ac0010a5ad140c2b5547b"
+      "sha256": "96b132c18d4e9a4fc57dd32f090de6731459b3f029ded8abb7fab32af4c22382"
     },
     {
       "path": "scripts/ui/validate_wcag.py",
@@ -421,7 +425,7 @@
     },
     {
       "path": "scripts/util/model-downloader.py",
-      "sha256": "577bd044377660e3114f8b7664c1b5f2be7a09bdbf73244c41d2a4b3119c6149"
+      "sha256": "53cfdde0d3818d989a3afb84d623b8fda3816a700ff73a6b9b71ee7c738176a8"
     },
     {
       "path": "scripts/util/scrape_directory_listing.py",
@@ -585,7 +589,7 @@
     },
     {
       "path": "tests/test_model_downloader.py",
-      "sha256": "53fcef4293ffbe5fd0f9df210acf385d0d34d20dc61145602c88b76f3f94629c"
+      "sha256": "e50631b0c46bd9de5e555191072d4660b1b2a2a5e2a9e8096fac538f30910a02"
     },
     {
       "path": "tests/test_scrape_directory_listing.py",
