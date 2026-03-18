@@ -42,6 +42,17 @@ ROOT = Path(__file__).resolve().parent.parent
 _REPO_NAME = ROOT.name
 
 
+def _git_is_clean() -> bool:
+    """Return True when the git working tree and index have no changes."""
+    result = subprocess.run(
+        ["git", "status", "--porcelain"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    return result.returncode == 0 and not result.stdout.strip()
+
+
 def _stage(name: str, fn, *args, **kwargs) -> None:
     """Execute a pipeline stage; abort on failure."""
     print(f"\n{'=' * 60}")
@@ -159,6 +170,13 @@ def run(skip_deploy: bool = False) -> int:
 
     _stage("9. validate (WCAG 2.1)", _stage_validate)
     _stage("10. test (Web Components)", run_all_tests)
+
+    # Skip SBOM + deploy when the working tree is clean (nothing changed).
+    if _git_is_clean():
+        print("\n[pipeline] No changes detected — skipping SBOM and deploy.")
+        print("\n[pipeline] ✓ All stages completed successfully.")
+        return 0
+
     _stage("11. sbom (blockchain)", _stage_sbom)
 
     if not skip_deploy:
