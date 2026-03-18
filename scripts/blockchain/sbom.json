@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-18T16:49:02.432063+00:00",
-  "file_count": 170,
+  "timestamp": "2026-03-18T17:10:07.138299+00:00",
+  "file_count": 187,
   "files": [
     {
       "path": ".githooks/pre-commit",
@@ -80,6 +80,10 @@
       "sha256": "f5bc0bc4a39d5e186c2ea976ca92b6fb1759f732beee964a52eb618d94b230de"
     },
     {
+      "path": "docker-compose.yml",
+      "sha256": "f75c1bbd17d18640e3427ec8db38975f126e5367c52bd10b88bb97d1dd4f01d5"
+    },
+    {
       "path": "requirements.txt",
       "sha256": "6d12560d27a97421e3a1290be2b5dbe37dbeaf3d7eed560013d0661601fef345"
     },
@@ -102,6 +106,10 @@
     {
       "path": "resources/guidogerb/repos.txt",
       "sha256": "cc77276d23ec353cee498f202825db64826f44af012b7db07de1c163140cb106"
+    },
+    {
+      "path": "resources/postgres-init/01_schema.sql",
+      "sha256": "cc5799ba81996b8e2207413b78e30366e54c6c43527c97e215c85ab9249ffbf1"
     },
     {
       "path": "resources/user-instructions/README.md",
@@ -144,6 +152,10 @@
       "sha256": "5d053d75beeac803b14475a1cd0ff37989b5cfeac9bacd3f863cd962f0d153cd"
     },
     {
+      "path": "scripts/README.md",
+      "sha256": "0d0a4dd35aeafa49999d4cfa891ee92754c1e98492569ea809db8bd8ad1adc2b"
+    },
+    {
       "path": "scripts/__init__.py",
       "sha256": "e34654f65057241ac1b252f30fdc8d59b75dc651a8065867600bfbfb918d857a"
     },
@@ -161,7 +173,7 @@
     },
     {
       "path": "scripts/blockchain/chain.json",
-      "sha256": "8b11c663301697bc32855611275ac5fcbd0e138e147551d40e99dd210dd40b96"
+      "sha256": "63d9367e1bf2d2ae87090b9bca9221dec7e347c1d709b7fe68a0720c94c9c5ee"
     },
     {
       "path": "scripts/blockchain/db.py",
@@ -174,6 +186,10 @@
     {
       "path": "scripts/blockchain/sbom.py",
       "sha256": "8355c5b04e47099151fb2fef95874ce617a84bb4c121a31bce74295822e130da"
+    },
+    {
+      "path": "scripts/blockchain/sync_db.py",
+      "sha256": "7acfb07df969586fbcac0246b47d879f0f786b870e52578430ee47a65a52ba4f"
     },
     {
       "path": "scripts/build_all.py",
@@ -252,6 +268,14 @@
       "sha256": "0a3232439ee1e0bc0388bd278c77ca7670e2fb8a03c4d034e30c61305d98f4b3"
     },
     {
+      "path": "tasks.md",
+      "sha256": "c0145836f9787dfce94f0b3139ecba65761642cf48bc7dea0467f9bf86dddb20"
+    },
+    {
+      "path": "tests/README.md",
+      "sha256": "446a6a0ac0c7b00d43b4c4c3a7da34790adc26310341e4f879b4ae6d5e8dd8be"
+    },
+    {
       "path": "tests/__init__.py",
       "sha256": "c53306bd40c9b237784c2dcf7be0a8c05887028d780310c6c8dab5d9eac66bfd"
     },
@@ -268,12 +292,56 @@
       "sha256": "e45516b706a231faa4a7d7dc3477ea9db825dcf77339219f65179a4cb2ff5de5"
     },
     {
+      "path": "tests/test_blockchain_db.py",
+      "sha256": "aeedcc7fe444593fed70cea200a9a7855dc085f9a27f46e659764f154fb214d4"
+    },
+    {
+      "path": "tests/test_blockchain_generate.py",
+      "sha256": "c9b3a7e4bbcf47ad8125a68f77eeafce8607626c666b226b02254db1dc0d7f68"
+    },
+    {
+      "path": "tests/test_blockchain_sbom.py",
+      "sha256": "4fb225003f02fec29319c12fd32613c2b5eecbd0bcbd3483ba6aeb91b6f559be"
+    },
+    {
+      "path": "tests/test_build.py",
+      "sha256": "f92dfdf069a031c3bb036daf48169f041371a41335f4afda69a6c5ebdb23cd6a"
+    },
+    {
+      "path": "tests/test_build_all.py",
+      "sha256": "ec2f3363bc6fdcabdd546a1ddb5a222d5ed42052236e7f35a94cda42e678ee60"
+    },
+    {
+      "path": "tests/test_clean.py",
+      "sha256": "f7e968e6fc59f7b4e34a8d0557939e6553d35108149c42358608761aec50119a"
+    },
+    {
       "path": "tests/test_format.py",
       "sha256": "36b53fea498419cbb1fdffe1387e3a6ac6e63e7fd72c318804d858144b6032c0"
     },
     {
+      "path": "tests/test_format_full.py",
+      "sha256": "72169340c0a16314f0cd03610570136ea4096f2ee16de1e3174a3d130f56af81"
+    },
+    {
       "path": "tests/test_lint.py",
       "sha256": "db2fbfbdee3ce9294783a39e20ddb5286b1411a8a4b0461fe1a11dc43576664d"
+    },
+    {
+      "path": "tests/test_lint_full.py",
+      "sha256": "e421d7c1247cc62f24285fefdf6646e2aa7d9cab0d4d8afd4e5d2d5d1f1050c7"
+    },
+    {
+      "path": "tests/test_serve.py",
+      "sha256": "6ebcb3040f7c1877faf4d2547867d26fcc820edba698f67dc02fc99cbc6ba4a2"
+    },
+    {
+      "path": "tests/test_sync_db.py",
+      "sha256": "f38dc771f815e9fd0e920dcf646807cd18f5c5818289274f2ef56afeb9dd69db"
+    },
+    {
+      "path": "tests/test_test_components.py",
+      "sha256": "3fd43372fce1436434dcee73e07880d9b91f893254dd459622e640fb390628f5"
     },
     {
       "path": "tests/test_validate_assets.py",
