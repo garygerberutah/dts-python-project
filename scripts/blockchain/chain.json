@@ -329,5 +329,41 @@
       }
     ],
     "timestamp": 1773879308.5134041
+  },
+  {
+    "index": 29,
+    "previous_hash": "d7d81b9c4ebc734e3ba1d3b9aacd61737994d46fb785e36e29c5c0abbd9e7e7c",
+    "proof": 5355,
+    "sbom_hashes": [
+      {
+        "bom_hash": "cab999a8030bc5c09c3fa8ff9d60aefd47bcb9269daa7777cfe1ca5c8a11d964",
+        "repo": "ggp-python-project"
+      }
+    ],
+    "timestamp": 1773880559.3391864
+  },
+  {
+    "index": 30,
+    "previous_hash": "0af73f001ab104b175620cf2202d41a719b9e705b7eb98b182827e4cacef5d03",
+    "proof": 143988,
+    "sbom_hashes": [
+      {
+        "bom_hash": "2a7174677146345ffdc941617dfcc33f3af19d906cbc6bb1ab99f3720e57f501",
+        "repo": "ggp-python-project"
+      }
+    ],
+    "timestamp": 1773880613.4807682
+  },
+  {
+    "index": 31,
+    "previous_hash": "de71e89a301663953caf926da52f18450749199d85b2c124d295fabdbc8b9aea",
+    "proof": 37499,
+    "sbom_hashes": [
+      {
+        "bom_hash": "f502741e31ae41dcfc1faa0729f29005e95f2ad79f7f5ae7834e021c9a70ec15",
+        "repo": "ggp-python-project"
+      }
+    ],
+    "timestamp": 1773880617.9741876
   }
 ]

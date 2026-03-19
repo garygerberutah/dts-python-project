@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-19T00:15:08.485716+00:00",
-  "file_count": 176,
+  "timestamp": "2026-03-19T00:36:57.953290+00:00",
+  "file_count": 183,
   "files": [
     {
       "path": ".githooks/pre-commit",
@@ -164,8 +164,16 @@
       "sha256": "0882fae5b3c7901d4c057378842b892bc76cfb70fed963c0722b9ad42408053b"
     },
     {
+      "path": "scripts/README.md",
+      "sha256": "36d19d54965e0e77763bb5fc745522241813d8bac07196fcb42218ef34cd4496"
+    },
+    {
       "path": "scripts/__init__.py",
       "sha256": "e34654f65057241ac1b252f30fdc8d59b75dc651a8065867600bfbfb918d857a"
+    },
+    {
+      "path": "scripts/api/README.md",
+      "sha256": "ee559732803c2104d622992748a195a4a8f9559abd9bd3b3332e66b0a451fb33"
     },
     {
       "path": "scripts/api/__init__.py",
@@ -173,7 +181,7 @@
     },
     {
       "path": "scripts/blockchain/README.md",
-      "sha256": "0103b4f4d0abec5a288a9ea466eef8fcaebb43bb9b2184bd6b86bc827d94311b"
+      "sha256": "46015fb43b24552470010e746d0faf26fc4f1281d50ffde7c818bd72907fdb56"
     },
     {
       "path": "scripts/blockchain/__init__.py",
@@ -194,6 +202,10 @@
     {
       "path": "scripts/build_all.py",
       "sha256": "f7cb714f4d2b4ce1341833e5a0445b4d01923895dc10f968e63b206943024d3f"
+    },
+    {
+      "path": "scripts/ui/README.md",
+      "sha256": "707d441af04f117b921aac86cf23fe068c16428d7bf038fa5f40e5a293818aed"
     },
     {
       "path": "scripts/ui/__init__.py",
@@ -248,6 +260,10 @@
       "sha256": "8bd37223348d103fea94afce30bd3d0577e331c4f39cf37f0398de1ec215029a"
     },
     {
+      "path": "scripts/util/README.md",
+      "sha256": "b7bf61ac18ff61748fbccb15e66aa6d41a4195151187d95434422670bed9b248"
+    },
+    {
       "path": "scripts/util/__init__.py",
       "sha256": "7daa258306d98a94b26acc2952dcbd93b2849436c2003b5a11c7f9e98676d0c9"
     },
@@ -268,8 +284,16 @@
       "sha256": "0a3232439ee1e0bc0388bd278c77ca7670e2fb8a03c4d034e30c61305d98f4b3"
     },
     {
+      "path": "tests/README.md",
+      "sha256": "ba33c8b7b7ab4251cc96643a22e5a65b8eabc2c0c65a92c7a5669c3ea0ab32f1"
+    },
+    {
       "path": "tests/__init__.py",
       "sha256": "c53306bd40c9b237784c2dcf7be0a8c05887028d780310c6c8dab5d9eac66bfd"
+    },
+    {
+      "path": "tests/api/README.md",
+      "sha256": "16b366e66939f0c758aa925b0376fbfb1d5dd5ef9eb9eba7332bafcd9fa97a06"
     },
     {
       "path": "tests/api/__init__.py",
@@ -314,6 +338,10 @@
     {
       "path": "tests/test_validate_wcag.py",
       "sha256": "e92fd3be06139e6252695e3da458778b5c567c4e8d9faaf3e449eeb345ae5211"
+    },
+    {
+      "path": "tests/ui/README.md",
+      "sha256": "c8633aac193a6045a7846d8a7ad54021672d53ab55741db6bc089d10dd81a237"
     },
     {
       "path": "tests/ui/__init__.py",
