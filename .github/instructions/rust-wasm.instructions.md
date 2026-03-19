@@ -10,7 +10,7 @@ description: "Use when writing Rust WASM code. Covers wasm-bindgen exports, immu
 - All WASM logic must be implemented in Rust; never add JS shims, wrappers, or helpers inside the wasm directory
 
 ## Copyright
-- Every `.rs` file must contain `Copyright 2026 by GuidoGerb Publishing, LLC` in a `//` comment at the top
+- Every `.rs` file must contain `Copyright 2026 by DTS, The State of Utah` in a `//` comment at the top
 
 ## Exports
 - Expose via `#[wasm_bindgen]` on structs and impl blocks

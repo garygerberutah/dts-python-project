@@ -8,7 +8,7 @@ all submodules and their descriptions (extracted from each submodule's README).
 Usage:
     python -m scripts.util.add_guidogerb_submodules /path/to/guidogerb
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 """
 
 from __future__ import annotations

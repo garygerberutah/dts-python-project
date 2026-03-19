@@ -1,4 +1,4 @@
-<!-- Copyright 2026 by GuidoGerb Publishing, LLC -->
+<!-- Copyright 2026 by DTS, The State of Utah -->
 
 # scripts/ — Python Toolchain
 
@@ -100,7 +100,7 @@ python run.py setup                    # Install pre-commit hooks
 - Project root: `ROOT = Path(__file__).resolve().parent.parent`.
 - **No graceful skipping** — missing tools or empty directories cause hard
   failures, never silent passes.
-- Every `.py` file starts with `Copyright 2026 by GuidoGerb Publishing, LLC`.
+- Every `.py` file starts with `Copyright 2026 by DTS, The State of Utah`.
 
 ## Dependencies
 

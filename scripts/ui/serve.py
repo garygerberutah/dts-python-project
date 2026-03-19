@@ -1,7 +1,7 @@
 """
 serve.py — starts a local HTTP development server from dist/.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 """
 
 import http.server

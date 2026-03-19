@@ -1,6 +1,6 @@
 """Tests for scripts/lint.py and scripts/lint_js.py.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 """
 
 
@@ -12,7 +12,7 @@ def test_lint_js_clean_file(tmp_path):
     comp_dir = tmp_path / "ui" / "src" / "components"
     comp_dir.mkdir(parents=True)
     (comp_dir / "app-test.js").write_text(
-        '/** Copyright 2026 by GuidoGerb Publishing, LLC */\n'
+        '/** Copyright 2026 by DTS, The State of Utah */\n'
         'const x = 1;\n'
         'if (x === 1) {\n'
         '  console.info("ok");\n'

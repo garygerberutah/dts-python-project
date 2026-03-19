@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2026 by GuidoGerb Publishing, LLC
+# Copyright 2026 by DTS, The State of Utah
 #
 # Pre-commit hook — runs the full pipeline (excluding deploy).
 # Commits are rejected if any stage fails.

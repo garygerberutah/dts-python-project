@@ -1,4 +1,4 @@
-# Copyright 2026 by GuidoGerb Publishing, LLC
+# Copyright 2026 by DTS, The State of Utah
 #
 # Pre-commit configuration — runs the project pipeline before every commit.
 # Install with: python run.py setup

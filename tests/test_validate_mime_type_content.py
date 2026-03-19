@@ -1,6 +1,6 @@
 """Tests for scripts/validate_mime_type_content.py.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 """
 
 from scripts.ui.validate_mime_type_content import (

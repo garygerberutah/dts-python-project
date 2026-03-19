@@ -1,6 +1,6 @@
 """Tests for scripts/validate_copyright.py.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 """
 
 from pathlib import Path
@@ -21,7 +21,7 @@ def test_validate_file_passes_with_correct_copyright():
     """A source file within the project tree with correct copyright passes."""
     candidate = ROOT / "run.py"
     if candidate.exists():
-        copyright_text = "Copyright 2026 by GuidoGerb Publishing, LLC"
+        copyright_text = "Copyright 2026 by DTS, The State of Utah"
         assert validate_file(candidate, copyright_text) is None
 
 
@@ -40,7 +40,7 @@ def test_validate_returns_empty_for_valid_tree(tmp_tree, monkeypatch):
     monkeypatch.setattr(vc_mod, "COPYRIGHT_FILE", tmp_tree / "COPYRIGHT")
     f = tmp_tree / "good.py"
     f.write_text(
-        "# Copyright 2026 by GuidoGerb Publishing, LLC\n",
+        "# Copyright 2026 by DTS, The State of Utah\n",
         encoding="utf-8",
     )
     errors = validate(directories=[tmp_tree])
@@ -64,7 +64,7 @@ def test_validate_fix_inserts_copyright(tmp_tree, monkeypatch):
     errors = validate(directories=[tmp_tree], fix=True)
     assert errors == []
     content = f.read_text(encoding="utf-8")
-    assert "Copyright 2026 by GuidoGerb Publishing, LLC" in content
+    assert "Copyright 2026 by DTS, The State of Utah" in content
 
 
 def test_find_source_files_respects_extensions(tmp_tree):
@@ -100,5 +100,5 @@ def test_validate_fix_replaces_wrong_copyright(tmp_tree, monkeypatch):
     errors = validate(directories=[tmp_tree], fix=True)
     assert errors == []
     content = f.read_text(encoding="utf-8")
-    assert "Copyright 2026 by GuidoGerb Publishing, LLC" in content
+    assert "Copyright 2026 by DTS, The State of Utah" in content
     assert "SomeOther Corp" not in content

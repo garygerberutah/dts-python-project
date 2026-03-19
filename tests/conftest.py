@@ -1,7 +1,7 @@
 """
 Shared fixtures for toolchain script tests.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 """
 
 import textwrap
@@ -17,7 +17,7 @@ SCRIPTS_DIR = ROOT / "scripts"
 def tmp_tree(tmp_path):
     """Create a minimal project tree for validation tests."""
     (tmp_path / "COPYRIGHT").write_text(
-        "Copyright 2026 by GuidoGerb Publishing, LLC\n", encoding="utf-8"
+        "Copyright 2026 by DTS, The State of Utah\n", encoding="utf-8"
     )
     return tmp_path
 
@@ -27,7 +27,7 @@ def tmp_py_file(tmp_tree):
     """Create a Python file with correct copyright."""
     f = tmp_tree / "example.py"
     f.write_text(
-        '# Copyright 2026 by GuidoGerb Publishing, LLC\nprint("hello")\n',
+        '# Copyright 2026 by DTS, The State of Utah\nprint("hello")\n',
         encoding="utf-8",
     )
     return f
@@ -38,7 +38,7 @@ def tmp_js_file(tmp_tree):
     """Create a JS file with correct copyright."""
     f = tmp_tree / "example.js"
     f.write_text(
-        '/** Copyright 2026 by GuidoGerb Publishing, LLC */\nconst x = 1;\n',
+        '/** Copyright 2026 by DTS, The State of Utah */\nconst x = 1;\n',
         encoding="utf-8",
     )
     return f

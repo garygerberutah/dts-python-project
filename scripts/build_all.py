@@ -1,7 +1,7 @@
 """
 build_all.py — master automation pipeline.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Pipeline stages (in order):
   1. test      — run global toolchain tests (tests/)

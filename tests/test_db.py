@@ -1,6 +1,6 @@
 """Tests for scripts/blockchain/db.py — PostgreSQL storage and SQL export.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Verifies:
   - Table schema includes chain_content column

@@ -97,7 +97,7 @@ forbidden on `git commit` and `git push`. If the hook fails, fix the code — ne
 Every source file must contain the contents of the `COPYRIGHT` file in a comment at the top:
 
 ```
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 ```
 
 Use the appropriate comment syntax for each file type:

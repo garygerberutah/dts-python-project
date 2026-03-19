@@ -1,6 +1,6 @@
 """test_components.py — runs the Web Component test suites via pytest.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Test files live under tests/ and verify component source structure,
 Shadow DOM patterns, and accessibility attributes using Python only.

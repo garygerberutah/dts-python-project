@@ -1,5 +1,5 @@
 /**
- * Copyright 2026 by GuidoGerb Publishing, LLC
+ * Copyright 2026 by DTS, The State of Utah
  *
  * app-root — root shell Web Component.
  * Manages application-level layout and WASM lifecycle.

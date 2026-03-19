@@ -1,7 +1,7 @@
 """
 db.py — PostgreSQL storage for SBOM version history.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Stores every generated ``sbom.json`` manifest and ``chain.json`` blockchain
 in the ``sbom_version`` table so every commit's bill-of-materials is
@@ -245,7 +245,7 @@ def export_sbom_version_sql() -> Path:
         conn.close()
 
     lines = [
-        "-- Copyright 2026 by GuidoGerb Publishing, LLC",
+        "-- Copyright 2026 by DTS, The State of Utah",
         f"-- Exported from sbom_version on {timestamp}",
         f"-- {len(rows)} row(s)",
         "",

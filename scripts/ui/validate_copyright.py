@@ -3,7 +3,7 @@ validate_copyright.py — validates that all source files contain the
 COPYRIGHT notice in a comment at the top of the file. Automatically
 inserts or replaces the copyright comment if it does not match.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Usage:
     python scripts/validate_copyright.py [--fix] [directory ...]

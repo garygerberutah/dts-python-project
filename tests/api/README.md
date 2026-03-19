@@ -1,4 +1,4 @@
-<!-- Copyright 2026 by GuidoGerb Publishing, LLC -->
+<!-- Copyright 2026 by DTS, The State of Utah -->
 
 # tests/api/ — API Test Suite
 
@@ -13,7 +13,7 @@ module is discoverable by pytest and the pipeline test runner.
 Tests added to this package must follow the project's testing standards:
 
 - Use **pytest** as the test framework — no other test runners.
-- Include `Copyright 2026 by GuidoGerb Publishing, LLC` in the module docstring.
+- Include `Copyright 2026 by DTS, The State of Utah` in the module docstring.
 - Mock all external dependencies (database connections, HTTP calls).
 - No network calls in unit tests — deterministic and fast.
 - Shared fixtures go in `tests/api/conftest.py`.

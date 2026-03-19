@@ -1,6 +1,6 @@
 """Tests for blockchain chain integrity and git-history protection.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Verifies:
   - Blockchain hash-chain verification detects tampered blocks

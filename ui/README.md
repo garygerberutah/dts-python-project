@@ -1,6 +1,6 @@
 # UI
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Web application — HTML5 Web Components + Rust WebAssembly.
 

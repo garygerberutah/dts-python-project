@@ -1,7 +1,7 @@
 """
 lint.py — static analysis for JS, Rust, and Python.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Runs:
   • ruff check  — Python

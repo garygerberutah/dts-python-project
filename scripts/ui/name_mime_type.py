@@ -2,7 +2,7 @@
 name_mime_type.py — renames static resource files using the convention:
     <stem>-<sha256>.ext
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Usage:
     python scripts/name_mime_type.py                          # Scan static dirs, rename all

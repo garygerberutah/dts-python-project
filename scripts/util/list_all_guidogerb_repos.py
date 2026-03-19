@@ -3,7 +3,7 @@ list_all_guidogerb_repos.py — fetches all public (and private, if a
 GITHUB_TOKEN is set) repositories for https://github.com/guidogerb and
 writes them to resources/guidogerb/repos.txt.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 """
 
 import json

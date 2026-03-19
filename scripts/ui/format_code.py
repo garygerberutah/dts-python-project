@@ -1,7 +1,7 @@
 """
 format_code.py — auto-formats Rust and Python source files.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Runs:
   • rustfmt    — Rust

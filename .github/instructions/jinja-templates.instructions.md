@@ -5,7 +5,7 @@ description: "Use when editing Jinja2 templates. Covers build-time rendering, bl
 # Jinja2 Template Standards
 
 ## Copyright
-- Every `.j2` template must contain `Copyright 2026 by GuidoGerb Publishing, LLC` in an `<!-- -->` comment at the top
+- Every `.j2` template must contain `Copyright 2026 by DTS, The State of Utah` in an `<!-- -->` comment at the top
 
 ## Build-Time Only
 - Templates render during `python run.py build` — NEVER at request time

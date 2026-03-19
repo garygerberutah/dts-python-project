@@ -8,7 +8,7 @@ description: "Use when editing Python toolchain scripts (build, lint, format, te
 - **Changing any rule requires explicit user permission every time** — never add, remove, or modify a rule without asking first
 
 ## Copyright
-- Every `.py` script must contain `Copyright 2026 by GuidoGerb Publishing, LLC` in the module docstring or a `#` comment at the top
+- Every `.py` script must contain `Copyright 2026 by DTS, The State of Utah` in the module docstring or a `#` comment at the top
 
 ## Core Principle
 Python is **build tooling only** — it never ships, never runs at request time, never appears in `dist/`.

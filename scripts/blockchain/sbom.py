@@ -1,7 +1,7 @@
 """
 sbom.py — Append-only blockchain ledger for SBOM audit trail.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 """
 
 import hashlib

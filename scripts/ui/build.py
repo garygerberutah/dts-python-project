@@ -2,7 +2,7 @@
 build.py — compiles the Rust WASM module, renders Jinja2 templates, and
 copies all frontend assets into the dist/ directory.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 """
 
 import hashlib

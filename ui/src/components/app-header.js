@@ -1,5 +1,5 @@
 /**
- * Copyright 2026 by GuidoGerb Publishing, LLC
+ * Copyright 2026 by DTS, The State of Utah
  *
  * app-header — navigation header Web Component.
  * Provides accessible site navigation with Shadow DOM encapsulation.

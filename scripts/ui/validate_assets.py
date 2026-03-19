@@ -2,7 +2,7 @@
 validate_assets.py — validates that all static resource files follow the
 naming convention and that their SHA-256 hashes match.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Convention:  camelCaseDescription-<sha256hex>.ext
 

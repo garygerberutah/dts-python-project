@@ -2,7 +2,7 @@
 validate_mime_type_content.py — validates that binary files in the repository
 contain data matching the encoding standard of their extension's mime-type.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Recognised mime-types (allowed in git):
     image/png, image/jpeg, image/gif, image/svg+xml, video/mp4, audio/mpeg,

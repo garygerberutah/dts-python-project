@@ -1,4 +1,4 @@
-<!-- Copyright 2026 by GuidoGerb Publishing, LLC -->
+<!-- Copyright 2026 by DTS, The State of Utah -->
 
 # scripts/api/ — API Build Tooling
 
@@ -15,6 +15,6 @@ Scripts added to this package must follow the same patterns as `scripts/ui/`:
 
 - Expose a `main() -> int` entry point (0 = success, 1 = failure).
 - Use `ROOT = Path(__file__).resolve().parent.parent.parent` for the project root.
-- Include `Copyright 2026 by GuidoGerb Publishing, LLC` in the module docstring.
+- Include `Copyright 2026 by DTS, The State of Utah` in the module docstring.
 - **Never skip gracefully** — missing tools or resources must cause hard failure.
 - Register new stages in `scripts/build_all.py` and `run.py` when ready.

@@ -1,7 +1,7 @@
 """
 test_all.py — runs all test suites across the project.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Usage:
     python tests/test_all.py

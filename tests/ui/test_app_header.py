@@ -1,6 +1,6 @@
 """Tests for the app-header Web Component (source analysis).
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 """
 
 

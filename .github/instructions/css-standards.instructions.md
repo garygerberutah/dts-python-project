@@ -5,7 +5,7 @@ description: "Use when editing global CSS. Covers CSS variable scoping, Shadow D
 # CSS Standards
 
 ## Copyright
-- Every `.css` file must contain `Copyright 2026 by GuidoGerb Publishing, LLC` in a `/* */` comment at the top
+- Every `.css` file must contain `Copyright 2026 by DTS, The State of Utah` in a `/* */` comment at the top
 
 ## Global Styles (main.css)
 - Minimal reset + CSS custom properties on `:root`

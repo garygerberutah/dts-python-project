@@ -1,7 +1,7 @@
 """
 clean.py — removes all generated build artifacts from the dist/ directory.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 """
 
 import shutil

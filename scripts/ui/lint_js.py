@@ -1,7 +1,7 @@
 """
 lint_js.py — lightweight Python-based JavaScript linter.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Enforces a subset of coding standards without requiring Node.js or ESLint:
   • eqeqeq     — forbid == and != (use === and !==)

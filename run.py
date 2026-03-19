@@ -1,7 +1,7 @@
 """
 run.py — single CLI entry point for the project toolchain.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Usage:
     python run.py <command> [options]

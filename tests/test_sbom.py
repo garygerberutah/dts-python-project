@@ -1,6 +1,6 @@
 """Tests for scripts/blockchain/sbom.json integrity.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Verifies that the SBOM manifest matches the actual repository filesystem:
   - Every git-tracked file (except sbom.json itself) appears in the manifest

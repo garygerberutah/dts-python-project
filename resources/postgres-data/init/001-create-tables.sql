@@ -1,4 +1,4 @@
--- Copyright 2026 by GuidoGerb Publishing, LLC
+-- Copyright 2026 by DTS, The State of Utah
 --
 -- Initialise the asset_catalog database schema.
 -- Executed automatically on first container start by the postgres Docker image.

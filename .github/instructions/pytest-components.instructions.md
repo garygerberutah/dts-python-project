@@ -5,7 +5,7 @@ description: "Use when writing or editing pytest component tests. Covers source-
 # Component Test Standards
 
 ## Copyright
-- Every test `.py` file must contain `Copyright 2026 by GuidoGerb Publishing, LLC` in the module docstring or a `#` comment at the top
+- Every test `.py` file must contain `Copyright 2026 by DTS, The State of Utah` in the module docstring or a `#` comment at the top
 
 ## Missing Python Dependencies
 - If a test fails with `ModuleNotFoundError` or `ImportError`, **ask the user for permission** before adding the missing package to `requirements.txt`, then run `pip install -r requirements.txt` and retry

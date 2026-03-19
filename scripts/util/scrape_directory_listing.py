@@ -3,7 +3,7 @@ scrape_directory_listing.py — recursively lists every file under a given
 directory and writes the fully-qualified paths to a timestamped CSV in
 resources/fs-info/.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 """
 
 import argparse

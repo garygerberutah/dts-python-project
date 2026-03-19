@@ -1,5 +1,5 @@
 /**
- * Copyright 2026 by GuidoGerb Publishing, LLC
+ * Copyright 2026 by DTS, The State of Utah
  *
  * app-3d-viewer — 3D canvas viewer Web Component.
  * Renders a 3D scene using the Rust WASM math engine and WebGL.

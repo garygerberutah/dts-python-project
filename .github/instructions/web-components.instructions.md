@@ -5,7 +5,7 @@ description: "Use when creating or editing Web Components. Covers Shadow DOM, pr
 # Web Component Standards
 
 ## Copyright
-- Every JS file must contain `Copyright 2026 by GuidoGerb Publishing, LLC` in a comment at the top
+- Every JS file must contain `Copyright 2026 by DTS, The State of Utah` in a comment at the top
 
 ## Structure
 - Extend `HTMLElement`, attach Shadow DOM `mode: "open"` in constructor

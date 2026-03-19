@@ -1,6 +1,6 @@
 """Tests for scripts/validate_wcag.py.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 """
 
 from scripts.ui.validate_wcag import (

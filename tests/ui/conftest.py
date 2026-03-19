@@ -1,7 +1,7 @@
 """
 Shared fixtures for Web Component source-analysis tests.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Parses component JS files and extracts Shadow DOM templates
 for structural and accessibility verification — no browser required.

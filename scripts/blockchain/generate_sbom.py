@@ -1,7 +1,7 @@
 """
 generate_sbom.py — Build a Software Bill of Materials from git-tracked files.
 
-Copyright 2026 by GuidoGerb Publishing, LLC
+Copyright 2026 by DTS, The State of Utah
 
 Walks all files returned by ``git ls-files``, computes a SHA-256 hash for
 each one, and writes the manifest to ``scripts/blockchain/sbom.json``.
