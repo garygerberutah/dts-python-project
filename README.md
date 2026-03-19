@@ -367,4 +367,4 @@ The `--no-verify` flag is **strictly forbidden**.
 
 Apache License 2.0 — see [LICENSE](LICENSE).
 
-Copyright 2026 by GuidoGerb Publishing, LLC.
+Copyright 2026 by DTS, The State of Utah
