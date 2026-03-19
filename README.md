@@ -6,11 +6,8 @@
 
 **Audience:** State of Utah Developers & Engineering Leadership
 
-Created by Gary Gerber \- [ggerber@utah.gov](mailto:ggerber@utah.gov)
-
+Author: Gary Gerber \- [ggerber@utah.gov](mailto:ggerber@utah.gov)
 Mar 19, 2026
-
-### ---
 
 **1\. Executive Summary: AI Safety in Government Systems**
 
