@@ -220,3 +220,4 @@ __marimo__/
 resources/postgres-data/data/
 # SQL exports are generated artifacts — regenerated every pipeline run
 resources/postgres-data/sbom_version_*.sql
+/.idea/
