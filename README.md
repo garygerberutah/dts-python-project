@@ -86,11 +86,6 @@ Moving away from frameworks like React is a critical effort \- the State of Utah
 **Zero-dependency 3D geometry processor** — native HTML5 Web Components + Rust WebAssembly.
 **Python-only toolchain** — no Node.js, npm, or any JS build tools.
 
-[![CI](https://github.com/guidogerb/ggp3d/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/guidogerb/ggp3d/actions/workflows/ci.yml)
-[![Deploy (dev)](https://github.com/guidogerb/ggp3d/actions/workflows/deploy-dev.yml/badge.svg?branch=dev)](https://github.com/guidogerb/ggp3d/actions/workflows/deploy-dev.yml)
-
----
-
 ## Architecture
 
 | Layer | Technology |
