@@ -5,6 +5,27 @@
 repos:
   - repo: local
     hooks:
+      - id: require-pull
+        name: "Require git pull from origin before commit"
+        entry: bash -c |
+          '
+            git fetch origin
+            LOCAL=$(git rev-parse @)
+            REMOTE=$(git rev-parse @{u})
+            BASE=$(git merge-base @ @{u})
+            if [ "$LOCAL" = "$REMOTE" ]; then
+            exit 0
+            elif [ "$LOCAL" = "$BASE" ]; then
+            echo "Your branch is behind origin. Please pull before committing."
+            exit 1
+            else
+            exit 0
+            fi
+          '
+        language: system
+        always_run: true
+        pass_filenames: false
+        stages: [pre-commit]
       - id: pipeline
         name: "ggp3d pipeline (format → lint → validate → build → test)"
         entry: bash -c 'python run.py pipeline --skip-deploy && git add scripts/blockchain/chain.json scripts/blockchain/sbom.json 2>/dev/null; true'
