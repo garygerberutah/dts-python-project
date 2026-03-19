@@ -6,11 +6,13 @@ Copyright 2026 by GuidoGerb Publishing, LLC
 
 import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 from time import time
 
 CHAIN_PATH = Path(__file__).resolve().parent / "chain.json"
+ROOT = Path(__file__).resolve().parent.parent.parent
 
 # Proof-of-work difficulty: number of leading hex zeros required.
 POW_DIFFICULTY = 4
@@ -36,14 +38,20 @@ class Blockchain:
         self.chain.append(block)
         return block
 
-    def add_sbom_hash(self, repo_name: str, sha256_hash: str) -> int:
-        """Queue an SBOM composite hash for the next block."""
-        self.pending_sbom_hashes.append(
-            {
-                "repo": repo_name,
-                "bom_hash": sha256_hash,
-            }
-        )
+    def add_sbom_hash(self, repo_name: str, sha256_hash: str, commit_sha: str = "") -> int:
+        """Queue an SBOM composite hash for the next block.
+
+        When *commit_sha* is provided the hash entry is anchored to a
+        specific git commit, allowing later verification that git history
+        has not been rewritten.
+        """
+        entry: dict[str, str] = {
+            "repo": repo_name,
+            "bom_hash": sha256_hash,
+        }
+        if commit_sha:
+            entry["commit_sha"] = commit_sha
+        self.pending_sbom_hashes.append(entry)
         return self.last_block["index"] + 1
 
     @property
@@ -107,6 +115,53 @@ class Blockchain:
                 print(
                     f"[blockchain] Integrity failure at block {block['index']}: "
                     f"previous_hash mismatch.",
+                    file=sys.stderr,
+                )
+                return False
+        return True
+
+    # ------------------------------------------------------------------
+    # Git-history anchoring
+    # ------------------------------------------------------------------
+    def verify_commit_ancestry(self) -> bool:
+        """Verify that chain commit SHAs exist in git and are in order.
+
+        For every pair of consecutive blocks that both carry a
+        ``commit_sha``, checks that the earlier commit is an ancestor of
+        (or equal to) the later commit.  This detects git history rewrites
+        (rebase, amend, force-push, filter-branch) that would orphan the
+        commits recorded in the chain.
+
+        Returns ``True`` when all checks pass or when the chain has no
+        commit-anchored entries (legacy blocks are silently skipped).
+        """
+        anchored: list[tuple[int, str]] = []
+        for block in self.chain:
+            for entry in block.get("sbom_hashes", []):
+                sha = entry.get("commit_sha", "")
+                if sha:
+                    anchored.append((block["index"], sha))
+
+        if len(anchored) < 2:
+            return True
+
+        for i in range(1, len(anchored)):
+            idx_a, sha_a = anchored[i - 1]
+            idx_b, sha_b = anchored[i]
+            if sha_a == sha_b:
+                continue
+            result = subprocess.run(
+                ["git", "merge-base", "--is-ancestor", sha_a, sha_b],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+            )
+            if result.returncode != 0:
+                print(
+                    f"[blockchain] Commit ancestry failure: "
+                    f"block {idx_a} commit {sha_a[:8]} is not an ancestor "
+                    f"of block {idx_b} commit {sha_b[:8]}. "
+                    f"Git history may have been rewritten.",
                     file=sys.stderr,
                 )
                 return False

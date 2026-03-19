@@ -26,6 +26,7 @@ import psycopg2
 ROOT = Path(__file__).resolve().parent.parent.parent
 DOCKER_COMPOSE_PATH = ROOT / "resources" / "postgres-data" / "docker-compose.yml"
 SQL_EXPORT_DIR = ROOT / "resources" / "postgres-data"
+CHAIN_PATH = Path(__file__).resolve().parent / "chain.json"
 
 
 def _wsl2_gateway() -> str | None:
@@ -260,7 +261,10 @@ def export_sbom_version_sql() -> Path:
             chain_content,
             created_at,
         ) = row
-        # Escape single quotes in JSON strings for SQL safety
+        # Escape single quotes in ALL string fields for SQL safety
+        commit_sha_esc = commit_sha.replace("'", "''")
+        branch_esc = branch.replace("'", "''")
+        composite_esc = composite.replace("'", "''")
         sbom_str = json.dumps(sbom_content, sort_keys=True).replace("'", "''")
         chain_str = json.dumps(chain_content, sort_keys=True).replace("'", "''")
         created_str = created_at.isoformat()
@@ -268,7 +272,7 @@ def export_sbom_version_sql() -> Path:
             f"INSERT INTO public.sbom_version "
             f"(id, commit_sha, branch, composite_sha256, file_count, "
             f"sbom_content, chain_content, created_at) VALUES ("
-            f"{row_id}, '{commit_sha}', '{branch}', '{composite}', "
+            f"{row_id}, '{commit_sha_esc}', '{branch_esc}', '{composite_esc}', "
             f"{file_count}, '{sbom_str}'::jsonb, '{chain_str}'::jsonb, "
             f"'{created_str}'::timestamptz);"
         )
@@ -331,6 +335,50 @@ def validate_sbom_db_sync() -> list[str]:
             f"DB has {db_count} row(s) but the best SQL export only has "
             f"{max_inserts} INSERT statement(s). "
             f"Run 'python run.py sbom' to regenerate exports."
+        )
+
+    return errors
+
+
+def verify_chain_db_consistency() -> list[str]:
+    """Cross-reference chain.json commit SHAs against the DB.
+
+    The ``sbom_version`` table is external to git and survives history
+    rewrites.  If the chain records a ``commit_sha`` that the DB has never
+    seen, it means git history was rewritten after the DB recorded the
+    original commit.
+
+    Returns a list of error strings (empty == pass).
+    """
+    errors: list[str] = []
+
+    if not CHAIN_PATH.exists():
+        return errors
+
+    chain_data = json.loads(CHAIN_PATH.read_text(encoding="utf-8"))
+    chain_shas: set[str] = set()
+    for block in chain_data:
+        for entry in block.get("sbom_hashes", []):
+            sha = entry.get("commit_sha", "")
+            if sha:
+                chain_shas.add(sha)
+
+    if not chain_shas:
+        return errors  # legacy chain without commit anchors
+
+    conn = connect()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT DISTINCT commit_sha FROM public.sbom_version")
+            db_shas = {row[0] for row in cur.fetchall()}
+    finally:
+        conn.close()
+
+    orphaned = chain_shas - db_shas
+    if orphaned:
+        errors.append(
+            f"Chain contains {len(orphaned)} commit SHA(s) not present in DB — "
+            f"possible git history rewrite: {sorted(orphaned)}"
         )
 
     return errors

@@ -144,13 +144,22 @@ def _stage_sbom() -> bool:
     # 1. Generate the manifest + composite hash
     manifest, composite = generate()
 
-    # 2. Load the blockchain, append, mine, save
+    # 2. Load the blockchain, append with commit anchor, mine, save
     chain = Blockchain.load()
-    chain.add_sbom_hash(repo_name=_REPO_NAME, sha256_hash=composite)
+
+    # Anchor every block to the current HEAD commit so history rewrites
+    # are detectable via verify_commit_ancestry().
+    from scripts.blockchain.db import _git_head_sha
+
+    commit_sha = _git_head_sha()
+    chain.add_sbom_hash(repo_name=_REPO_NAME, sha256_hash=composite, commit_sha=commit_sha)
     proof = chain.proof_of_work()
     chain.new_block(proof=proof)
     if not chain.verify_chain():
         print("[sbom] Blockchain integrity check FAILED.", file=sys.stderr)
+        return False
+    if not chain.verify_commit_ancestry():
+        print("[sbom] Blockchain commit-ancestry check FAILED.", file=sys.stderr)
         return False
     chain.save()
     print(f"[sbom] Blockchain: block #{chain.last_block['index']} mined (proof={proof}).")

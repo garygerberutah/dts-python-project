@@ -365,5 +365,70 @@
       }
     ],
     "timestamp": 1773880617.9741876
+  },
+  {
+    "index": 32,
+    "previous_hash": "13701447568186f0b366c48cfb32a5a349cbdbd7c87ffe5f91759f36e13c587a",
+    "proof": 95219,
+    "sbom_hashes": [
+      {
+        "bom_hash": "84c8e6a3379088f7ef580a2aa10b09aca80efbb5401f6183d4fc8cd692776cd5",
+        "commit_sha": "e5c326d01c723d860b6bcf5bda712a2e4d225088",
+        "repo": "ggp-python-project"
+      }
+    ],
+    "timestamp": 1773881537.5653734
+  },
+  {
+    "index": 33,
+    "previous_hash": "a6b9d9dba41b6b30f18548c5fe6e00ac498689a3ac45c57f3ef2b2b43e238b8a",
+    "proof": 26832,
+    "sbom_hashes": [
+      {
+        "bom_hash": "f36584beb5241eefd7ca8b8971e59f6df0eaeb7fe497ec8f7dd7fd89051d524b",
+        "commit_sha": "e5c326d01c723d860b6bcf5bda712a2e4d225088",
+        "repo": "ggp-python-project"
+      }
+    ],
+    "timestamp": 1773881546.8696187
+  },
+  {
+    "index": 34,
+    "previous_hash": "28835de814659d677f1f8ab7ef784f0150ff76364cd4c32c3ae674938525d1e2",
+    "proof": 216259,
+    "sbom_hashes": [
+      {
+        "bom_hash": "dc46c353b2d9f6a75424643d5418817ecbf119e988207b5942b1744bbd3f2528",
+        "commit_sha": "e5c326d01c723d860b6bcf5bda712a2e4d225088",
+        "repo": "ggp-python-project"
+      }
+    ],
+    "timestamp": 1773881556.608429
+  },
+  {
+    "index": 35,
+    "previous_hash": "118a3a6ee11fe2559f5dd3c6c6c5ed6380836a6ac392e38dc321be2076c5cab1",
+    "proof": 373081,
+    "sbom_hashes": [
+      {
+        "bom_hash": "bac3ca2085615cdf9e1148f1b8aef126c8ea3d974f2bc511b70e3ebda6738b85",
+        "commit_sha": "e5c326d01c723d860b6bcf5bda712a2e4d225088",
+        "repo": "ggp-python-project"
+      }
+    ],
+    "timestamp": 1773881618.1421542
+  },
+  {
+    "index": 36,
+    "previous_hash": "7a07e7bb6f4b8f8780d48ffdad4149c6424a8ed547e401f8e910f8cc011fccb7",
+    "proof": 83263,
+    "sbom_hashes": [
+      {
+        "bom_hash": "0445467bbf3aaab14e985b98404f86885957dcb4dfccadeed024afe7de009cf7",
+        "commit_sha": "e5c326d01c723d860b6bcf5bda712a2e4d225088",
+        "repo": "ggp-python-project"
+      }
+    ],
+    "timestamp": 1773881622.0324676
   }
 ]

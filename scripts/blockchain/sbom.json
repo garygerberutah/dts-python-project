@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "timestamp": "2026-03-19T00:36:57.953290+00:00",
-  "file_count": 183,
+  "timestamp": "2026-03-19T00:53:41.987658+00:00",
+  "file_count": 184,
   "files": [
     {
       "path": ".githooks/pre-commit",
@@ -189,19 +189,19 @@
     },
     {
       "path": "scripts/blockchain/db.py",
-      "sha256": "c3b51eac86cb6e3bc675ae20a664f932fdce0680c28b087ac5bd65a171bfc77b"
+      "sha256": "e5836b2736ca6c525f52d18d52bd8e7d09be12dc733c031579cfe0141746e0c7"
     },
     {
       "path": "scripts/blockchain/generate_sbom.py",
-      "sha256": "4508e8f9d965ce0373221339c23936b4472134fdc96eec85fd1e31a513c1889a"
+      "sha256": "f5fc6d4c2ac995f148214246fd01a61f647f9d1c372470b1961902d040cbe9a5"
     },
     {
       "path": "scripts/blockchain/sbom.py",
-      "sha256": "704c586bd7cecfdf6af9589a8b11fff86f62348763b3c5fd30d4c635a769de71"
+      "sha256": "dbd2a59fe0e469deeab93012f4253a225800a6cedc71fc612840989373720949"
     },
     {
       "path": "scripts/build_all.py",
-      "sha256": "f7cb714f4d2b4ce1341833e5a0445b4d01923895dc10f968e63b206943024d3f"
+      "sha256": "f0f3245b13695b8bc48c6e22add4e0106a612a7af99bcb0398facb19d4155d01"
     },
     {
       "path": "scripts/ui/README.md",
@@ -306,6 +306,10 @@
     {
       "path": "tests/test_all.py",
       "sha256": "e45516b706a231faa4a7d7dc3477ea9db825dcf77339219f65179a4cb2ff5de5"
+    },
+    {
+      "path": "tests/test_chain_integrity.py",
+      "sha256": "473ad6ca949ef1d6165f276a84e1d9bcfbb45ac7e332d97cd264fddcf5f4cefb"
     },
     {
       "path": "tests/test_db.py",

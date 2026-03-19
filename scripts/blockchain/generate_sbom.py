@@ -42,6 +42,35 @@ def _git_ls_files() -> list[str]:
     return paths
 
 
+def verify_index_worktree() -> list[str]:
+    """Check that tracked files in the working tree match the git index.
+
+    Returns a list of error strings (empty == pass).  Any tracked file
+    whose working-tree content differs from the staged index version is
+    reported, because the SBOM hashes the working tree — a mismatch
+    means the SBOM would not reflect what is actually committed.
+
+    Files in ``_EXCLUDED_RELS`` (sbom.json, chain.json) are ignored
+    because they are regenerated during the SBOM stage itself.
+    """
+    result = subprocess.run(
+        ["git", "diff", "--name-only"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return [f"git diff failed: {result.stderr.strip()}"]
+
+    dirty = [f for f in result.stdout.splitlines() if f and f not in _EXCLUDED_RELS]
+    if not dirty:
+        return []
+    return [
+        f"[sbom] Working tree differs from index for {len(dirty)} file(s) — "
+        "stage or discard changes before generating the SBOM:\n  " + "\n  ".join(sorted(dirty))
+    ]
+
+
 def _sha256(filepath: Path) -> str:
     """Return hex-encoded SHA-256 digest of *filepath*."""
     h = hashlib.sha256()
@@ -55,7 +84,16 @@ def generate() -> tuple[dict, str]:
     """Generate the SBOM manifest and return ``(manifest_dict, composite_sha256)``.
 
     The manifest is also written to ``scripts/blockchain/sbom.json``.
+    Fails if the working tree diverges from the git index for any tracked
+    file, preventing TOCTOU hash mismatches.
     """
+    worktree_errors = verify_index_worktree()
+    if worktree_errors:
+        for err in worktree_errors:
+            print(err, file=sys.stderr)
+        print("[sbom] SBOM generation aborted — index/working-tree mismatch.", file=sys.stderr)
+        sys.exit(1)
+
     tracked = _git_ls_files()
 
     entries: list[dict[str, str]] = []
