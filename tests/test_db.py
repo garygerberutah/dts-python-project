@@ -256,9 +256,10 @@ def test_init_sql_matches_schema():
 # ---------------------------------------------------------------------------
 
 
-@patch("scripts.blockchain.db._try_connect")
-def test_connect_tries_5432_first(mock_try):
-    """connect() tries port 5432 before 5433."""
+@patch("scripts.blockchain.db._wsl2_gateway", return_value=None)
+@patch("scripts.blockchain.db._try_connect_dsn")
+def test_connect_tries_5432_first(mock_try, _mock_gw):
+    """connect() tries localhost:5432 before 5433 (no WSL gateway)."""
     from scripts.blockchain.db import connect
 
     mock_conn = MagicMock()
@@ -266,34 +267,55 @@ def test_connect_tries_5432_first(mock_try):
 
     result = connect()
     assert result is mock_conn
-    mock_try.assert_called_once_with(5432)
+    mock_try.assert_called_once_with("localhost", 5432)
 
 
+@patch("scripts.blockchain.db._wsl2_gateway", return_value="172.26.176.1")
 @patch("scripts.blockchain.db._start_docker_db")
-@patch("scripts.blockchain.db._try_connect")
-def test_connect_falls_back_to_5433(mock_try, mock_start):
-    """connect() falls back to port 5433 when 5432 is unavailable."""
+@patch("scripts.blockchain.db._try_connect_dsn")
+def test_connect_tries_gateway_then_localhost(mock_try, _mock_start, _mock_gw):
+    """connect() tries the WSL2 gateway IP first, then localhost on 5432."""
     from scripts.blockchain.db import connect
 
     mock_conn = MagicMock()
+    # Gateway fails, localhost:5432 succeeds
     mock_try.side_effect = [None, mock_conn]
 
     result = connect()
     assert result is mock_conn
     assert mock_try.call_count == 2
-    mock_try.assert_any_call(5432)
-    mock_try.assert_any_call(5433)
+    mock_try.assert_any_call("172.26.176.1", 5432)
+    mock_try.assert_any_call("localhost", 5432)
+
+
+@patch("scripts.blockchain.db._wsl2_gateway", return_value=None)
+@patch("scripts.blockchain.db._start_docker_db")
+@patch("scripts.blockchain.db._try_connect_dsn")
+def test_connect_falls_back_to_5433(mock_try, mock_start, _mock_gw):
+    """connect() falls back to port 5433 when 5432 is unavailable."""
+    from scripts.blockchain.db import connect
+
+    mock_conn = MagicMock()
+    # localhost:5432 fails, localhost:5433 succeeds
+    mock_try.side_effect = [None, mock_conn]
+
+    result = connect()
+    assert result is mock_conn
+    assert mock_try.call_count == 2
+    mock_try.assert_any_call("localhost", 5432)
+    mock_try.assert_any_call("localhost", 5433)
     mock_start.assert_not_called()
 
 
+@patch("scripts.blockchain.db._wsl2_gateway", return_value=None)
 @patch("scripts.blockchain.db._start_docker_db")
-@patch("scripts.blockchain.db._try_connect")
-def test_connect_starts_docker_when_both_fail(mock_try, mock_start):
+@patch("scripts.blockchain.db._try_connect_dsn")
+def test_connect_starts_docker_when_both_fail(mock_try, mock_start, _mock_gw):
     """connect() starts Docker when both 5432 and 5433 are unavailable."""
     from scripts.blockchain.db import connect
 
     mock_conn = MagicMock()
-    # First two calls (5432, 5433) fail, third call (5433 after start) succeeds
+    # localhost:5432 fails, localhost:5433 fails, Docker starts, localhost:5433 succeeds
     mock_try.side_effect = [None, None, mock_conn]
 
     result = connect()

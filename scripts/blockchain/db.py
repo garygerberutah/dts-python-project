@@ -28,32 +28,40 @@ DOCKER_COMPOSE_PATH = ROOT / "resources" / "postgres-data" / "docker-compose.yml
 SQL_EXPORT_DIR = ROOT / "resources" / "postgres-data"
 
 
-def _pg_host() -> str:
-    """Return the PostgreSQL host — Windows gateway IP when running inside WSL2."""
-    if platform.system() == "Linux" and Path("/proc/sys/fs/binfmt_misc/WSLInterop").exists():
-        result = subprocess.run(
-            ["ip", "route", "show", "default"],
-            capture_output=True,
-            text=True,
-        )
-        for token in result.stdout.split():
-            if token.count(".") == 3:
-                return token
-    return "localhost"
+def _wsl2_gateway() -> str | None:
+    """Return the WSL2 default-gateway IP, or *None* outside WSL."""
+    if platform.system() != "Linux":
+        return None
+    if not Path("/proc/sys/fs/binfmt_misc/WSLInterop").exists():
+        return None
+    result = subprocess.run(
+        ["ip", "route", "show", "default"],
+        capture_output=True,
+        text=True,
+    )
+    for token in result.stdout.split():
+        if token.count(".") == 3:
+            return token
+    return None
 
 
-def _dsn(port: int = 5432) -> str:
-    host = _pg_host()
+def _dsn(host: str, port: int) -> str:
     return f"postgresql://assman:1324QEWRFD7sdf!1!@{host}:{port}/asset_catalog"
 
 
-def _try_connect(port: int) -> psycopg2.extensions.connection | None:
-    """Attempt a connection on the given port; return conn or None."""
+def _try_connect_dsn(host: str, port: int) -> psycopg2.extensions.connection | None:
+    """Attempt a connection to *host:port*; return conn or ``None``."""
     try:
-        conn = psycopg2.connect(_dsn(port), connect_timeout=3)
+        conn = psycopg2.connect(_dsn(host, port), connect_timeout=3)
         return conn
     except psycopg2.OperationalError:
         return None
+
+
+# Backward-compat wrapper used by _start_docker_db
+def _try_connect(port: int) -> psycopg2.extensions.connection | None:
+    """Attempt a connection on *port* using localhost; return conn or ``None``."""
+    return _try_connect_dsn("localhost", port)
 
 
 def _start_docker_db() -> None:
@@ -86,18 +94,29 @@ def _start_docker_db() -> None:
 def connect() -> psycopg2.extensions.connection:
     """Connect to PostgreSQL with automatic fallback.
 
-    Order: host:5432 → Docker:5433 → start Docker then retry 5433.
+    Order:
+      1. Windows host on port 5432 (try gateway IP then localhost).
+      2. Docker container on port 5433 (localhost).
+      3. Start Docker, then retry 5433.
     """
-    conn = _try_connect(5432)
+    # 1. Try Windows host PostgreSQL on port 5432
+    gateway = _wsl2_gateway()
+    if gateway is not None:
+        conn = _try_connect_dsn(gateway, 5432)
+        if conn is not None:
+            return conn
+    conn = _try_connect_dsn("localhost", 5432)
     if conn is not None:
         return conn
 
-    conn = _try_connect(5433)
+    # 2. Try Docker container on port 5433
+    conn = _try_connect_dsn("localhost", 5433)
     if conn is not None:
         return conn
 
+    # 3. Start Docker and retry
     _start_docker_db()
-    conn = _try_connect(5433)
+    conn = _try_connect_dsn("localhost", 5433)
     if conn is not None:
         return conn
 
