@@ -133,14 +133,16 @@ impl Mat4 {
     }
 
     /// Multiplies this matrix by another, returning a new matrix.
+    ///
+    /// Column-major: element (row, col) lives at `data[col * 4 + row]`.
     pub fn multiply(&self, other: &Mat4) -> Mat4 {
         let a = &self.data;
         let b = &other.data;
         let mut result = [0.0f64; 16];
-        for row in 0..4 {
-            for col in 0..4 {
+        for col in 0..4 {
+            for row in 0..4 {
                 for k in 0..4 {
-                    result[row * 4 + col] += a[row * 4 + k] * b[k * 4 + col];
+                    result[col * 4 + row] += a[k * 4 + row] * b[col * 4 + k];
                 }
             }
         }
@@ -212,5 +214,32 @@ mod tests {
         assert_eq!(arr[10], 1.0);
         assert_eq!(arr[15], 1.0);
         assert_eq!(arr[1], 0.0);
+    }
+
+    #[test]
+    fn test_mat4_multiply_identity() {
+        let a = Mat4::rotation_y(0.5);
+        let id = Mat4::identity();
+        let result = a.multiply(&id);
+        let a_arr = a.to_js_array();
+        let r_arr = result.to_js_array();
+        for i in 0..16 {
+            assert!(
+                (a_arr[i] - r_arr[i]).abs() < 1e-10,
+                "A*I mismatch at index {i}"
+            );
+        }
+    }
+
+    #[test]
+    fn test_mat4_multiply_translation() {
+        let t1 = Mat4::translation(1.0, 2.0, 3.0);
+        let t2 = Mat4::translation(4.0, 5.0, 6.0);
+        let result = t1.multiply(&t2);
+        let arr = result.to_js_array();
+        // Column-major: translation lives in column 3 (indices 12,13,14)
+        assert!((arr[12] - 5.0).abs() < 1e-10, "tx should be 1+4=5");
+        assert!((arr[13] - 7.0).abs() < 1e-10, "ty should be 2+5=7");
+        assert!((arr[14] - 9.0).abs() < 1e-10, "tz should be 3+6=9");
     }
 }

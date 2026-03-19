@@ -27,8 +27,14 @@ _EXCLUDED_RELS = {
 
 @pytest.fixture(scope="module")
 def sbom_manifest():
-    """Load the SBOM manifest from disk."""
-    assert SBOM_PATH.exists(), f"SBOM file not found: {SBOM_PATH}"
+    """Load the SBOM manifest from disk.
+
+    Skips the entire module when sbom.json does not exist because
+    the SBOM is a generated artifact (gitignored) that only appears
+    after a pipeline run.
+    """
+    if not SBOM_PATH.exists():
+        pytest.skip("sbom.json not generated yet — run the pipeline first")
     return json.loads(SBOM_PATH.read_text(encoding="utf-8"))
 
 

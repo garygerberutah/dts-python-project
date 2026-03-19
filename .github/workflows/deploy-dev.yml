@@ -12,7 +12,20 @@ concurrency:
 
 env:
   RUST_BACKTRACE: 1
-  AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+
+  # ── Required GitHub Secrets ─────────────────────────────────
+  # Configure these in Settings → Secrets and variables → Actions:
+  #
+  #   AWS_ACCESS_KEY_ID              IAM access key for S3/CloudFront
+  #   AWS_SECRET_ACCESS_KEY          IAM secret key
+  #   AWS_DEFAULT_REGION             e.g. us-east-1
+  #   AWS_S3_BUCKET_DEV              Target S3 bucket name
+  #   AWS_CLOUDFRONT_DISTRIBUTION_ID_DEV  CloudFront distribution ID
+  #
+  # For OIDC (recommended), replace the credentials step with:
+  #   aws-actions/configure-aws-credentials@v4
+  #   with: role-to-assume: arn:aws:iam::<ACCOUNT>:role/<ROLE>
+  # ────────────────────────────────────────────────────────────
 
 jobs:
   deploy:

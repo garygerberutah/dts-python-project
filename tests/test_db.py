@@ -20,6 +20,7 @@ from scripts.blockchain.db import (
     CREATE_TABLE_SQL,
     INSERT_SQL,
     SQL_EXPORT_DIR,
+    _dsn,
     export_sbom_version_sql,
     validate_sbom_db_sync,
 )
@@ -34,6 +35,13 @@ def test_create_table_includes_chain_content():
     """CREATE TABLE statement defines a chain_content JSONB column."""
     assert "chain_content" in CREATE_TABLE_SQL
     assert "JSONB" in CREATE_TABLE_SQL
+
+
+def test_create_table_has_unique_index():
+    """CREATE TABLE SQL includes a unique index on composite_sha256 + commit_sha."""
+    assert "idx_sbom_version_unique_entry" in CREATE_TABLE_SQL
+    assert "composite_sha256" in CREATE_TABLE_SQL
+    assert "commit_sha" in CREATE_TABLE_SQL
 
 
 def test_create_table_includes_sbom_content():
@@ -56,6 +64,36 @@ def test_insert_sql_includes_chain_content():
 def test_insert_sql_has_six_placeholders():
     """INSERT statement has exactly 6 parameter placeholders."""
     assert INSERT_SQL.count("%s") == 6
+
+
+def test_insert_sql_has_on_conflict():
+    """INSERT statement uses ON CONFLICT for duplicate prevention."""
+    assert "ON CONFLICT" in INSERT_SQL
+    assert "DO NOTHING" in INSERT_SQL
+
+
+# ---------------------------------------------------------------------------
+# DSN credential sourcing
+# ---------------------------------------------------------------------------
+
+
+def test_dsn_uses_env_vars(monkeypatch):
+    """_dsn reads credentials from environment variables when set."""
+    monkeypatch.setenv("SBOM_DB_USER", "myuser")
+    monkeypatch.setenv("SBOM_DB_PASSWORD", "secret")
+    monkeypatch.setenv("SBOM_DB_NAME", "mydb")
+    result = _dsn("localhost", 5432)
+    assert result == "postgresql://myuser:secret@localhost:5432/mydb"
+
+
+def test_dsn_uses_defaults_without_env(monkeypatch):
+    """_dsn falls back to defaults when env vars are absent."""
+    monkeypatch.delenv("SBOM_DB_USER", raising=False)
+    monkeypatch.delenv("SBOM_DB_PASSWORD", raising=False)
+    monkeypatch.delenv("SBOM_DB_NAME", raising=False)
+    result = _dsn("localhost", 5433)
+    assert "localhost:5433" in result
+    assert "asset_catalog" in result
 
 
 # ---------------------------------------------------------------------------
@@ -115,6 +153,27 @@ def test_store_sbom_defaults_chain_to_empty_list(mock_sha, mock_branch, mock_con
     call_args = mock_cursor.execute.call_args
     params = call_args[0][1]
     assert json.loads(params[5]) == []
+
+
+@patch("scripts.blockchain.db.connect")
+@patch("scripts.blockchain.db._git_branch", return_value="main")
+@patch("scripts.blockchain.db._git_head_sha", return_value="c" * 40)
+def test_store_sbom_returns_negative_on_duplicate(mock_sha, mock_branch, mock_connect):
+    """store_sbom returns -1 when ON CONFLICT DO NOTHING yields no row."""
+    from scripts.blockchain.db import store_sbom
+
+    mock_conn = MagicMock()
+    mock_cursor = MagicMock()
+    mock_cursor.fetchone.return_value = None  # ON CONFLICT DO NOTHING → no row
+    mock_conn.__enter__ = lambda s: s
+    mock_conn.__exit__ = MagicMock(return_value=False)
+    mock_conn.cursor.return_value.__enter__ = lambda s: mock_cursor
+    mock_conn.cursor.return_value.__exit__ = MagicMock(return_value=False)
+    mock_connect.return_value = mock_conn
+
+    manifest = {"version": "1.0", "file_count": 0, "files": []}
+    row_id = store_sbom(manifest, "0" * 64)
+    assert row_id == -1
 
 
 # ---------------------------------------------------------------------------

@@ -5,7 +5,7 @@ name = "ggp3d-wasm"
 version = "0.1.0"
 edition = "2021"
 description = "3D geometry processing core for ggp3d, compiled to WebAssembly"
-license = "MIT"
+license = "Apache-2.0"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

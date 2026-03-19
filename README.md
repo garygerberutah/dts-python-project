@@ -77,6 +77,7 @@ python run.py <command> [options]
 | `test` | Run all component test suites (pytest) |
 | `sbom` | Generate SBOM manifest + append to local blockchain |
 | `sbom-db` | Create/verify the PostgreSQL `sbom_version` table |
+| `reset-sbom` | Reset SBOM + blockchain (`--include-db`, `--include-exports`) |
 | `pipeline` | Full automation: test → format → lint → validate → clean → build → validate → test → sbom → deploy |
 | `pipeline --skip-deploy` | As above but skip the git commit/push stage |
 
@@ -235,13 +236,64 @@ The `deploy-dev.yml` workflow triggers on every push to the `dev` branch.
 
 ### Required GitHub Secrets
 
+Configure in **Settings → Secrets and variables → Actions**:
+
 | Secret | Description |
 |---|---|
-| `AWS_ACCESS_KEY_ID` | IAM access key |
+| `AWS_ACCESS_KEY_ID` | IAM access key for S3/CloudFront |
 | `AWS_SECRET_ACCESS_KEY` | IAM secret key |
 | `AWS_DEFAULT_REGION` | e.g. `us-east-1` |
 | `AWS_S3_BUCKET_DEV` | Target S3 bucket name |
 | `AWS_CLOUDFRONT_DISTRIBUTION_ID_DEV` | CloudFront distribution ID |
+
+For OIDC-based authentication (recommended), replace static IAM keys with
+`role-to-assume` in the `aws-actions/configure-aws-credentials` step.
+
+---
+
+## SBOM Database Setup
+
+The pipeline stores SBOM snapshots in PostgreSQL for tamper-evident auditing.
+
+### 1. Start PostgreSQL
+
+```bash
+docker compose -f resources/postgres-data/docker-compose.yml up -d
+```
+
+### 2. Create the table and restricted role
+
+```bash
+python run.py sbom-db    # Creates table + indexes (idempotent)
+
+# Then apply the restricted sbom_writer role:
+docker exec -i ggp3d-postgres psql -U assman -d asset_catalog \
+  < resources/postgres-data/init/002-create-sbom-role.sql
+```
+
+### 3. Configure pipeline credentials
+
+Set environment variables for the pipeline (use the restricted role):
+
+```bash
+export SBOM_DB_USER=sbom_writer
+export SBOM_DB_PASSWORD='<your-sbom-writer-password>'
+export SBOM_DB_NAME=asset_catalog    # default, can be omitted
+```
+
+The `sbom_writer` role has **SELECT + INSERT only** on `sbom_version` —
+no UPDATE, DELETE, or DDL. The admin user (`assman`) retains full access
+for schema migrations and maintenance.
+
+### 4. Reset SBOM & blockchain
+
+To start fresh (e.g. after cloning this template):
+
+```bash
+python run.py reset-sbom                              # Delete local sbom.json + chain.json
+python run.py reset-sbom --include-db                  # + truncate DB table
+python run.py reset-sbom --include-db --include-exports  # + delete SQL exports
+```
 
 ---
 

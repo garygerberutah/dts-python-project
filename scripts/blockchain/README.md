@@ -14,8 +14,9 @@ scripts/blockchain/
 ├── generate_sbom.py     # Build SBOM manifest from git-tracked files
 ├── sbom.py              # Append-only blockchain with proof-of-work
 ├── db.py                # PostgreSQL storage, export, and validation
-├── sbom.json            # Current SBOM manifest (generated, excluded from SBOM)
-├── chain.json           # Current blockchain state (generated, excluded from SBOM)
+├── reset_sbom.py        # Reset SBOM, chain, and optionally the database
+├── sbom.json            # Generated SBOM manifest (gitignored)
+├── chain.json           # Generated blockchain state (gitignored)
 └── README.md
 ```
 
@@ -46,8 +47,11 @@ database has rows.
 ## Standalone Commands
 
 ```bash
-python run.py sbom        # Generate SBOM manifest + blockchain + DB store
-python run.py sbom-db     # Create/verify the PostgreSQL table (idempotent)
+python run.py sbom          # Generate SBOM manifest + blockchain + DB store
+python run.py sbom-db       # Create/verify the PostgreSQL table (idempotent)
+python run.py reset-sbom    # Delete local sbom.json + chain.json
+python run.py reset-sbom --include-db             # + truncate DB table
+python run.py reset-sbom --include-db --include-exports  # + delete SQL exports
 ```
 
 ## Modules
@@ -131,7 +135,13 @@ and SQL export.
 
 ## Database Schema
 
-Connection: `postgresql://assman:…@localhost:5432/asset_catalog`
+Connection credentials are read from environment variables:
+
+| Variable           | Default          | Description            |
+|--------------------|------------------|------------------------|
+| `SBOM_DB_USER`     | `assman`         | PostgreSQL user        |
+| `SBOM_DB_PASSWORD`  | *(dev default)*  | PostgreSQL password    |
+| `SBOM_DB_NAME`     | `asset_catalog`  | Database name          |
 
 Table `public.sbom_version`:
 
@@ -146,7 +156,23 @@ Table `public.sbom_version`:
 | chain_content     | JSONB        | Full blockchain state at insertion time  |
 | created_at        | TIMESTAMPTZ  | Insertion timestamp                      |
 
-**Indexes:** `idx_sbom_version_commit` on `commit_sha`.
+**Indexes:**
+- `idx_sbom_version_commit` on `commit_sha`
+- `idx_sbom_version_unique_entry` **UNIQUE** on `(composite_sha256, commit_sha)`
+
+Duplicate inserts (same composite hash + commit) are silently skipped via
+`ON CONFLICT DO NOTHING`.
+
+## Restricted Role (`sbom_writer`)
+
+The `002-create-sbom-role.sql` init script creates a limited role with
+**SELECT + INSERT only** on `sbom_version`. Use this role for pipeline
+operations instead of the admin user:
+
+```bash
+export SBOM_DB_USER=sbom_writer
+export SBOM_DB_PASSWORD='<your-password>'
+```
 
 ## SQL Exports
 

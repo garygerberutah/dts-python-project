@@ -14,6 +14,7 @@ Connection strategy:
 """
 
 import json
+import os
 import platform
 import re
 import subprocess
@@ -47,7 +48,10 @@ def _wsl2_gateway() -> str | None:
 
 
 def _dsn(host: str, port: int) -> str:
-    return f"postgresql://assman:1324QEWRFD7sdf!1!@{host}:{port}/asset_catalog"
+    user = os.environ.get("SBOM_DB_USER", "assman")
+    password = os.environ.get("SBOM_DB_PASSWORD", "1324QEWRFD7sdf!1!")
+    dbname = os.environ.get("SBOM_DB_NAME", "asset_catalog")
+    return f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
 
 
 def _try_connect_dsn(host: str, port: int) -> psycopg2.extensions.connection | None:
@@ -138,6 +142,9 @@ CREATE TABLE IF NOT EXISTS public.sbom_version (
 
 CREATE INDEX IF NOT EXISTS idx_sbom_version_commit
     ON public.sbom_version (commit_sha);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_sbom_version_unique_entry
+    ON public.sbom_version (composite_sha256, commit_sha);
 """
 
 ALTER_ADD_CHAIN_SQL = """\
@@ -150,6 +157,7 @@ INSERT INTO public.sbom_version
     (commit_sha, branch, composite_sha256, file_count, sbom_content, chain_content)
 VALUES
     (%s, %s, %s, %s, %s, %s)
+ON CONFLICT (composite_sha256, commit_sha) DO NOTHING
 RETURNING id;
 """
 
@@ -196,7 +204,10 @@ def ensure_table() -> None:
 
 
 def store_sbom(manifest: dict, composite_sha256: str, chain_data: list | None = None) -> int:
-    """Insert an SBOM snapshot with blockchain data and return the row ``id``."""
+    """Insert an SBOM snapshot with blockchain data and return the row ``id``.
+
+    Returns ``-1`` when the entry already exists (duplicate composite+commit).
+    """
     commit_sha = _git_head_sha()
     branch = _git_branch()
     file_count = manifest.get("file_count", len(manifest.get("files", [])))
@@ -216,7 +227,11 @@ def store_sbom(manifest: dict, composite_sha256: str, chain_data: list | None = 
                     chain_json,
                 ),
             )
-            row_id = cur.fetchone()[0]
+            row = cur.fetchone()
+            if row is None:
+                print(f"[sbom-db] Duplicate SBOM for commit {commit_sha[:8]} — skipped.")
+                return -1
+            row_id = row[0]
     finally:
         conn.close()
 

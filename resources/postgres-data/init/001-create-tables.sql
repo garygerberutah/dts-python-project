@@ -16,3 +16,6 @@ CREATE TABLE IF NOT EXISTS public.sbom_version (
 
 CREATE INDEX IF NOT EXISTS idx_sbom_version_commit
     ON public.sbom_version (commit_sha);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_sbom_version_unique_entry
+    ON public.sbom_version (composite_sha256, commit_sha);

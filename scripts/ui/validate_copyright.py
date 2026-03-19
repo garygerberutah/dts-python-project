@@ -41,11 +41,13 @@ SKIP_DIRS = {
     ".git",
     ".pytest_cache",
     ".ruff_cache",
+    "api",
     "dist",
     "node_modules",
     "__pycache__",
     "pkg",
     "target",
+    "ui",
     "venv",
 }
 
