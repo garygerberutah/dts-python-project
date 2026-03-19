@@ -42,8 +42,6 @@ In government systems, knowing *what* is in a build and *who* (or what) put it t
 * **Local Blockchain Integration:** To ensure immutability, this manifest is appended to a local blockchain via a proof-of-work mechanism (chain.json). This ensures that if AI-generated code introduces a vulnerability, the exact state of the repository at the time of integration is permanently frozen and cryptographically verifiable.
 * **PostgreSQL Storage:** The blockchain data is mirrored to a PostgreSQL database (sbom\_version table), allowing state security auditors to query the history of the repository and track the lineage of every deployed file.
 
-### ---
-
 **5\. Identified Weaknesses & Path to Improvement**
 
 While the evaluated repository establishes an exceptionally strong foundation for AI safety, several weaknesses exist in its current implementation that require ongoing remediation.
@@ -75,8 +73,6 @@ While the evaluated repository establishes an exceptionally strong foundation fo
 * **Auditing Pathway:** Shift the ultimate source of truth to the GitHub Actions CI/CD pipeline. Ensure that branch protection rules strictly require the pipeline to succeed on the remote server, regardless of local bypasses.
 * **Ongoing Effort:** Implement automated audits of branch protection rules via state-wide infrastructure-as-code (IaC) to ensure no developer or AI tool can grant administrative overrides to the dev or main branches.
 
----
-
 **Editorial Note:**
 
 ***It is all on us**\!*
@@ -99,8 +95,6 @@ Moving away from frameworks like React is a critical effort \- the State of Utah
 | Tests | pytest (source-analysis, no browser or DOM engine) |
 | SBOM | SHA-256 manifests + local blockchain + PostgreSQL |
 | CI/CD | GitHub Actions → AWS S3 + CloudFront |
-
----
 
 ## Quick Start
 
